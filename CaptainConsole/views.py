@@ -20,7 +20,6 @@ def user_login(request):
     return render(request, 'templates/login.html', context)    
 
 def list_products(request):
-<<<<<<< HEAD
     # context = {
     #     'products': Product.objects.all()
     # }
@@ -33,10 +32,3 @@ def single_product(request):
     #     'product': Product.objects.all()
     # }
     return render(request, 'product/single_product.html')
-=======
-    context = {
-        'products': Product.objects.all()
-    }
-    return render(request, 'list_products.html', context)
-
->>>>>>> 3e0b78b91ef82263419fdb33f40f994646137cf5
