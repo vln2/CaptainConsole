@@ -4,8 +4,9 @@ from .models import *
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'category')
+    list_display = ('id', 'name', 'price', 'category')
     list_filter = ('category',)
+    prepopulated_fields = {'slug': ('name',)}
 
 
 class ProductInline(admin.TabularInline):
