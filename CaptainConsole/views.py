@@ -11,4 +11,7 @@ def list_products(request):
 
 def single_product(request):
 
+    # context = {
+    #     'product': Product.objects.all()
+    # }
     return render(request, 'product/single_product.html')
