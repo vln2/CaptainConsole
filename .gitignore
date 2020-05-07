@@ -16,5 +16,9 @@ __pycache__
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/gradle.xml
-.idea/**/libraries
+.idea/**/librariesd
 *.iws /out/
+
+#enviorment in PyCharm
+.idea/misc.xml
+.idea/CaptainConsole.iml
