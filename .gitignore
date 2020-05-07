@@ -22,3 +22,5 @@ __pycache__
 #enviorment in PyCharm
 .idea/misc.xml
 .idea/CaptainConsole.iml
+
+.idea/

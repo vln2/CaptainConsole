@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 #views created
 from .models import Product
 
+
 def register_user(request):  
     form = UserCreationForm()
 
@@ -13,22 +14,24 @@ def register_user(request):
         if form.is_valid():
             form.save()
 
-    return render(request, 'templates/register.html')
+    return render(request, 'register.html')
+
 
 def user_login(request):
     context = {}
-    return render(request, 'templates/login.html', context)    
+    return render(request, 'login.html', context)
+
 
 def list_products(request):
-    # context = {
-    #     'products': Product.objects.all()
-    # }
-    return render(request, 'catalog/list_products.html')
+    context = {
+        'products': Product.objects.all()
+    }
+    return render(request, 'catalog/list_products.html', context)
 
 
-def single_product(request):
+def single_product(response, id):
 
-    # context = {
-    #     'product': Product.objects.all()
-    # }
-    return render(request, 'product/single_product.html')
+    context = {
+        'product': Product.objects.get(id=id)
+    }
+    return render(response, 'product/single_product.html', context)
