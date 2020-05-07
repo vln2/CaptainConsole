@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
-
-#views created
+from django.views.generic import ListView, DetailView
 from .models import Product
 
-
+#======================= REGISTER USER
 def register_user(request):  
     form = UserCreationForm()
 
@@ -16,22 +15,27 @@ def register_user(request):
 
     return render(request, 'register.html')
 
-
+#======================= LOGIN
 def user_login(request):
     context = {}
     return render(request, 'login.html', context)
 
-
+#======================= CATEGORY / LIST_PRODUCTS
 def list_products(request):
     context = {
         'products': Product.objects.all()
     }
     return render(request, 'catalog/list_products.html', context)
 
-
-def single_product(request):
+#======================= SINGLE PRODUCT
+def single_product(response, id):
 
     context = {
-        # 'product': Product.objects.all()
+        'product': Product.objects.get(id=id)
     }
-    return render(request, 'product/single_product.html', context)
+    print(context['product'])
+    return render(response, 'product/single_product.html', context)
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'product_details.html'
