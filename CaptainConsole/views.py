@@ -13,7 +13,7 @@ def register_user(request):
         if form.is_valid():
             form.save()
 
-    return render(request, 'templates/register.html', context)
+    return render(request, 'templates/register.html')
 
 def user_login(request):
     context = {}
