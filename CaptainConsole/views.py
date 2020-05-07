@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView
 from .models import Product
 
 #======================= REGISTER USER
-def register_user(request):  
+def registerUser(request):  
     form = UserCreationForm()
 
     if request.method == 'POST':
@@ -16,26 +16,18 @@ def register_user(request):
     return render(request, 'register.html')
 
 #======================= LOGIN
-def user_login(request):
+def userLogin(request):
     context = {}
     return render(request, 'login.html', context)
 
 #======================= CATEGORY / LIST_PRODUCTS
-def list_products(request):
+def listProducts(request):
     context = {
         'products': Product.objects.all()
     }
     return render(request, 'catalog/list_products.html', context)
 
 #======================= SINGLE PRODUCT
-def single_product(response, id):
-
-    context = {
-        'product': Product.objects.get(id=id)
-    }
-    print(context['product'])
-    return render(response, 'product/single_product.html', context)
-
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'product_details.html'
