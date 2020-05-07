@@ -2,20 +2,33 @@
 
 {% block content %}
     <div class="container">
+        <!-- PRODUCT NAME -->
         <h2 class="h2">{% block product.name %}{% endblock %}</h2>
+        
+        <!-- PICTURES -->
         <section class="row">
+            <!-- Primary/Current image-->
             <div class="col-6">
 
                 <img src="..." class="img-fluid" alt="Responsive image">
 
 
             </div>
-            <div clas="col">
+            
+            <!-- image collection -->
+            <div class="col container">
                     <img src="..." alt="..." class="img-thumbnail">
                     <img src="..." alt="..." class="img-thumbnail">
                     <img src="..." alt="..." class="img-thumbnail">
             </div>
+            
+        </section>
 
+        <!-- DESCRIPTION -->
+        <section class="row">
+            <div>
+                {% block product.description %}{% endblock %}
+            </div>
         </section>
     </div>
     
