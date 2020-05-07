@@ -1,32 +1,22 @@
-{% extends '../base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
     <div class="container">
-        <h2 class="h2">{{ product.name }}</h2>
+        <h2 class="h2">{{ object.name }}</h2>
         <section class="row">
-            <!-- Primary/Current image-->
             <div class="col-6">
 
                 <img src="..." class="img-fluid" alt="Responsive image">
 
 
             </div>
-            
-            <!-- image collection -->
-            <div class="col container">
+            <div clas="col">
                     <img src="..." alt="..." class="img-thumbnail">
                     <img src="..." alt="..." class="img-thumbnail">
                     <img src="..." alt="..." class="img-thumbnail">
             </div>
-            
-        </section>
 
-        <!-- DESCRIPTION -->
-        <section class="row">
-            <div>
-                {% block product.description %}{% endblock %}
-            </div>
         </section>
     </div>
-    
+
 {% endblock %}
