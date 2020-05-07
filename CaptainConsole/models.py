@@ -3,7 +3,10 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -11,6 +14,9 @@ class Product(models.Model):
     description = models.CharField(max_length=999, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.FloatField()
+
+    def __str__(self):
+        return self.name
 
 
 class Address(models.Model):
@@ -27,6 +33,9 @@ class UserInfo(models.Model):
     password = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return self.email
+
 
 class Shipping(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
@@ -41,4 +50,5 @@ class Order(models.Model):
     owner = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     status = models.CharField(max_length=255)
     shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT)
+
 
