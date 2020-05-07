@@ -1,10 +1,20 @@
 {% extends '../base.html' %}
 
 {% block content %}
-    <h3>Products list</h3>
+    <h2>Products list</h2>
+    <section class="container">
+        {% for product in products %}
+        
+            <!-- Single product cards-->
+            <div class="card my-3 mx-3" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">
+                        {{ product.name }}
+                        <span class="badge badge-primary">{{ product.price }}$ </span></p>
+                </div>
+            </div>
 
-    {% for product in products %}
-        <p>{{ product.name }}</p>
-        <span> {{ product.price }}</span>
-    {% endfor %}
+        {% endfor %}
+    </section>
 {% endblock %}
