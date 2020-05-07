@@ -3,7 +3,12 @@ from .models import Product
 
 
 def list_products(request):
-    context = {
-        'products': Product.objects.all()
-    }
-    return render(request, 'list_products.html', context)
+    # context = {
+    #     'products': Product.objects.all()
+    # }
+    return render(request, 'catalog/list_products.html')
+
+
+def single_product(request):
+
+    return render(request, 'product/single_product.html')
