@@ -27,10 +27,8 @@ class Address(models.Model):
 
 
 class UserInfo(models.Model):
-    admin = models.BooleanField(default=False)
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
 
     def __str__(self):
