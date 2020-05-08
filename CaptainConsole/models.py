@@ -1,10 +1,30 @@
 from django.db import models
-from django.template.defaultfilters import slugify
+from mptt.models import MPTTModel, TreeForeignKey
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
+                            related_name='children', db_index=True)
+    slug = models.SlugField()
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        unique_together = ('parent', 'slug')
+        verbose_name_plural = 'categories'
+
+    def get_slug_list(self):
+        try:
+            ancestors = self.get_ancestors(include_self=True)
+        except:
+            ancestors = []
+        else:
+            ancestors = [i.slug for i in ancestors]
+        slugs = []
+        for i in range(len(ancestors)):
+            slugs.append('/'.join(ancestors[:i + 1]))
 
     def __str__(self):
         return self.name
@@ -12,10 +32,10 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=999, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    description = models.TextField(blank=True)
+    category = TreeForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField()
-    slug = models.SlugField(null=False, unique=True)
+    slug = models.SlugField(null=False)
 
     def __str__(self):
         return self.name
@@ -50,5 +70,3 @@ class Order(models.Model):
     owner = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     status = models.CharField(max_length=255)
     shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT)
-
-
