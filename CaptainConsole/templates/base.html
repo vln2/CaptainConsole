@@ -37,11 +37,11 @@
                 </div>
             </form>
             <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
-            <button type="button" class="btn btn-primary">Login/Register</button>
+            <a href="/register" class="btn btn-primary">Login/Register</a>
         </nav>
     </header>    
     <!-- Breadcrumbs -->
-    {%  block breadcrumbs%}
+        {% block breadcrumbs %}
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Home</li>
@@ -49,8 +49,8 @@
                 <li class="breadcrumb-item active">GameCube</li>
             </ol>
         </nav>
-    {% endblock breadcrumbs %}
-    <main>
+        {% endblock breadcrumbs %}
+    <main class="container mt-4">
         {% block content %}
         {% endblock content %}
     </main>
