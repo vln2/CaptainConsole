@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'mptt',
     # our own apps
 ]
 
@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'CaptainConsole.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nuvcvsni',
-        'USER': 'nuvcvsni',
-        'PASSWORD': 'n1USDmjnDy07yizI_hue6wcWj-uMgX7G',
-        'HOST': 'dumbo.db.elephantsql.com',
+        'NAME': 'vuxzsrki',
+        'USER': 'vuxzsrki',
+        'PASSWORD': 'ouphCiyrbDS0WbYasGncOERACQ7GAji1',
+        'HOST': 'kandula.db.elephantsql.com',
         'PORT': '5432'
     }
 }

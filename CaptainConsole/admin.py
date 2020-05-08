@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from mptt.admin import MPTTModelAdmin
 from .models import *
 
 
@@ -13,9 +13,8 @@ class ProductInline(admin.TabularInline):
     model = Product
 
 
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent')
-    inlines = [ProductInline]
+class CategoryAdmin(MPTTModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
 
 
 admin.site.register(Product, ProductAdmin)
