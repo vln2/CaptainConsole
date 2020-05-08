@@ -24,7 +24,7 @@ def registerUser(request):
                 messages.success(request, 'Account has been made, Welcome ' +  user)
                 return redirect('login')
 
-        return render(request, 'register.html')
+        return render(request, 'pages/register.html')
 
 #======================= LOGIN
 def userLogin(request):
@@ -43,7 +43,7 @@ def userLogin(request):
             else: 
                 messages.info(request, 'Your username OR password is incorrect')
         context = {}
-        return render(request, 'login.html', context)
+        return render(request, 'pages/login.html', context)
 
 #======================= USER LOG OUT
 def userLogout(request):
@@ -51,16 +51,17 @@ def userLogout(request):
     return redirect('login')
 
 #======================= CATEGORY / LIST_PRODUCTS
-def listProducts(request):
+def productList(request):
+    aProducts = Product.objects.all()
     context = {
-        'products': Product.objects.all()
+        'products': aProducts
     }
-    return render(request, 'catalog/list_products.html', context)
+    return render(request, 'pages/product_list.html', context)
 
 #======================= SINGLE PRODUCT
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'product_details.html'
+    template_name = 'pages/product_details.html'
 
 
 #passa að bæta við @login_required(login_url='login') ef notandi þarf að vera skráður inn til að gera einhvað ákveðið

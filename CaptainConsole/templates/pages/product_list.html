@@ -1,5 +1,7 @@
 {% extends '../base.html' %}
 
+
+<!--    Page content      -->
 {% block content %}
     <h2>Products list</h2>
     <section class="container">
@@ -10,7 +12,7 @@
                 <img src="..." class="card-img-top" alt="...">
                 <div class="card-body">
                     <p class="card-text">
-                        {{ product.name }}
+                        <a href="/products/{{product.slug}}" >{{ product.name }}</a>
                         <span class="badge badge-primary">{{ product.price }}$ </span></p>
                 </div>
             </div>

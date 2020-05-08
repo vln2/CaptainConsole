@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block head_title %}{% endblock %}</title>
+    <title>{% block head_title %}Captain Console's RetroGame Shop{% endblock head_title %}</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
@@ -27,8 +27,6 @@
                 <img src="{%static "media/captain_console_logo.png" %}" width="50" height="50" alt=""> 
             </a>
                 Captain Console's RetroGame Shop
-
-                
             <form class="form-inline">
                         
                 <div class="input-group mb-3">
@@ -38,17 +36,20 @@
                     </div>
                 </div>
             </form>
+            <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
             <button type="button" class="btn btn-primary">Login/Register</button>
         </nav>
     </header>    
     <!-- Breadcrumbs -->
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">Home</li>
-            <li class="breadcrumb-item">Nintendo</li>
-            <li class="breadcrumb-item active">GameCube</li>
-        </ol>
-    </nav>
+    {%  block breadcrumbs%}
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item">Nintendo</li>
+                <li class="breadcrumb-item active">GameCube</li>
+            </ol>
+        </nav>
+    {% endblock breadcrumbs %}
     <main>
         {% block content %}
         {% endblock content %}
