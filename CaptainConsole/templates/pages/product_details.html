@@ -12,7 +12,7 @@
         <!-- THE IMAGES 
             bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
         -->
-        <section class="row">
+        <section class="container row">
             <div class="col-8">
                 <!-- THE FULL IMAGE (only one should be visible at a time) -->
                 <div class="tab-content">
@@ -36,26 +36,26 @@
                 </div>
             </div>
         </section>
-        
+        <hr>
         <!-- THE DETAILS-->
         <section>
-            <ul >
                 <!-- PRICE -->
-                <li>
-                    <h3 class="h4">Price:</h3>
-                    <span>$</span>
-                </li>
+                <div class="container">
+                    <h3 class="h5 d-inline">Price:</h3>
+                    <span>{{object.price}}</span>
+                </div>
+                <hr>
                 <!-- DESCRIPTION -->
-                <li>
-                    <h3 class="h4">Description</h3>
+                <div class="container">
+                    <h3 class="h5">Description</h3>
                     <p>{{object.description}}</p>
-                </li>
-            </ul>
+                </div>
         </section>
-
+        <hr>
         <!-- THE SEARCH/PRODUCTS VIEWED HISTORY -->
+        <h2 class="h3">Recently Viewed Products</h2>
         <section>
-            <h2 class="h3">Recently Viewed Products</h2>
+            <!-- CAROUSEL / LIST OF RECENTLY VIEWED PRODUCTS-->
         </section>
     </main>
 
