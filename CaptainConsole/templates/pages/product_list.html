@@ -3,20 +3,25 @@
 
 <!--    Page content      -->
 {% block content %}
+<main class="container">
+
+    <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
     <h2>Products list</h2>
     <section class="container">
         {% for product in products %}
         
             <!-- Single product cards-->
-            <div class="card my-3 mx-3" style="width: 18rem;">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <p class="card-text">
-                        <a href="/products/{{product.slug}}" >{{ product.name }}</a>
-                        <span class="badge badge-primary">{{ product.price }}$ </span></p>
+            <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
+                <!-- CARD IMAGE -->
+                <img src="..." class="card-img-top rounded-top" alt="...">
+                <!-- CARD TEXT -->
+                <div class="card-body text-center rounded-bottom ">
+                    <a href="/products/{{product.slug}}" >{{ product.name }}</a>
+                    <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
                 </div>
             </div>
 
         {% endfor %}
     </section>
+</main>
 {% endblock %}

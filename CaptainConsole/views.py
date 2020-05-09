@@ -24,7 +24,7 @@ def registerUser(request):
             messages.success(request, 'Account has been made, Welcome ' +  user)
             return redirect('login')
 
-    return render(request, 'pages/register.html')
+    return render(request, 'pages/register.html', {'form': form})
 
 #======================= LOGIN
 def userLogin(request):
