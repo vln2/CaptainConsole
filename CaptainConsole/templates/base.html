@@ -12,32 +12,34 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.17.0/css/mdb.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.17.0/css/mdb.min.css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
-    
+    <link rel="stylesheet" href="{%static "css/style.css" %}">
 </head>
 <body>
     <!--        Header      -->
     <header>
         <nav class="navbar navbar-light bg-light">
-
+            <!-- LOGO & NAME -->
             <a class="navbar-brand">
-                <img src="{%static "media/captain_console_logo.png" %}" width="50" height="50" alt=""> 
+                <img src="{%static "media/captain_console_logo.png" %}" class="d-inline-block align-center" width="50" height="50" alt="">
+                <span class="pl-3">Captain Console's RetroGame Shop</span>
+                
             </a>
-                Captain Console's RetroGame Shop
-            <form class="form-inline">
-                        
+            
+            <form class="form-inline my-lg-0 ">
                 <div class="input-group mb-3">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">                 
-                        <button class="btn btn-outline-success input-group-text" type="submit">Search</button>
+                    <input type="text" class="form-control"type="search" placeholder="" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success my-sm-0" type="submit">Search</button>
                     </div>
                 </div>
             </form>
-            <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
-            <a href="/register" class="btn btn-primary">Login/Register</a>
+            <div>
+                    
+                <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
+                <a href="/register" class="btn btn-primary">Login/Register</a>
+            </div>
+            <!-- SEARCH BAR -->        
         </nav>
     </header>    
     <!--        Breadcrumbs         -->
