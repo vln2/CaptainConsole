@@ -1,5 +1,5 @@
 {% extends '../base.html' %}
-
+{% load static %}
 <!--    Page title      -->
 {% block head_title %}
     {{ object.name }}
@@ -9,19 +9,53 @@
 {% block content %}
     <main class="container">
         <h2 class="h2">{{ object.name }}</h2>
+        <!-- THE IMAGES 
+            bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
+        -->
         <section class="row">
-            <div class="col-6">
-
-                <img src="..." class="img-fluid" alt="Responsive image">
-
-
+            <div class="col-8">
+                <!-- THE FULL IMAGE (only one should be visible at a time) -->
+                <div class="tab-content">
+                    <!-- First/Selected figure shall have class 'show active'-->
+                    {% for image in object.gallery %}
+                        <figure class="tab-pane fade" role="tab-panel">
+                            <img src="{{image.full}}" alt="{{image.desc}}" class="img-fluid border border-light rounded shadow-sm my-2">
+                        </figure>
+                    {% endfor %}
+                </div>
             </div>
-            <div clas="col">
-                    <img src="..." alt="..." class="img-thumbnail">
-                    <img src="..." alt="..." class="img-thumbnail">
-                    <img src="..." alt="..." class="img-thumbnail">
+            <!-- IMAGE COLLECTION -->
+            <div class="col-4 d-flex flex-column">
+                <div class="list-group" role="tablist">
+                    <!-- First item in the list would get the class 'active' as the currently selected image -->
+                    {% for image in object.gallery %}
+                        <a class="list-group-item"  data-toggle="list" href="#" role="tab">
+                            <img src="{{image.thumb}}" alt="" class="img-thumbnail border border-light rounded shadow-sm my-2">
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
+        </section>
+        
+        <!-- THE DETAILS-->
+        <section>
+            <ul >
+                <!-- PRICE -->
+                <li>
+                    <h3 class="h4">Price:</h3>
+                    <span>$</span>
+                </li>
+                <!-- DESCRIPTION -->
+                <li>
+                    <h3 class="h4">Description</h3>
+                    <p>{{object.description}}</p>
+                </li>
+            </ul>
+        </section>
 
+        <!-- THE SEARCH/PRODUCTS VIEWED HISTORY -->
+        <section>
+            <h2 class="h3">Recently Viewed Products</h2>
         </section>
     </main>
 
