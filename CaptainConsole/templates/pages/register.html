@@ -11,16 +11,16 @@
 <form method="POST" action="">
     <!--það þarf síðan að færa {% csrf_token %} inní htmlið til að það matchi -->
     {% csrf_token %}
-    {{form.username.lable}}
+    {{form.username.label}}
     {{form.username}}
     
-    {{form.email.lable}}
+    {{form.email.label}}
     {{form.email}}
 
-    {{form.password1.lable}}
+    {{form.password1.label}}
     {{form.password1}}
 
-    {{form.password2.lable}}
+    {{form.password2.label}}
     {{form.password2}}
 
 
