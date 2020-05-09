@@ -20,14 +20,14 @@
     <header>
         <nav class="navbar navbar-light bg-light">
             <!-- LOGO & NAME -->
-            <a class="navbar-brand">
+            <a class="navbar-brand" href="/">
                 <img src="{%static "media/captain_console_logo.png" %}" class="d-inline-block align-center" width="50" height="50" alt="">
                 <span class="pl-3">Captain Console's RetroGame Shop</span>
                 
             </a>
             <!-- SEARCH BAR-->
             <form class="form-inline my-lg-0 ">
-                <div class="input-group mb-3">
+                <div class="input-group">
                     <input type="text" class="form-control"type="search" placeholder="" aria-label="Search">
                     <div class="input-group-append">
                         <button class="btn btn-outline-success my-sm-0" type="submit">Search</button>
@@ -43,24 +43,22 @@
         </nav>
     </header>    
     <!--        Breadcrumbs         -->
-        {% block breadcrumbs %}
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Home</li>
-                <li class="breadcrumb-item">Nintendo</li>
-                <li class="breadcrumb-item active">GameCube</li>
-            </ol>
-        </nav>
-        {% endblock breadcrumbs %}
+    {% block breadcrumbs %}
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Home</li>
+            <li class="breadcrumb-item">Nintendo</li>
+            <li class="breadcrumb-item active">GameCube</li>
+        </ol>
+    </nav>
+    {% endblock breadcrumbs %}
 
     <!--         CONTENT         -->
-    <main class="container mt-4">
-        {% block content %}
-        {% endblock content %}
-    </main>
+    {% block content %}
+    {% endblock content %}
     
     <!--         FOOTER         -->
-    <footer class="blockquote-footer">
+    <footer class="blockquote-footer bg-light">
         <h3>Footer stuff</h3>
     </footer>
 

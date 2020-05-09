@@ -6,29 +6,35 @@
 
 <!--    Page content      -->
 {% block content %}
-<h2>Make an account</h2>
 
-<form method="POST" action="">
-    <!--það þarf síðan að færa {% csrf_token %} inní htmlið til að það matchi -->
-    {% csrf_token %}
-    {{form.username.label}}
-    {{form.username}}
+<main class="container">
+        
+    <h2>Make an account</h2>
     
-    {{form.email.label}}
-    {{form.email}}
+    <section class="container">
+            
+        <form method="POST" action="">
+            <!--það þarf síðan að færa {% csrf_token %} inní htmlið til að það matchi -->
+            {% csrf_token %}
+            {{form.username.label}}
+            {{form.username}}
+            
+            {{form.email.label}}
+            {{form.email}}
 
-    {{form.password1.label}}
-    {{form.password1}}
+            {{form.password1.label}}
+            {{form.password1}}
 
-    {{form.password2.label}}
-    {{form.password2}}
+            {{form.password2.label}}
+            {{form.password2}}
 
 
-    <input type="submit" class="btn btn-success" name="Create User">
-</form>
+            <input type="submit" class="btn btn-success" name="Create User">
+        </form>
 
-<!-- væri til í að hafa neðst "already have an account?" login here takka-->
-    <!-- Registration link -->
-    <a href="/login" class="btn btn-primary">Already have an account?</a>
+        <!-- Registration link -->
+        <a href="/login" class="btn btn-primary">Already have an account?</a>
 
+    </section>
+</main>
 {% endblock content %}
