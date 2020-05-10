@@ -3,14 +3,19 @@ from mptt.admin import MPTTModelAdmin
 from .models import *
 
 
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price', 'category')
     list_filter = ('category',)
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [
+        ProductImageInline,
+    ]
 
-
-class ProductInline(admin.TabularInline):
-    model = Product
+# class ProductInline(admin.TabularInline):
+#     model = Product
 
 
 class CategoryAdmin(MPTTModelAdmin):

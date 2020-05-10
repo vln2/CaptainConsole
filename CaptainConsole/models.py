@@ -41,6 +41,15 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+# ======================= PRODUCT IMAGES
+class ProductImage(models.Model):
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/products/', default='No_image_available.png')
+
+    def __str__(self):
+        return str(self.product.id)
+
 #======================= ADDRESS
 class Address(models.Model):
     street = models.CharField(max_length=255)
