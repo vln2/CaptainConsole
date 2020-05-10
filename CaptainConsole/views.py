@@ -63,5 +63,8 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'pages/product_details.html'
 
+    def get_object(self):
+        return Product.objects.get(id=self.kwargs['id'])
+
 
 #passa að bæta við @login_required(login_url='login') ef notandi þarf að vera skráður inn til að gera einhvað ákveðið
