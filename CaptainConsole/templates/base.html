@@ -12,54 +12,60 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.17.0/css/mdb.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.17.0/css/mdb.min.css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
-    
+    <link rel="stylesheet" href="{%static "css/style.css" %}">
 </head>
 <body>
-    <!-- Header -->
+    <!--        Header      -->
     <header>
         <nav class="navbar navbar-light bg-light">
-
-            <a class="navbar-brand">
-                <img src="{%static "media/captain_console_logo.png" %}" width="50" height="50" alt=""> 
+            <!-- LOGO & NAME -->
+            <a class="navbar-brand" href="/">
+                <img src="{%static "media/captain_console_logo.png" %}" class="d-inline-block align-center" width="50" height="50" alt="">
+                <span class="pl-3">Captain Console's RetroGame Shop</span>
+                
             </a>
-                Captain Console's RetroGame Shop
-            <form class="form-inline">
-                        
-                <div class="input-group mb-3">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">                 
-                        <button class="btn btn-outline-success input-group-text" type="submit">Search</button>
+            <!-- SEARCH BAR-->
+            <form class="form-inline my-lg-0 ">
+                <div class="input-group">
+                    <input type="text" class="form-control"type="search" placeholder="" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success my-sm-0" type="submit">Search</button>
                     </div>
                 </div>
             </form>
-            <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
-            <a href="/register" class="btn btn-primary">Login/Register</a>
+
+            <!-- LOGIN/REGISTER/PROFILE-->
+            <div>
+                <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
+                <a href="/register" class="btn btn-primary">Login/Register</a>
+            </div>      
         </nav>
     </header>    
-    <!-- Breadcrumbs -->
-        {% block breadcrumbs %}
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Home</li>
-                <li class="breadcrumb-item">Nintendo</li>
-                <li class="breadcrumb-item active">GameCube</li>
-            </ol>
-        </nav>
-        {% endblock breadcrumbs %}
-    <main class="container mt-4">
-        {% block content %}
-        {% endblock content %}
-    </main>
+    <!--        Breadcrumbs         -->
+    {% block breadcrumbs %}
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Home</li>
+            <li class="breadcrumb-item">Nintendo</li>
+            <li class="breadcrumb-item active">GameCube</li>
+        </ol>
+    </nav>
+    {% endblock breadcrumbs %}
+
+    <!--         CONTENT         -->
+    {% block content %}
+    {% endblock content %}
     
+    <!--         FOOTER         -->
+    <footer class="blockquote-footer bg-light">
+        <h3>Footer stuff</h3>
+    </footer>
+
+    <!--         SCRIPTS         -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.17.0/js/mdb.min.js"></script>
     <!-- Initializations -->
     <script type="text/javascript">
         // Animations initialization

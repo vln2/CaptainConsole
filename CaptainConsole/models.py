@@ -2,6 +2,7 @@ from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
 
+#======================= CATEGORY
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
@@ -29,7 +30,7 @@ class Category(MPTTModel):
     def __str__(self):
         return self.name
 
-
+#======================= PRODUCT
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -40,14 +41,14 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
+#======================= ADDRESS
 class Address(models.Model):
     street = models.CharField(max_length=255)
     postalCode = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
 
-
+#======================= USERINFO
 class UserInfo(models.Model):
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
@@ -56,7 +57,7 @@ class UserInfo(models.Model):
     def __str__(self):
         return self.email
 
-
+#======================= SHIPPING
 class Shipping(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
     dateShipped = models.DateTimeField()
@@ -64,7 +65,7 @@ class Shipping(models.Model):
     status = models.CharField(max_length=255)
     shippingCost = models.FloatField()
 
-
+#======================= ORDER
 class Order(models.Model):
     dateCreated = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(UserInfo, on_delete=models.CASCADE)

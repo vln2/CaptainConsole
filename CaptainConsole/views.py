@@ -24,7 +24,7 @@ def registerUser(request):
             messages.success(request, 'Account has been made, Welcome ' +  user)
             return redirect('login')
 
-    return render(request, 'pages/register.html')
+    return render(request, 'pages/register.html', {'form': form})
 
 #======================= LOGIN
 def userLogin(request):
@@ -62,6 +62,9 @@ def productList(request):
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'pages/product_details.html'
+
+    def get_object(self):
+        return Product.objects.get(id=self.kwargs['id'])
 
 
 #passa að bæta við @login_required(login_url='login') ef notandi þarf að vera skráður inn til að gera einhvað ákveðið

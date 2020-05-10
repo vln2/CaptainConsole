@@ -1,0 +1,36 @@
+[
+    {
+       "model":"CaptainConsole.product",
+       "pk":1,
+       "fields":{
+          "name":"Sonic CD",
+          "description":"Sonic the Hedgehog CD is a 1993 platform game for the Sega CD. The story follows Sonic the Hedgehog as he attempts to save an extraterrestrial body, Little Planet, from Doctor Robotnik. As a Sonic the Hedgehog series platformer, Sonic runs and jumps through several themed levels while collecting rings and defeating robots. Sonic CD is distinguished from other Sonic games by its time travel feature, a key aspect to the story and gameplay. By traveling through time, players can access different versions of stages, featuring alternative layouts, music, and graphics.",
+          "category":8,
+          "price":49.99,
+          "slug":"sonic-cd"
+        }
+    },
+    {
+       "model":"CaptainConsole.product",
+       "pk":2,
+       "fields":{
+          "name":"Mortal Kombat",
+          "description":"",
+          "category":2,
+          "price":29.99,
+          "slug":"mortal-kombat"
+        }
+    },
+    {
+       "model":"CaptainConsole.product",
+       "pk":3,
+       "fields":{
+          "name":"Mortal Kombat",
+          "description":"",
+          "category":4,
+          "price":19.99,
+          "slug":"mortal-kombat"
+            
+        }
+    }
+ ]

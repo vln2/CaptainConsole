@@ -8,8 +8,9 @@ urlpatterns = [
 
     path('register/', views.registerUser, name='register'),
     path('login/', views.userLogin, name='login'),
-    path('logout/', views.logout, name='logoin'),
+    path('logout/', views.logout, name='logout'),
 
-    path('products/<slug:slug>', views.ProductDetailView.as_view(), name='product_details')
+    path('product/<int:id>/<slug:slug>/', views.ProductDetailView.as_view(), name='product_details'),
+    path('product/<int:id>/', views.ProductDetailView.as_view(), name='product_details')
 
 ]

@@ -6,29 +6,46 @@
 
 <!--    Page content      -->
 {% block content %}
-<h2>Make an account</h2>
+<main class="container">
+        
+    <h2>Make an account</h2>
 
-<form method="POST" action="">
-    <!--það þarf síðan að færa {% csrf_token %} inní htmlið til að það matchi -->
-    {% csrf_token %}
-    {{form.username.lable}}
-    {{form.username}}
+    <section class="container">
+
+        <form method="POST" action="">
+            <!--það þarf síðan að færa {% csrf_token %} inní htmlið til að það matchi -->
+            {% csrf_token %}
     
-    {{form.email.lable}}
-    {{form.email}}
+            <!-- USERNAME  -->
+            <fieldset class="form-group row">
+                <label for="{{ form.username.id_for_label }}" class="col-sm-2 col-form-label">Username:</label>
+                {{form.username}}
+            </fieldset>
+    
+            <!-- EMAIL  -->
+            <fieldset class="form-group row">
+                <label for="{{ form.email.id_for_label }}" class="col-sm-2 col-form-label">Email:</label>
+                {{form.email}}
+            </fieldset>
+    
+            <!-- PASSWORD (I have no clue why the input does not accept the style) -->
+            <fieldset class="form-group row">
+                <label for="{{ form.password1.id_for_label }}" class="col-sm-2 col-form-label">Password:</label>
+                {{form.password1}}
+            </fieldset>
+    
+            <fieldset class="form-group row">
+                <label for="{{ form.password2.id_for_label }}" class="col-sm-2 col-form-label">Password Confirmation:</label>
+                {{form.password2}}
+            </fieldset>
+            
+            <!-- SUMBIT (I have no clue why it does not accept the style -->
+            <input type="submit" class="btn btn-success mb-3" name="Create User">
+        </form>
+    
+        <!-- LOGIN WITH EXISTING ACCOUNT -->
+        <a href="/login" class="btn btn-primary mb-3">Already have an account?</a>
+    </section>
 
-    {{form.password1.lable}}
-    {{form.password1}}
-
-    {{form.password2.lable}}
-    {{form.password2}}
-
-
-    <input type="submit" class="btn btn-success" name="Create User">
-</form>
-
-<!-- væri til í að hafa neðst "already have an account?" login here takka-->
-    <!-- Registration link -->
-    <a href="/login" class="btn btn-primary">Already have an account?</a>
-
+</main>
 {% endblock content %}
