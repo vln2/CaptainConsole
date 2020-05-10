@@ -12,7 +12,7 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
 
     path('product/<int:id>/<slug:slug>/', views.ProductDetailView.as_view(), name='product_details'),
-    path('product/<int:id>/', views.ProductDetailView.as_view(), name='product_details')
+    path('product/<int:id>/', views.ProductDetailView.as_view(), name='product_details'),
 
     re_path(r'^category/(?P<hierarchy>.+)/$', views.show_category, name='category'),
 ]
