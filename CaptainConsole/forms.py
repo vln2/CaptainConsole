@@ -20,3 +20,5 @@ class CreatingUserForms(UserCreationForm):
             'password1': forms.PasswordInput(attrs={'class': 'form-control col-sm-10'}),
             'password2': forms.PasswordInput(attrs={'class': 'form-control col-sm-10'})
         }
+
+class UserLoginForms()

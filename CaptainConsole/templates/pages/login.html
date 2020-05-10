@@ -11,8 +11,32 @@
     
     <h2>Login </h2>
 
-    <!-- Login form -->
+    <section class="container"></section>
+        <form method="POST" action="">
+            <!--það þarf síðan að færa {% csrf_token %} inní htmlið til að það matchi -->
+            {% csrf_token %}
 
+            <!-- Login form -->
+
+            <!-- USERNAME  -->
+            <fieldset class="form-group row">
+                <label for="{{ form.username.id_for_label }}" class="col-sm-2 col-form-label">Username:</label>
+                {{form.username}}
+            </fieldset>
+
+            <!-- PASSWORD (I have no clue why the input does not accept the style) -->
+            <fieldset class="form-group row">
+                <label for="{{ form.password1.id_for_label }}" class="col-sm-2 col-form-label">Password:</label>
+                {{form.password1}}
+            </fieldset>
+        
+        <!-- SUMBIT (I have no clue why it does not accept the style -->
+        <input type="submit" class="btn btn-success mb-3" name="Create User">
+        </form>
+
+    <!-- REGISTER IF NO ACCOUNT -->
+    <a href="/register" class="btn btn-primary mb-3">Dont have an account?</a>
+</section>
 
 </main>
 {% endblock content %}
