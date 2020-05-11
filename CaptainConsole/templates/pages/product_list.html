@@ -14,39 +14,44 @@
 {% endblock %}
 
 {% block sidebar %}
-    <div class="list-group">
+{% endblock %}
+
+{% block content %}
+<div class="row">  
+    <nav class="list-group col-3">
     {% full_tree_for_model CaptainConsole.Category as gs %}
     {% for node, structure in gs|tree_info %}
         <a href="/category/{{ node.get_slug_link }}" class="list-group-item">
             {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
         </a>
     {% endfor %}
-    </div>
-{% endblock %}
+    </nav>
+    <main class="container col-9">
 
-{% block content %}
-<main class="container">
-
-    <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
-    <h2>Products list</h2>
-    <section class="container">
-        {% for product in products %}
-        
-            <!-- Single product cards-->
-            <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
-                <!-- CARD IMAGE -->
-                <img src="{{product.thumb.url}}" class="card-img-top rounded-top" alt="...">
-                <!-- CARD TEXT -->
-                <div class="card-body text-center rounded-bottom ">
-                    <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
-                    <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
+        <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
+        <h2>Products list</h2>
+        <section class="container d-flex flex-wrap">
+            {% for product in products %}
+            
+                <!-- Single product cards-->
+                <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
+                    <!-- CARD IMAGE -->
+                    <img src="{{product.thumb.url}}" class="card-img-top rounded-top" alt="...">
+                    <!-- CARD TEXT -->
+                    <div class="card-body text-center rounded-bottom ">
+                        <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
+                        <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
+                    </div>
                     <form method="POST" action="/add-to-cart/{{ product.id }}">
                         {% csrf_token %}
                         {{ add_to_cart_form }}
-                        <input type="submit" class="btn btn-success mb-3" value="Add to cart">
+	                    <div class="btn-group btn-group" data-toggle="buttons">
+	                        <input type="submit" class="btn btn-light col-6 border border-primary" value="Add to cart">
+	                        <button class="btn btn-light col-6 border border-primary">Share</button>
+	                    </div>
                     </form>
                 </div>
-            </div>
+                </div>
 
         {% endfor %}
     </section>
@@ -67,6 +72,6 @@
             <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
+    </main>
 </div>
-</main>
 {% endblock %}
