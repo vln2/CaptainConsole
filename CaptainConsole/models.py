@@ -50,6 +50,7 @@ class Product(models.Model):
     category = TreeForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField()
     slug = models.SlugField(null=False)
+    thumb = models.ImageField(upload_to='images/thumbs/', default='No_image_available.png', blank=True)
 
     def __str__(self):
         return self.name
@@ -58,7 +59,7 @@ class Product(models.Model):
 class ProductImage(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='images/products/', default='No_image_available.png')
+    image = models.ImageField(upload_to='images/products/')
 
     def __str__(self):
         return str(self.product.id)
