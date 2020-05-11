@@ -14,40 +14,42 @@
 {% endblock %}
 
 {% block sidebar %}
-    <div class="list-group">
+{% endblock %}
+
+{% block content %}
+<div class="row">  
+    <nav class="list-group col-3">
     {% full_tree_for_model CaptainConsole.Category as gs %}
     {% for node, structure in gs|tree_info %}
         <a href="/category/{{ node.get_slug_link }}" class="list-group-item">
             {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
         </a>
     {% endfor %}
-    </div>
-{% endblock %}
+    </nav>
+    <main class="container col-9">
 
-{% block content %}
-<main class="container">
-
-    <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
-    <h2>Products list</h2>
-    <section class="container d-flex flex-wrap">
-        {% for product in products %}
-        
-            <!-- Single product cards-->
-            <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
-                <!-- CARD IMAGE -->
-                <img src="{{product.thumb.url}}" class="card-img-top rounded-top" alt="...">
-                <!-- CARD TEXT -->
-                <div class="card-body text-center rounded-bottom ">
-                    <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
-                    <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
+        <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
+        <h2>Products list</h2>
+        <section class="container d-flex flex-wrap">
+            {% for product in products %}
+            
+                <!-- Single product cards-->
+                <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
+                    <!-- CARD IMAGE -->
+                    <img src="{{product.thumb.url}}" class="card-img-top rounded-top" alt="...">
+                    <!-- CARD TEXT -->
+                    <div class="card-body text-center rounded-bottom ">
+                        <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
+                        <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
+                    </div>
+                    <div class="btn-group btn-group" data-toggle="buttons">
+                        <button class="btn btn-light col-6 border border-primary">Add to cart</button>
+                        <button class="btn btn-light col-6 border border-primary">Share</button>
+                    </div>
                 </div>
-                <div class="btn-group btn-group" data-toggle="buttons">
-                    <button class="btn btn-light col-6 border border-primary">Add to cart</button>
-                    <button class="btn btn-light col-6 border border-primary">Share</button>
-                </div>
-            </div>
 
-        {% endfor %}
-    </section>
-</main>
+            {% endfor %}
+        </section>
+    </main>
+</div>
 {% endblock %}
