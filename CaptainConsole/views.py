@@ -1,16 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
-#======================= VIEWS CREATED
-from .models import Product
+from .models import Product, Category
 from .forms import CreatingUserForms
 
-#======================= REGISTER USER
+
 def registerUser(request):
     #if request.user.is_authenticed:
     #    return redirect('base')
@@ -21,12 +19,11 @@ def registerUser(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request, 'Account has been made, Welcome ' +  user)
+            messages.success(request, 'Account has been made, Welcome ' + user)
             return redirect('login')
 
     return render(request, 'pages/register.html', {'form': form})
 
-#======================= LOGIN
 def userLogin(request):
     #if request.user.is_authenticed:
     #    return redirect('login')
@@ -45,12 +42,12 @@ def userLogin(request):
     context = {}
     return render(request, 'pages/login.html', context)
 
-#======================= USER LOG OUT
+
 def userLogout(request):
     logout(request)
     return redirect('login')
 
-#======================= CATEGORY / LIST_PRODUCTS
+
 def productList(request):
     aProducts = Product.objects.all()
     context = {
@@ -58,7 +55,7 @@ def productList(request):
     }
     return render(request, 'pages/product_list.html', context)
 
-#======================= SINGLE PRODUCT
+
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'pages/product_details.html'
@@ -66,5 +63,17 @@ class ProductDetailView(DetailView):
     def get_object(self):
         return Product.objects.get(id=self.kwargs['id'])
 
+
+def show_category(request, hierarchy=None):
+    categories_slug = hierarchy.split('/')
+    category_slug = categories_slug[-1]
+    category = Category.objects.get(slug=category_slug)
+
+    context = {
+        'instance': category,
+        'products': category.get_products,
+        'breadcrumbs': category.get_ancestors(include_self=True)
+    }
+    return render(request, 'pages/product_list.html', context)
 
 #passa að bæta við @login_required(login_url='login') ef notandi þarf að vera skráður inn til að gera einhvað ákveðið
