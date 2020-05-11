@@ -4,8 +4,8 @@
 <!--    Page content      -->
 
 {% block breadcrumbs %}
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+    <nav>
+        <ol class="breadcrumb mb-0" aria-label="breadcrumb">
             {% for breadcrumb in breadcrumbs %}
                <li class="breadcrumb-item"><a href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
             {% endfor %}
@@ -19,14 +19,14 @@
 {% block content %}
 <div class="row">  
     <nav class="list-group col-3">
-    {% full_tree_for_model CaptainConsole.Category as gs %}
-    {% for node, structure in gs|tree_info %}
-        <a href="/category/{{ node.get_slug_link }}" class="list-group-item">
-            {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
-        </a>
-    {% endfor %}
+        {% full_tree_for_model CaptainConsole.Category as gs %}
+        {% for node, structure in gs|tree_info %}
+            <a href="/category/{{ node.get_slug_link }}" class="list-group-item  list-group-item-action">
+                {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
+            </a>
+        {% endfor %}
     </nav>
-    <main class="container col-9">
+    <main class="container col-9 pt-3">
 
         <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
         <h2>Products list</h2>
