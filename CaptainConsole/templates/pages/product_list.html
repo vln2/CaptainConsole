@@ -42,14 +42,36 @@
                         <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
                         <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
                     </div>
-                    <div class="btn-group btn-group" data-toggle="buttons">
-                        <button class="btn btn-light col-6 border border-primary">Add to cart</button>
-                        <button class="btn btn-light col-6 border border-primary">Share</button>
-                    </div>
+                    <form method="POST" action="/add-to-cart/{{ product.id }}">
+                        {% csrf_token %}
+                        {{ add_to_cart_form }}
+	                    <div class="btn-group btn-group" data-toggle="buttons">
+	                        <input type="submit" class="btn btn-light col-6 border border-primary" value="Add to cart">
+	                        <button class="btn btn-light col-6 border border-primary">Share</button>
+	                    </div>
+                    </form>
+                </div>
                 </div>
 
-            {% endfor %}
-        </section>
+        {% endfor %}
+    </section>
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if products.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ products.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ products.number }} of {{ products.paginator.num_pages }}.
+        </span>
+
+        {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}">next</a>
+            <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
     </main>
 </div>
 {% endblock %}

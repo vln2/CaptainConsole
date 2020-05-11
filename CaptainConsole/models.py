@@ -1,8 +1,11 @@
 from django.db import models
+from django.conf import settings
 from mptt.models import MPTTModel, TreeForeignKey
 
 
 #======================= CATEGORY
+
+
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
@@ -73,14 +76,15 @@ class Address(models.Model):
 
 #======================= USERINFO
 class UserInfo(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
-    address = models.ForeignKey(Address, on_delete=models.PROTECT)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return self.email
 
-#======================= SHIPPING
+
 class Shipping(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
     dateShipped = models.DateTimeField()
@@ -88,9 +92,27 @@ class Shipping(models.Model):
     status = models.CharField(max_length=255)
     shippingCost = models.FloatField()
 
-#======================= ORDER
+
+class Item(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} of {self.product.name}"
+
 class Order(models.Model):
     dateCreated = models.DateTimeField(auto_now=True)
-    owner = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
-    status = models.CharField(max_length=255)
-    shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT)
+    items = models.ManyToManyField(Item)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT, null=True)
+    CART = 'C'
+    order_labels = (
+        (CART, 'Cart'),
+        ('P', 'Payment'),
+        ('S', 'Shipping'),
+        ('D', 'Done')
+    )
+    status = models.CharField(choices=order_labels, max_length=1, default='C')
+
+    def __str__(self):
+        return self.owner.username
