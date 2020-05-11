@@ -17,15 +17,28 @@ class Category(MPTTModel):
         verbose_name_plural = 'categories'
 
     def get_slug_list(self):
+        ancestors = []
+        slugs = []
+
         try:
             ancestors = self.get_ancestors(include_self=True)
-        except:
-            ancestors = []
-        else:
+        finally:
             ancestors = [i.slug for i in ancestors]
-        slugs = []
         for i in range(len(ancestors)):
             slugs.append('/'.join(ancestors[:i + 1]))
+
+        return slugs
+
+    def get_slug_link(self):
+        slugs = self.get_slug_list()
+        if slugs:
+            return slugs[-1]
+
+    def get_products(self):
+        descendants = self.get_descendants(include_self=True)
+        # descendants = [i.name for i in descendants]
+        products = Product.objects.filter(category__in=descendants)
+        return products
 
     def __str__(self):
         return self.name
@@ -37,9 +50,19 @@ class Product(models.Model):
     category = TreeForeignKey('Category', on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField()
     slug = models.SlugField(null=False)
+    thumb = models.ImageField(upload_to='images/thumbs/', default='No_image_available.png', blank=True)
 
     def __str__(self):
         return self.name
+
+# ======================= PRODUCT IMAGES
+class ProductImage(models.Model):
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/products/')
+
+    def __str__(self):
+        return str(self.product.id)
 
 #======================= ADDRESS
 class Address(models.Model):

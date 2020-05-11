@@ -1,7 +1,29 @@
 {% extends '../base.html' %}
-
+{% load mptt_tags %}
 
 <!--    Page content      -->
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+               <li class="breadcrumb-item"><a href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
+            {% endfor %}
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block sidebar %}
+    <div class="list-group">
+    {% full_tree_for_model CaptainConsole.Category as gs %}
+    {% for node, structure in gs|tree_info %}
+        <a href="/category/{{ node.get_slug_link }}" class="list-group-item">
+            {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
+        </a>
+    {% endfor %}
+    </div>
+{% endblock %}
+
 {% block content %}
 <main class="container">
 
@@ -13,7 +35,7 @@
             <!-- Single product cards-->
             <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
                 <!-- CARD IMAGE -->
-                <img src="..." class="card-img-top rounded-top" alt="...">
+                <img src="{{product.thumb.url}}" class="card-img-top rounded-top" alt="...">
                 <!-- CARD TEXT -->
                 <div class="card-body text-center rounded-bottom ">
                     <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
