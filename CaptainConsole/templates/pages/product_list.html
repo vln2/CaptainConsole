@@ -36,7 +36,7 @@
                 <!-- Single product cards-->
                 <div class="card my-3 mx-3 shadow-sm rounded" style="width: 18rem;">
                     <!-- CARD IMAGE -->
-                    <img src="{{product.thumb.url}}" class="card-img-top img-fluid" alt="...">
+                    <a href="/product/{{product.id}}/{{product.slug}}" ><img src="{{product.thumb.url}}" class="card-img-top img-fluid" alt="..."></a>
                     <!-- CARD TEXT -->
                     <div class="card-body text-center ">
                         <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>

@@ -1,0 +1,29 @@
+{% extends '../base.html' %}
+
+<!--    Page breadcrumbs (removed)      -->
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+
+<!--    Page content      -->
+{% block content %}
+<main class="container">
+    <!-- LIST OF PRODUCTS IN CART  -->
+    <ul>
+        {% for item in object.order.items %}
+            <li>
+                <!-- ITEM NAME / LINK -->
+                <a href="">{{item.name}}</a>
+                <!-- REMOVE ITEM FROM CART-->
+                <input type="button" value="remove item">
+            </li>
+        {% endfor %}
+    </ul>
+    <!-- PRICE INFO, DISCOUNT, VSK  -->
+    <h4>Total:</h4>
+    <span>??? $</span>
+    <!-- PROCEED TO CHECKOUT  -->
+    <button>Proceed to checkout</button>
+
+</main>
+{% endblock content %}

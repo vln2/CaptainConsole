@@ -6,10 +6,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Product, Category, ProductImage, Order, Item
-from django.db.models import F
 from .forms import CreatingUserForms, AddItemToCartForm
 
-
+# ======================= REGISTER USER
 def registerUser(request):
     #if request.user.is_authenticed:
     #    return redirect('base')
@@ -25,6 +24,7 @@ def registerUser(request):
 
     return render(request, 'pages/register.html', {'form': form})
 
+# ======================= LOGIN
 def userLogin(request):
     #if request.user.is_authenticed:
     #    return redirect('login')
@@ -44,11 +44,13 @@ def userLogin(request):
     return render(request, 'pages/login.html', context)
 
 
+# ======================= LOGOUT
 def userLogout(request):
     logout(request)
     return redirect('login')
 
 
+# ======================= PRODUCT LIST
 def productList(request):
     context = {
         'products': Product.objects.all()
@@ -56,6 +58,7 @@ def productList(request):
     return render(request, 'pages/product_list.html', context)
 
 
+# ======================= PRODUCT DETAILS
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'pages/product_details.html'
@@ -68,7 +71,8 @@ class ProductDetailView(DetailView):
         }
 
 
-def show_category(request, hierarchy=None):
+# ======================= SHOW CATEGORY
+def showCategory(request, hierarchy=None):
     categories_slug = hierarchy.split('/')
     category_slug = categories_slug[-1]
     category = Category.objects.get(slug=category_slug)
@@ -88,7 +92,8 @@ def show_category(request, hierarchy=None):
     return render(request, 'pages/product_list.html', context)
 
 
-def add_to_cart(request, product_id):
+# ======================= ADD TO CART
+def addToCart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     form = AddItemToCartForm(request.POST or None)
     if form.is_valid():
@@ -115,3 +120,11 @@ def add_to_cart(request, product_id):
     httpheaders = request.headers
     refer = httpheaders['Referer']
     return redirect(refer)
+
+    
+# ======================= VIEW CART
+def cartOverview(request):
+    context = {
+        'order' : Order.objects.filter(owner=request.user)
+    }
+    return render(request, 'pages/cart_overview.html', context)
