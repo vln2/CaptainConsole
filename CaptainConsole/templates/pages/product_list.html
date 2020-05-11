@@ -29,7 +29,7 @@
 
     <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
     <h2>Products list</h2>
-    <section class="container">
+    <section class="container d-flex flex-wrap">
         {% for product in products %}
         
             <!-- Single product cards-->
@@ -40,6 +40,10 @@
                 <div class="card-body text-center rounded-bottom ">
                     <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
                     <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
+                </div>
+                <div class="btn-group btn-group" data-toggle="buttons">
+                    <button class="btn btn-light col-6 border border-primary">Add to cart</button>
+                    <button class="btn btn-light col-6 border border-primary">Share</button>
                 </div>
             </div>
 
