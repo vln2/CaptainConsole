@@ -17,9 +17,9 @@
                 <!-- THE FULL IMAGE (only one should be visible at a time) -->
                 <div class="tab-content">
                     <!-- First/Selected figure shall have class 'show active'-->
-                    {% for image in object.gallery %}
+                    {% for image in object.gallery_set %}
                         <figure class="tab-pane fade" role="tab-panel">
-                            <img src="{{image.full}}" alt="{{image.desc}}" class="img-fluid border border-light rounded shadow-sm my-2">
+                            <img src="{{image.image.url}}" alt="{{image.desc}}" class="img-fluid border border-light rounded shadow-sm my-2">
                         </figure>
                     {% endfor %}
                 </div>
@@ -30,25 +30,25 @@
                     <!-- First item in the list would get the class 'active' as the currently selected image -->
                     {% for image in object.gallery %}
                         <a class="list-group-item"  data-toggle="list" href="#" role="tab">
-                            <img src="{{image.thumb}}" alt="" class="img-thumbnail border border-light rounded shadow-sm my-2">
+                            <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-light rounded shadow-sm my-2">
                         </a>
                     {% endfor %}
                 </div>
             </div>
-        </section>
+        </section> 
         <hr>
         <!-- THE DETAILS-->
         <section>
                 <!-- PRICE -->
                 <div class="container">
                     <h3 class="h5 d-inline">Price:</h3>
-                    <span>{{object.price}}</span>
+                    <span>{{object.product.price}}</span>
                 </div>
                 <hr>
                 <!-- DESCRIPTION -->
                 <div class="container">
                     <h3 class="h5">Description</h3>
-                    <p>{{object.description}}</p>
+                    <p>{{object.product.description}}</p>
                 </div>
         </section>
         <hr>

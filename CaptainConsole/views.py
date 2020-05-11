@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Product, Category
+from .models import Product, Category, ProductImage
+from django.db.models import F
 from .forms import CreatingUserForms
 
 
@@ -49,9 +49,8 @@ def userLogout(request):
 
 
 def productList(request):
-    aProducts = Product.objects.all()
     context = {
-        'products': aProducts
+        'products': Product.objects.all()
     }
     return render(request, 'pages/product_list.html', context)
 
@@ -61,7 +60,11 @@ class ProductDetailView(DetailView):
     template_name = 'pages/product_details.html'
 
     def get_object(self):
-        return Product.objects.get(id=self.kwargs['id'])
+        iProductId = self.kwargs['id']
+        return {
+            'product': Product.objects.get(id=iProductId),
+            'gallery': ProductImage.objects.filter(product=iProductId)
+        }
 
 
 def show_category(request, hierarchy=None):
