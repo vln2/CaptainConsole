@@ -15,7 +15,9 @@ urlpatterns = [
 
     path('product/<int:id>/<slug:slug>/', views.ProductDetailView.as_view(), name='product_details'),
     path('product/<int:id>/', views.ProductDetailView.as_view(), name='product_details'),
-    
+
+    path('add-to-cart/<int:product_id>', views.add_to_cart, name='add_to_cart'),
+
     re_path(r'^category/(?P<hierarchy>.+)/$', views.show_category, name='category'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
