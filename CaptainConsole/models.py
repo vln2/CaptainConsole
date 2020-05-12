@@ -71,6 +71,9 @@ class Address(models.Model):
     country = models.CharField(max_length=255)
 
 
+class Payment(models.Model):
+    
+
 class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)

@@ -1,9 +1,9 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import Order, Item
+from .models import Order, Item, Address
 
 
 class OrderForms(ModelForm):
@@ -23,6 +23,7 @@ class CreatingUserForms(UserCreationForm):
             'password2': forms.PasswordInput(attrs={'class': 'form-control col-sm-10'})
         }
 
+
 class LoginForm(AuthenticationForm):
     class Meta:
         model = User
@@ -32,7 +33,14 @@ class LoginForm(AuthenticationForm):
             'password': forms.PasswordInput(attrs={'class': 'form-control col-sm-10'})
         }
 
+
 class AddItemToCartForm(ModelForm):
     class Meta:
         model = Item
         fields = ('quantity',)
+
+
+class AddressForm(ModelForm):
+    class Meta:
+        model = Address
+        fields = '__all__'

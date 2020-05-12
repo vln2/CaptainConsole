@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Product, Category, ProductImage, Order, Item
-from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
+from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm
 from django.db.models import Q
 
 # ======================= REGISTER USER
@@ -144,8 +144,13 @@ def cart(request):
     }
     return render(request, 'pages/cart.html', context)
 
+
 def checkout(request):
-    return render(request, 'pages/checkout.html')
+    context = {
+        'addressform': AddressForm()
+    }
+    return render(request, 'pages/checkout.html', context)
+
 
 def search_results(request):
     context = {}
