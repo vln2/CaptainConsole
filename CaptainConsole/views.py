@@ -12,17 +12,17 @@ from .forms import CreatingUserForms, AddItemToCartForm
 def registerUser(request):
     #if request.user.is_authenticed:
     #    return redirect('base')
-    form = CreatingUserForms()
+    registerForm = CreatingUserForms()
     #else:
     if request.method == 'POST':
-        form = CreatingUserForms(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
+        registerForm = CreatingUserForms(request.POST)
+        if registerForm.is_valid():
+            registerForm.save()
+            user = registerForm.cleaned_data.get('username')
             messages.success(request, 'Account has been made, Welcome ' + user)
             return redirect('login')
 
-    return render(request, 'pages/register.html', {'form': form})
+    return render(request, 'pages/register.html', {'form': registerForm})
 
 # ======================= LOGIN
 def userLogin(request):
@@ -40,14 +40,21 @@ def userLogin(request):
             return redirect('home')
         else:
             messages.info(request, 'Your username OR password is incorrect')
-    context = {}
-    return render(request, 'pages/login.html', context)
+
+    return render(request, 'pages/login.html')
 
 
 # ======================= LOGOUT
 def userLogout(request):
     logout(request)
     return redirect('login')
+
+# ======================= USER PROFILE
+def userProfile(request):
+    # if not request.user.is_authenticed():
+    #     return redirect('login')
+    # else:
+    return render(request, 'pages/user_profile.html', {'user': request.user})
 
 
 # ======================= PRODUCT LIST

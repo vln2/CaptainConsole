@@ -45,7 +45,11 @@
             <!-- LOGIN/REGISTER/PROFILE-->
             <div>
                 <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
+                {% if user.is_authenticated %}
+                <a href="/profile" class="btn btn-primary">Profile</a>
+                {% else %}
                 <a href="/register" class="btn btn-primary">Login/Register</a>
+                {% endif%}
             </div>      
         </nav>
     </header>    

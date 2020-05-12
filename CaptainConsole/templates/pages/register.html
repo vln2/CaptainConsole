@@ -20,23 +20,39 @@
             <fieldset class="form-group row">
                 <label for="{{ form.username.id_for_label }}" class="col-sm-2 col-form-label">Username:</label>
                 {{form.username}}
+                {{ form.username.errors }}
             </fieldset>
     
             <!-- EMAIL  -->
             <fieldset class="form-group row">
                 <label for="{{ form.email.id_for_label }}" class="col-sm-2 col-form-label">Email:</label>
                 {{form.email}}
+                {{ form.email.errors }}
             </fieldset>
     
             <!-- PASSWORD (I have no clue why the input does not accept the style) -->
             <fieldset class="form-group row">
                 <label for="{{ form.password1.id_for_label }}" class="col-sm-2 col-form-label">Password:</label>
                 {{form.password1}}
+                {% if form.password1.errors %}
+                    <ol class="list-group">
+                    {% for error in form.password1.errors %}
+                        <li class="list-group-item"><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                    </ol>
+                {% endif %}
             </fieldset>
     
             <fieldset class="form-group row">
                 <label for="{{ form.password2.id_for_label }}" class="col-sm-2 col-form-label">Password Confirmation:</label>
                 {{form.password2}}
+                {% if form.password2.errors %}
+                    <ol class="list-group">
+                    {% for error in form.password2.errors %}
+                        <li class="list-group-item"><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                    </ol>
+                {% endif %}
             </fieldset>
             
             <!-- SUMBIT (I have no clue why it does not accept the style -->

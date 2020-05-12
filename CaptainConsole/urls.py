@@ -13,6 +13,8 @@ urlpatterns = [
     path('login/', views.userLogin, name='login'),
     path('logout/', views.logout, name='logout'),
 
+    path('profile/', views.userProfile, name="user_profile"),
+
     path('product/<int:id>/<slug:slug>/', views.ProductDetailView.as_view(), name='product_details'),
     path('product/<int:id>/', views.ProductDetailView.as_view(), name='product_details'),
 

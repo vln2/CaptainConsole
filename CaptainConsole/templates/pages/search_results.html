@@ -1,0 +1,28 @@
+{% extends '../base.html' %}
+
+<!--    Page breadcrumbs (removed)      -->
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+
+<!--    Page content      -->
+{% block content %}
+<main class="container">
+    <h2>Search results</h2>
+    <ul>
+        {{ for item in results }}
+            <li>
+                <!-- Thumbnail of product -->
+                <img src="" alt="">
+
+                <!-- Link to product-->
+                <a href="">Results</a>
+                
+                <!-- can probably find a way to put on character limit on description -->
+                <p>Description </p>
+            </li>
+        {{ endfor }}
+    </ul>
+
+</main>
+{% endblock content %}
