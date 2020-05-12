@@ -10,7 +10,7 @@
 <main class="container">
     <h2>Search results</h2>
     <ul>
-        {{ for item in results }}
+        {% for item in results %}
             <li>
                 <!-- Thumbnail of product -->
                 <img src="" alt="">
@@ -21,7 +21,7 @@
                 <!-- can probably find a way to put on character limit on description -->
                 <p>Description </p>
             </li>
-        {{ endfor }}
+        {% endfor %}
     </ul>
 
 </main>

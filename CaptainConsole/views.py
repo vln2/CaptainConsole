@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Product, Category, ProductImage, Order, Item
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
+from django.db.models import Q
 
 # ======================= REGISTER USER
 def registerUser(request):
@@ -136,3 +137,28 @@ def cartOverview(request):
         'order' : Order.objects.filter(owner=request.user)
     }
     return render(request, 'pages/cart_overview.html', context)
+
+def search_results(request):
+    context = {}
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+        context['query'] = str(query)
+
+    context['products'] = query_search(query)
+
+    return render(request, 'pages/search_results.html', context)
+
+
+def query_search(query=None):
+    queryset = []
+    queries = query.split(" ")
+    for q in queries:
+        posts = Product.objects.filter(
+            Q(name__icontains=q) |
+            Q(description__icontains=q)
+        ).distinct()
+
+        for post in posts:
+            queryset.append(post)
+    return list(set(queryset))
