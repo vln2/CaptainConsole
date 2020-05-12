@@ -22,7 +22,8 @@ urlpatterns = [
 
     path('add-to-cart/<int:product_id>', views.addToCart, name='add_to_cart'),
 
-    path('cart/', views.cartOverview, name="cart_overview"),
+    path('cart/', views.cart, name="cart"),
+    path('checkout/', views.checkout, name="checkout"),
 
     re_path(r'^category/(?P<hierarchy>.+)/$', views.showCategory, name='category'),
 
