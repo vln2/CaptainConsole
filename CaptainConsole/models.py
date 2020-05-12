@@ -3,9 +3,6 @@ from django.conf import settings
 from mptt.models import MPTTModel, TreeForeignKey
 
 
-#======================= CATEGORY
-
-
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
@@ -46,7 +43,7 @@ class Category(MPTTModel):
     def __str__(self):
         return self.name
 
-#======================= PRODUCT
+
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -58,23 +55,22 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-# ======================= PRODUCT IMAGES
-class ProductImage(models.Model):
 
+class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/products/')
 
     def __str__(self):
         return str(self.product.id)
 
-#======================= ADDRESS
+
 class Address(models.Model):
     street = models.CharField(max_length=255)
     postalCode = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
 
-#======================= USERINFO
+
 class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
@@ -100,6 +96,7 @@ class Item(models.Model):
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
 
+
 class Order(models.Model):
     dateCreated = models.DateTimeField(auto_now=True)
     items = models.ManyToManyField(Item)
@@ -116,3 +113,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.owner.username
+
+    def getTotal(self):
+        order_sum = 0
+        for item in self.items.all():
+            order_sum += item.product.price
+        return round(order_sum, 2)

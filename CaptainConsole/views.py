@@ -132,11 +132,20 @@ def addToCart(request, product_id):
 
     
 # ======================= VIEW CART
-def cartOverview(request):
+def cart(request):
+    order_qs = Order.objects.filter(owner=request.user, status=Order.CART)
+    if order_qs.exists():
+        cart = order_qs[0]
+    else:
+        cart = Order.objects.create(owner=request.user, status=Order.CART)
+
     context = {
-        'order' : Order.objects.filter(owner=request.user)
+        'cart': cart
     }
-    return render(request, 'pages/cart_overview.html', context)
+    return render(request, 'pages/cart.html', context)
+
+def checkout(request):
+    return render(request, 'pages/checkout.html')
 
 def search_results(request):
     context = {}
