@@ -4,8 +4,8 @@
 <!--    Page content      -->
 
 {% block breadcrumbs %}
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+    <nav>
+        <ol class="breadcrumb mb-0" aria-label="breadcrumb">
             {% for breadcrumb in breadcrumbs %}
                <li class="breadcrumb-item"><a href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
             {% endfor %}
@@ -14,36 +14,64 @@
 {% endblock %}
 
 {% block sidebar %}
-    <div class="list-group">
-    {% full_tree_for_model CaptainConsole.Category as gs %}
-    {% for node, structure in gs|tree_info %}
-        <a href="/category/{{ node.get_slug_link }}" class="list-group-item">
-            {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
-        </a>
-    {% endfor %}
-    </div>
 {% endblock %}
 
 {% block content %}
-<main class="container">
-
-    <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
-    <h2>Products list</h2>
-    <section class="container">
-        {% for product in products %}
-        
-            <!-- Single product cards-->
-            <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
-                <!-- CARD IMAGE -->
-                <img src="{{product.thumb.url}}" class="card-img-top rounded-top" alt="...">
-                <!-- CARD TEXT -->
-                <div class="card-body text-center rounded-bottom ">
-                    <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
-                    <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
-                </div>
-            </div>
-
+<div class="row">  
+    <nav class="list-group col-3">
+        {% full_tree_for_model CaptainConsole.Category as gs %}
+        {% for node, structure in gs|tree_info %}
+            <a href="/category/{{ node.get_slug_link }}" class="list-group-item  list-group-item-action">
+                {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
+            </a>
         {% endfor %}
-    </section>
-</main>
+    </nav>
+    <main class="container col-9 pt-3">
+
+        <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
+        <h2>Products list</h2>
+        <section class="container d-flex flex-wrap">
+            {% for product in products %}
+            
+                <!-- Single product cards-->
+                <div class="card my-3 mx-3 shadow-sm rounded" style="width: 18rem;">
+                    <!-- CARD IMAGE -->
+                    <a href="/product/{{product.id}}/{{product.slug}}" ><img src="{{product.thumb.url}}" class="card-img-top img-fluid" alt="..."></a>
+                    <!-- CARD TEXT -->
+                    <div class="card-body text-center ">
+                        <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
+                        <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
+                        
+                        <form method="POST" action="/add-to-cart/{{ product.id }}">
+                            <fieldset class="row" data-toggle="buttons">
+                                {% csrf_token %}
+                                {{ add_to_cart_form }}
+                                <input type="submit" class="btn btn-light col-6 border border-primary" value="Add to cart">
+                                <input type="button" class="btn btn-light col-6 border border-primary" value="Share">
+                            </fieldset>
+                        </form>
+                    </div>
+                            
+                </div>
+            {% endfor %}
+        </section>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if products.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ products.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ products.number }} of {{ products.paginator.num_pages }}.
+                </span>
+
+                {% if products.has_next %}
+                    <a href="?page={{ products.next_page_number }}">next</a>
+                    <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </main>
 {% endblock %}

@@ -7,51 +7,58 @@
 
 <!--    Page content      -->
 {% block content %}
-<main class="container">
-    <h2 class="h2">{{ object.name }}</h2>
-    <!-- THE IMAGES
-        bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
-    -->
-    <section class="container row">
-        <div class="col-8">
-            <!-- THE FULL IMAGE (only one should be visible at a time) -->
-            <div class="tab-content">
-                <!-- First/Selected figure shall have class 'show active'-->
-                {% for image in object.gallery_set %}
-                    <figure class="tab-pane fade" role="tab-panel">
-                        <img src="{{image.image.url}}" alt="{{image.desc}}" class="img-fluid border border-light rounded shadow-sm my-2">
-                    </figure>
-                {% endfor %}
+    <main class="container">
+        <h2 class="h2">{{ object.name }}</h2>
+        <!-- THE IMAGES 
+            bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
+        -->
+        <section class="container row">
+            <div class="col-8">
+                <!-- THE FULL IMAGE (only one should be visible at a time) -->
+                <div class="tab-content">
+                    <!-- First/Selected figure shall have class 'show active'-->
+                    {% for image in object.gallery_set %}
+                        <figure class="tab-pane fade" role="tab-panel">
+                            <img src="{{image.image.url}}" alt="{{image.desc}}" class="img-fluid border border-light rounded shadow-sm my-2">
+                        </figure>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        <!-- IMAGE COLLECTION -->
-        <div class="col-4 d-flex flex-column">
-            <div class="list-group" role="tablist">
-                <!-- First item in the list would get the class 'active' as the currently selected image -->
-                {% for image in object.gallery %}
-                    <a class="list-group-item"  data-toggle="list" href="#" role="tab">
-                        <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-light rounded shadow-sm my-2">
-                    </a>
-                {% endfor %}
+            <!-- IMAGE COLLECTION -->
+            <div class="col-4 d-flex flex-column">
+                <div class="list-group" role="tablist">
+                    <!-- First item in the list would get the class 'active' as the currently selected image -->
+                    {% for image in object.gallery %}
+                        <a class="list-group-item"  data-toggle="list" href="#" role="tab">
+                            <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-light rounded shadow-sm my-2">
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    </section>
-    <hr>
-    <!-- THE DETAILS-->
-    <section>
-            <!-- PRICE -->
-            <div class="container">
-                <h3 class="h5 d-inline">Price:</h3>
-                <span>{{object.product.price}}</span>
-            </div>
-            <hr>
-            <!-- DESCRIPTION -->
-            <div class="container">
-                <h3 class="h5">Description</h3>
-                <p>{{object.product.description}}</p>
-            </div>
-    </section>
-    <hr>
+        </section> 
+        <hr>
+        <!-- THE DETAILS-->
+        <section>
+                <!-- PRICE -->
+                <div class="container">
+                    <h3 class="h5 d-inline">Price:</h3>
+                    <span>{{object.product.price}}</span>         
+                    <div class="row">
+                            
+                        <input type="submit" class="btn btn-light col-6 border border-primary" value="Add to cart">
+                        <input type="button" class="btn btn-light col-6 border border-primary" value="Share">
+
+                    </div>
+                </div>
+            
+                <hr>
+                <!-- DESCRIPTION -->
+                <div class="container">
+                    <h3 class="h5">Description</h3>
+                    <p>{{object.product.description}}</p>
+                </div>
+        </section>
+        <hr>
         <!-- THE SEARCH/PRODUCTS VIEWED HISTORY -->
         <h2 class="h3">Recently Viewed Products</h2>
         <section>

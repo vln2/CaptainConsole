@@ -1,49 +1,28 @@
 {% extends '../base.html' %}
-{% load mptt_tags %}
+
+<!--    Page breadcrumbs (removed)      -->
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
 
 <!--    Page content      -->
-
-{% block breadcrumbs %}
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            {% for breadcrumb in breadcrumbs %}
-               <li class="breadcrumb-item"><a href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
-            {% endfor %}
-        </ol>
-    </nav>
-{% endblock %}
-
-{% block sidebar %}
-    <div class="list-group">
-    {% full_tree_for_model CaptainConsole.Category as gs %}
-    {% for node, structure in gs|tree_info %}
-        <a href="/category/{{ node.get_slug_link }}" class="list-group-item">
-            {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
-        </a>
-    {% endfor %}
-    </div>
-{% endblock %}
-
 {% block content %}
 <main class="container">
+    <h2>Search results</h2>
+    <ul>
+        {{ for item in results }}
+            <li>
+                <!-- Thumbnail of product -->
+                <img src="" alt="">
 
-    <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
-    <h2>Products list</h2>
-    <section class="container">
-        {% for product in products %}
+                <!-- Link to product-->
+                <a href="">Results</a>
+                
+                <!-- can probably find a way to put on character limit on description -->
+                <p>Description </p>
+            </li>
+        {{ endfor }}
+    </ul>
 
-            <!-- Single product cards-->
-            <div class="card my-3 mx-3 shadow-sm" style="width: 18rem;">
-                <!-- CARD IMAGE -->
-                <img src="{{product.thumb.url}}" class="card-img-top rounded-top" alt="...">
-                <!-- CARD TEXT -->
-                <div class="card-body text-center rounded-bottom ">
-                    <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
-                    <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
-                </div>
-            </div>
-
-        {% endfor %}
-    </section>
 </main>
-{% endblock %}
+{% endblock content %}
