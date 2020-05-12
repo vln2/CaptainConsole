@@ -4,8 +4,8 @@
 <!--    Page content      -->
 
 {% block breadcrumbs %}
-    <nav>
-        <ol class="breadcrumb mb-0 bg-primary rounded-0" aria-label="breadcrumb">
+    <nav class="breadcrumb py-0 rounded-0">
+        <ol class="breadcrumb mb-0 rounded-0" aria-label="breadcrumb">
             {% for breadcrumb in breadcrumbs %}
                <li class="breadcrumb-item"><a class="text-white" href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
             {% endfor %}
@@ -18,7 +18,7 @@
 
 {% block content %}
 <div class="row">  
-    <nav class="list-group col-3">
+    <nav class="list-group col-3 bg-secondary pr-0">
         {% full_tree_for_model CaptainConsole.Category as gs %}
         {% for node, structure in gs|tree_info %}
             <a href="/category/{{ node.get_slug_link }}" class="list-group-item bg-secondary list-group-item-action">

@@ -2,7 +2,8 @@ header nav.bg-primary {
   background-color: #485896;
 }
 
-body {
-  background-color: green;
+nav.breadcrumb, ol.breadcrumb {
+  background-color: #374374;
+  margin-bottom: 0;
 }
 /*# sourceMappingURL=style.css.map */
