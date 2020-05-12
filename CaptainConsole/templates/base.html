@@ -15,19 +15,17 @@
     <meta property="og:image"         content="{%static "media/captain_console_logo.png" %}" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- Your custom styles (optional) -->
-    <link rel="stylesheet" href="{%static "css/style.css" %}">
+ <!-- Your custom styles (optional) -->
+    <link type="text/css" rel="stylesheet" href="{%static "bootstrap/scss/bootstrap.css" %}">
 </head>
 <body>
     <!--        Header      -->
     <header>
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-light bg-primary">
             <!-- LOGO & NAME -->
             <a class="navbar-brand" href="/">
                 <img src="{%static "media/captain_console_logo.png" %}" class="d-inline-block align-center" width="50" height="50" alt="">
-                <span class="pl-3">Captain Console's RetroGame Shop</span>
+                <span class="pl-3 text-secondary">Captain Console's RetroGame Shop</span>
                 
             </a>
             <!-- SEARCH BAR-->
@@ -36,15 +34,15 @@
                     <input type="text" class="form-control"type="search" placeholder="Search..." aria-label="Search" name="q" id="id_q">
                     <div class="input-group-append">
                         <!--button class="btn btn-outline-success my-sm-0" type="submit" onclick="window.location.href='/product_list'">Search</button-->
-                        <button class="btn btn-outline-success my-sm-0" type="submit">Search</button>
+                        <button class="btn btn-secondary my-sm-0" type="submit">Search</button>
                     </div>
                 </div>
             </form>
             <!-- CART INFO -->
             <div> 
-                <a href="/cart" class="btn btn-light">
+                <a href="/cart" class="btn btn-outline-secondary border-0">
                     <!-- NUMBER OF ITEMS-->
-                    <span class="badge badge-secondary mx-1">0</span>
+                    <span class="badge badge-warning mx-1">0</span>
                     Cart
                 </a> 
             </div>
@@ -52,9 +50,9 @@
             <div>
                 <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
                 {% if user.is_authenticated %}
-                <a href="/profile" class="btn btn-primary">Profile</a>
+                <a href="/profile" class="btn btn-secondary">Profile</a>
                 {% else %}
-                <a href="/register" class="btn btn-primary">Login/Register</a>
+                <a href="/register" class="btn btn-secondary">Login/Register</a>
                 {% endif%}
             </div>      
         </nav>
