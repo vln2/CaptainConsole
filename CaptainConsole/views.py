@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Category, ProductImage
 from django.db.models import F
 from .forms import CreatingUserForms
+from django.db.models import Q
 
 
 def registerUser(request):
@@ -78,5 +79,34 @@ def show_category(request, hierarchy=None):
         'breadcrumbs': category.get_ancestors(include_self=True)
     }
     return render(request, 'pages/product_list.html', context)
+
+def search_results(request):
+    context = {}
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+        context['query'] = str(query)
+
+    context['products'] = query_search(query)
+
+    return render(request, 'pages/search_results.html', context)
+
+
+
+def query_search(query= None):
+
+    queryset = []
+    queries = query.split(" ")
+    for q in queries:
+        posts = Product.objects.filter(
+            Q(name__icontains=q) |
+            Q(description__icontains=q)
+        ).distinct()
+
+        for post in posts:
+            queryset.append(post)
+    return list(set(queryset))
+
+
 
 #passa að bæta við @login_required(login_url='login') ef notandi þarf að vera skráður inn til að gera einhvað ákveðið
