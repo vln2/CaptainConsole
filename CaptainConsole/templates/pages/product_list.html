@@ -42,7 +42,7 @@
                         <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
                         <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
                         
-                        <form method="POST" action="{% url add_to_cart %}{{ product.id }}">
+                        <form method="POST" action="{% url 'add_to_cart' product.id %}">
                             <fieldset class="row" data-toggle="buttons">
                                 {% csrf_token %}
                                 {{ add_to_cart_form }}

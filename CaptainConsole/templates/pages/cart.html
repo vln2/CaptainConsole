@@ -18,7 +18,7 @@
             </div>
             <div>
                 <span>${{ item.product.price }}</span>
-                <a href="{% url  %}" class="btn btn-danger btn-sm" value="remove item">
+                <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger btn-sm">remove item</a>
             </div>
         </li>
         {% endfor %}
