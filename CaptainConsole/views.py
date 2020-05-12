@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Product, Category, ProductImage, Order, Item
-from .forms import CreatingUserForms, AddItemToCartForm
+from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
 
 # ======================= REGISTER USER
 def registerUser(request):
@@ -29,6 +29,7 @@ def userLogin(request):
     #if request.user.is_authenticed:
     #    return redirect('login')
     #else:
+    authForm = LoginForm()
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -41,7 +42,7 @@ def userLogin(request):
         else:
             messages.info(request, 'Your username OR password is incorrect')
 
-    return render(request, 'pages/login.html')
+    return render(request, 'pages/login.html', {'form': authForm})
 
 
 # ======================= LOGOUT
