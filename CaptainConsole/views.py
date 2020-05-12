@@ -138,6 +138,7 @@ def cartOverview(request):
     }
     return render(request, 'pages/cart_overview.html', context)
 
+# ======================= SEARCH RESULTS
 def search_results(request):
     context = {}
     query = ""
@@ -150,6 +151,7 @@ def search_results(request):
     return render(request, 'pages/search_results.html', context)
 
 
+# ======================= SEARCH QUERY
 def query_search(query=None):
     queryset = []
     queries = query.split(" ")
