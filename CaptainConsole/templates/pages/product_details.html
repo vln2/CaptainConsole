@@ -5,8 +5,11 @@
     {{ object.name }}
 {% endblock head_title %}
 
+<!--    FACEBOOK SHARE DETAILS      -->
+
 <!--    Page content      -->
 {% block content %}
+
     <main class="container">
         <h2 class="h2">{{ object.name }}</h2>
         <!-- THE IMAGES 
@@ -44,10 +47,11 @@
                     <h3 class="h5 d-inline">Price:</h3>
                     <span>{{object.product.price}}</span>         
                     <div class="row">
-                            
                         <input type="submit" class="btn btn-light col-6 border border-primary" value="Add to cart">
-                        <input type="button" class="btn btn-light col-6 border border-primary" value="Share">
-
+                        <div class="fb-share-button col-6" data-href="{{ request.build_absolute_uri }} " data-layout="button" data-size="small">
+                            <a  class="btn btn-light col-12 border border-primary" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
+                        </div>
+  
                     </div>
                 </div>
             
