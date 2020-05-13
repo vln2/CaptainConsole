@@ -10,7 +10,7 @@
 <!--    Page content      -->
 {% block content %}
 
-    <main class="container">
+    <main class="container pt-3">
         <h2 class="h2">{{ object.name }}</h2>
         <!-- THE IMAGES 
             bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
@@ -23,8 +23,8 @@
                     <div class="tab-content text-center" id="nav-tabContent">
 
                         {% for image in object.gallery %}                       
-                            <div class="tab-pane fade" id="image-{{image.id}}" role="tabpanel" aria-labelledby="image-{{image.id}}-list">
-                                    <img src="{{image.image.url}}" alt="" class="img-fluid border border-light rounded shadow-sm">      
+                            <div class="tab-pane fade {% if forloop.first %} active show{% endif %}" id="image-{{image.id}}" role="tabpanel" aria-labelledby="image-{{image.id}}-list">
+                                    <img src="{{image.image.url}}" alt="" class="img-fluid border border-primary rounded shadow-sm">      
                             </div>
 
                         {% endfor %}
@@ -34,8 +34,8 @@
                     <div class="list-group" id="list-tab" role="tablist">
 
                         {% for image in object.gallery %}    
-                            <a class="list-group-item list-group-item-action" id="image-{{image.id}}-list" data-toggle="list" href="#image-{{image.id}}" role="tab" aria-controls="profile">
-                                <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-light rounded shadow-sm my-2">
+                            <a class="list-group-item list-group-item-action border-secondary {% if forloop.first %}active{% endif %}" id="image-{{image.id}}-list" data-toggle="list" href="#image-{{image.id}}" role="tab" aria-controls="profile">
+                                <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-primary rounded shadow-sm my-2">
                             </a>
 
                         {% endfor %}
@@ -58,9 +58,9 @@
                     <h3 class="h5 d-inline">Price:</h3>
                     <span>{{object.product.price}}</span>         
                     <div class="row">
-                        <input type="submit" class="btn btn-light col-6 border border-primary" value="Add to cart">
+                        <input type="submit" class="btn btn-secondary col-6 border border-warning" value="Add to cart">
                         <div class="fb-share-button col-6" data-href="{{ request.build_absolute_uri }} " data-layout="button" data-size="small">
-                            <a  class="btn btn-light col-12 border border-primary" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
+                            <a  class="btn btn-secondary col-12 border border-warning" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
                         </div>
   
                     </div>
