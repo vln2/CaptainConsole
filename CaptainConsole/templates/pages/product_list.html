@@ -3,25 +3,9 @@
 
 <!--    Page content      -->
 
-{% block breadcrumbs %}
-    <nav class="breadcrumb py-0 rounded-0">
-        <ol class="breadcrumb mb-0 rounded-0" aria-label="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="/" class="text-white">Catalog</a>
-            </li>
-            {% for breadcrumb in breadcrumbs %}
-               <li class="breadcrumb-item"><a class="text-white" href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
-            {% endfor %}
-        </ol>
-    </nav>
-{% endblock %}
-
-{% block sidebar %}
-{% endblock %}
-
 {% block content %}
 <div class="row">  
-    <ul class="list-group col-2 bg-secondary pr-0">
+    <ul class="list-group col-xl-2  col-md-3  bg-secondary pr-0">
         {% full_tree_for_model CaptainConsole.Category as gs %}
         {% for node, structure in gs|tree_info %}
             <li>
@@ -33,11 +17,11 @@
 
         
         </ul>
-    <main class="container col-10 pt-3">
+    <main class="container col-xl-10 col-md-9 pt-3">
 
         <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
         <h2>Products list</h2>
-        <section class="container d-flex flex-wrap">
+        <section class="container d-flex flex-wrap justify-content-center">
             {% for product in products %}
             
                 <!-- Single product cards-->

@@ -22,45 +22,64 @@
 <body>
     <!--        Header      -->
     <header>
-        <nav class="navbar navbar-light bg-primary">
-            <!-- LOGO & NAME -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+            <!-- LOGO & NAME -->                
             <a class="navbar-brand" href="/">
                 <img src="{%static "media/captain_console_logo.png" %}" class="d-inline-block align-center" width="50" height="50" alt="">
                 <span class="pl-3 text-secondary">Captain Console's RetroGame Shop</span>
                 
             </a>
-            <!-- SEARCH BAR-->
-            <form class="form-inline my-lg-0 " method="GET" action="{% url 'search_results' %}">
-                <div class="input-group">
-                    <input type="text" class="form-control"type="search" placeholder="Search..." aria-label="Search" name="q" id="id_q">
-                    <div class="input-group-append">
-                        <!--button class="btn btn-outline-success my-sm-0" type="submit" onclick="window.location.href='/product_list'">Search</button-->
-                        <button class="btn btn-secondary my-sm-0" type="submit">Search</button>
-                    </div>
-                </div>
-            </form>
-            <!-- CART INFO -->
-            <div> 
-                <a href="/cart" class="btn btn-outline-secondary border-0">
-                    <!-- NUMBER OF ITEMS-->
-                    <span class="badge badge-warning mx-1">0</span>
-                    Cart
-                </a> 
-            </div>
-            <!-- LOGIN/REGISTER/PROFILE-->
-            <div>
-                <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
-                {% if user.is_authenticated %}
-                <a href="/profile" class="btn btn-secondary">Profile</a>
-                {% else %}
-                <a href="/login" class="btn btn-secondary">Login</a>
-                {% endif%}
-            </div>      
-        </nav>
-    {% block breadcrumbs %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header_nav" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    {% endblock breadcrumbs %}
-    
+            <div class="collapse navbar-collapse d-md-flex justify-content-between" id="header_nav">
+                <div class=" d-sm-flex justify-content-between py-3">
+                        
+                    <!-- SEARCH BAR-->
+                    <form class="form-inline my-lg-0 " method="GET" action="{% url 'search_results' %}">
+                        <div class="input-group">
+                            <input type="text" class="form-control"type="search" placeholder="Search..." aria-label="Search" name="q" id="id_q">
+                            <div class="input-group-append">
+                                <!--button class="btn btn-outline-success my-sm-0" type="submit" onclick="window.location.href='/product_list'">Search</button-->
+                                <button class="btn btn-secondary my-sm-0" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- CART INFO -->
+                    <div> 
+                        <a href="/cart" class="btn btn-outline-secondary border-0">
+                            <!-- NUMBER OF ITEMS-->
+                            <span class="badge badge-warning mx-1">0</span>
+                            Cart
+                        </a> 
+                    </div>
+                    <!-- LOGIN/REGISTER/PROFILE-->
+                    <div>
+                        <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
+                        {% if user.is_authenticated %}
+                        <a href="/profile" class="btn btn-secondary">Profile</a>
+                        {% else %}
+                        <a href="/login" class="btn btn-secondary">Login</a>
+                        {% endif%}
+                    </div>  
+                </div>  
+            </div>
+        </nav>
+        {% block breadcrumbs %}
+
+        <nav class="breadcrumb py-0 rounded-0">
+                <ol class="breadcrumb mb-0 rounded-0" aria-label="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-white">Catalog</a>
+                    </li>
+                    {% for breadcrumb in breadcrumbs %}
+                    <li class="breadcrumb-item"><a class="text-white" href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        {% endblock breadcrumbs %}
+        
     </header>    
     <!-- Breadcrumbs -->
     {% block sidebar %}
@@ -70,8 +89,11 @@
     {% endblock content %}
     
     <!--         FOOTER         -->
-    <footer class="blockquote-footer bg-primary container">
-        <h3>Footer stuff</h3>
+    <footer class="blockquote-footer bg-primary ">
+        <div  class=" container">
+                
+            <h3>Footer stuff</h3>
+        </div>
     </footer>
     <!--        FACEBOOK -->
     <div id="fb-root"></div>

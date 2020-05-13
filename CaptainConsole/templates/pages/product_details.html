@@ -10,34 +10,45 @@
 <!--    Page content      -->
 {% block content %}
 
-    <main class="container">
+    <main class="pt-3 align-content-center d-flex flex-column">
         <h2 class="h2">{{ object.name }}</h2>
         <!-- THE IMAGES 
             bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
         -->
-        <section class="container row">
-            <div class="col-8">
-                <!-- THE FULL IMAGE (only one should be visible at a time) -->
-                <div class="tab-content">
-                    <!-- First/Selected figure shall have class 'show active'-->
-                    {% for image in object.gallery_set %}
-                        <figure class="tab-pane fade" role="tab-panel">
-                            <img src="{{image.image.url}}" alt="{{image.desc}}" class="img-fluid border border-light rounded shadow-sm my-2">
-                        </figure>
-                    {% endfor %}
+        <section class="container row" >
+            <!-- IF GALLERY CONTAINS MORE THAN SINGLE IMAGE -->
+            {% if object.gallery|length > 1 %}
+
+                <div class="col-xl-10 col-sm-8">
+                    <div class="tab-content text-center" id="nav-tabContent">
+
+                        {% for image in object.gallery %}                       
+                            <div class="tab-pane fade {% if forloop.first %} active show{% endif %}" id="image-{{image.id}}" role="tabpanel" aria-labelledby="image-{{image.id}}-list">
+                                    <img src="{{image.image.url}}" alt="" class="img-fluid border border-primary rounded shadow-sm">      
+                            </div>
+
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <!-- IMAGE COLLECTION -->
-            <div class="col-4 d-flex flex-column">
-                <div class="list-group" role="tablist">
-                    <!-- First item in the list would get the class 'active' as the currently selected image -->
+                <div class="col-xl-2 col-sm-4">
+                    <div class="list-group" id="list-tab" role="tablist">
+
+                        {% for image in object.gallery %}    
+                            <a class="list-group-item list-group-item-action border-secondary {% if forloop.first %}active{% endif %}" id="image-{{image.id}}-list" data-toggle="list" href="#image-{{image.id}}" role="tab" aria-controls="profile">
+                                <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-primary rounded shadow-sm my-2">
+                            </a>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+            <!-- ELSE DISPLAY SINGLE IMAGE -->
+                <div class="container text-center">
                     {% for image in object.gallery %}
-                        <a class="list-group-item"  data-toggle="list" href="#" role="tab">
-                            <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-light rounded shadow-sm my-2">
-                        </a>
+                    <img src="{{image.image.url}}" alt="" class="border border-light rounded shadow-sm">
                     {% endfor %}
                 </div>
-            </div>
+            {% endif %}
         </section> 
         <hr>
         <!-- THE DETAILS-->
@@ -47,9 +58,9 @@
                     <h3 class="h5 d-inline">Price:</h3>
                     <span>{{object.product.price}}</span>         
                     <div class="row">
-                        <input type="submit" class="btn btn-light col-6 border border-primary" value="Add to cart">
+                        <input type="submit" class="btn btn-secondary col-6 border border-warning" value="Add to cart">
                         <div class="fb-share-button col-6" data-href="{{ request.build_absolute_uri }} " data-layout="button" data-size="small">
-                            <a  class="btn btn-light col-12 border border-primary" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
+                            <a  class="btn btn-secondary col-12 border border-warning" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
                         </div>
   
                     </div>

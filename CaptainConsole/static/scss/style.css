@@ -10,4 +10,8 @@ nav.breadcrumb, ol.breadcrumb {
 a.child_node {
   border-left: 1.5rem solid #FFD945;
 }
+
+.active.list-group-item {
+  background-color: #FFD945;
+}
 /*# sourceMappingURL=style.css.map */

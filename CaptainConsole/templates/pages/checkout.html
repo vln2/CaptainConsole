@@ -8,9 +8,145 @@
 <!--    Page content      -->
 {% block content %}
 <main class="container">
-    <h2>Checkout step 1: Address</h2>
-    <h2>Checkout step 2: Payment info</h2>
-    <h2>Checkout step 3: Review order</h2>
-    <h2>Checkout step 4: Confirm payment</h2>
+    <div>
+        <!-- CHECKOUT BREADCRUMBS LINKS -->
+        <ul class="list-group flex-row">
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_1" class="btn btn-primary rounded-circle">1</a>
+            </li>
+            <li class="list-group-item border-0 col-1">></li>
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_2" class="btn btn-primary rounded-circle">2</a>
+            </li>
+            <li class="list-group-item border-0 col-1">></li>
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_3" class="btn btn-primary rounded-circle">3</a>
+            </li>
+            <li class="list-group-item border-0 col-1">></li>
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_4" class="btn btn-primary rounded-circle">4</a>
+            </li>
+        </ul>
+    </div>
+
+    <!--        CHECKOUT SHIPPING ADDRESS -->
+    <section id="checkout_1">
+        <h2>Checkout step 1: Contact information</h2>
+        <form>
+            <!---   NAME -->
+            <fieldset>
+                <label> First name
+                    <input type="text">
+                </label>
+                <label> Last Name
+                    <input type="text">
+                </label>
+            </fieldset>
+
+            <!--    EMAIL-->
+            <fieldset>
+                <label> Email
+                    <input type="email">
+                </label>
+            </fieldset>
+
+            <!--    PHONE-->
+            <fieldset>
+                <label> Phone
+                    <input type="tel">
+                </label>
+            </fieldset>
+            
+            <!--    ADDRESS  -->
+            <fieldset>
+                <label> Address 1
+                    <input type="text">
+                </label>
+                <label> Address 2
+                    <input type="text">
+                </label>
+                <label> City
+                    <input type="text">
+                </label>
+            </fieldset>
+
+            <!-- RESET FORM -->
+            <input type="reset" value="Clear shipping info">
+        </form>
+        <!-- NEXT -->
+        <a href="#checkout_2" class="btn-info btn">next</a>
+    </section>
+
+    <!--        CHECKOUT BILLING INFO -->
+    <section id="checkout_2">
+        <h2>Checkout step 2: Payment info</h2>
+        <ul>
+            <li>Billing info</li>
+            <li>Card details</li>
+            <li>Billing address same as shipping?</li>
+        </ul>
+        <form>
+                <!--    CARD NUMBER -->
+                <fieldset>
+                    <label> Credit Card Number
+                        <input type="text">
+                    </label>
+                </fieldset>
+
+                <!--    MONTH  -->
+                <fieldset>
+                    <label> Month
+                        <input type="number" min="1" max="12">
+                    </label>
+                </fieldset>
+
+                <!--    YEAR -->
+                <fieldset>
+                    <label> Year
+                        <input type="number">
+                    </label>
+                </fieldset>
+
+                <!--    CVC -->
+                <fieldset>
+                    <label> CVC
+                        <input type="number" max="999">
+                    </label>
+                </fieldset>
+
+                <!-- ADDRESS SAME AS SHIPPING ?-->
+                <fieldset>
+                    <label> Billing address same as shipping?
+                        <input type="checkbox">
+                    </label>
+                </fieldset>
+                
+                <!-- RESET FORM -->
+                <input type="reset" value="Clear card info">
+        </form>
+        <!-- NEXT -->
+        <a href="#checkout_3" class="btn-info btn">next</a>
+    </section>
+
+    <!--        CHECKOUT REVIEW -->  
+    <section id="checkout_3">
+        <h2>Checkout step 3: Review order</h2>
+        <ul>
+            <li>List of products to be ordered</li>
+        </ul>
+        <!-- NEXT -->
+        <a href="#checkout_4" class="btn-info btn">next</a>
+    </section>
+    
+    <!--        CHECKOUT CONFIRM PAYMENT -->
+    <section id="checkout_4">
+        <h2>Checkout step 4: Confirm payment</h2>
+        <ul>
+            <li>Shipping info</li>
+            <li>Confirm amount to be charged on card</li>
+        </ul>
+        <!-- FINISH -->
+        <a href="" class="btn-success btn">Complete payment</a>
+    </section>
 </main>
 {% endblock content %}
