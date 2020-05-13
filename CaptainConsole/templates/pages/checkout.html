@@ -31,11 +31,48 @@
 
     <!--        CHECKOUT SHIPPING ADDRESS -->
     <section id="checkout_1">
-        <h2>Checkout step 1: Address</h2>
-        <ul>
-            <li>Email</li>
-            <li>Shipping address</li>
-        </ul>
+        <h2>Checkout step 1: Contact information</h2>
+        <form>
+            <!---   NAME -->
+            <fieldset>
+                <label> First name
+                    <input type="text">
+                </label>
+                <label> Last Name
+                    <input type="text">
+                </label>
+            </fieldset>
+
+            <!--    EMAIL-->
+            <fieldset>
+                <label> Email
+                    <input type="email">
+                </label>
+            </fieldset>
+
+            <!--    PHONE-->
+            <fieldset>
+                <label> Phone
+                    <input type="tel">
+                </label>
+            </fieldset>
+            
+            <!--    ADDRESS  -->
+            <fieldset>
+                <label> Address 1
+                    <input type="text">
+                </label>
+                <label> Address 2
+                    <input type="text">
+                </label>
+                <label> City
+                    <input type="text">
+                </label>
+            </fieldset>
+
+            <!-- RESET FORM -->
+            <input type="reset" value="Clear shipping info">
+        </form>
         <!-- NEXT -->
         <a href="#checkout_2" class="btn-info btn">next</a>
     </section>
@@ -48,6 +85,45 @@
             <li>Card details</li>
             <li>Billing address same as shipping?</li>
         </ul>
+        <form>
+                <!--    CARD NUMBER -->
+                <fieldset>
+                    <label> Credit Card Number
+                        <input type="text">
+                    </label>
+                </fieldset>
+
+                <!--    MONTH  -->
+                <fieldset>
+                    <label> Month
+                        <input type="number" min="1" max="12">
+                    </label>
+                </fieldset>
+
+                <!--    YEAR -->
+                <fieldset>
+                    <label> Year
+                        <input type="number">
+                    </label>
+                </fieldset>
+
+                <!--    CVC -->
+                <fieldset>
+                    <label> CVC
+                        <input type="number" max="999">
+                    </label>
+                </fieldset>
+
+                <!-- ADDRESS SAME AS SHIPPING ?-->
+                <fieldset>
+                    <label> Billing address same as shipping?
+                        <input type="checkbox">
+                    </label>
+                </fieldset>
+                
+                <!-- RESET FORM -->
+                <input type="reset" value="Clear card info">
+        </form>
         <!-- NEXT -->
         <a href="#checkout_3" class="btn-info btn">next</a>
     </section>
