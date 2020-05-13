@@ -62,10 +62,19 @@ def userProfile(request):
 
 
 # ======================= PRODUCT LIST
-def productList(request):
+def productList(request, *args):
     context = {
         'products': Product.objects.all()
     }
+    query = request.GET.get('sort_by')
+    if query:
+        if query == 'price':
+            context['products'] = Product.objects.all().order_by('price')
+        elif query == 'name':
+            context['products'] = Product.objects.all().order_by('name')
+    
+            
+            
     return render(request, 'pages/product_list.html', context)
 
 
@@ -104,6 +113,7 @@ def showCategory(request, hierarchy=None):
             'products': page_obj,
             'breadcrumbs': category.get_ancestors(include_self=True)
         }
+
     except Category.DoesNotExist:
         raise Http404("Category not found")
 
