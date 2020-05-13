@@ -57,10 +57,20 @@
                 {% endif%}
             </div>      
         </nav>
-    {% block breadcrumbs %}
+        {% block breadcrumbs %}
 
-    {% endblock breadcrumbs %}
-    
+        <nav class="breadcrumb py-0 rounded-0">
+                <ol class="breadcrumb mb-0 rounded-0" aria-label="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-white">Catalog</a>
+                    </li>
+                    {% for breadcrumb in breadcrumbs %}
+                    <li class="breadcrumb-item"><a class="text-white" href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        {% endblock breadcrumbs %}
+        
     </header>    
     <!-- Breadcrumbs -->
     {% block sidebar %}
