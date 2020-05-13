@@ -4,8 +4,11 @@
 <!--    Page content      -->
 
 {% block breadcrumbs %}
-    <nav>
-        <ol class="breadcrumb mb-0 bg-primary rounded-0" aria-label="breadcrumb">
+    <nav class="breadcrumb py-0 rounded-0">
+        <ol class="breadcrumb mb-0 rounded-0" aria-label="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/" class="text-white">Catalog</a>
+            </li>
             {% for breadcrumb in breadcrumbs %}
                <li class="breadcrumb-item"><a class="text-white" href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
             {% endfor %}
@@ -18,15 +21,19 @@
 
 {% block content %}
 <div class="row">  
-    <nav class="list-group col-3">
+    <ul class="list-group col-2 bg-secondary pr-0">
         {% full_tree_for_model CaptainConsole.Category as gs %}
         {% for node, structure in gs|tree_info %}
-            <a href="/category/{{ node.get_slug_link }}" class="list-group-item bg-secondary list-group-item-action">
-                {% for a in node.get_ancestors %}>{% endfor %} {{ node }}
-            </a>
+            <li>
+                <a href="/category/{{ node.get_slug_link }}" class="{% if node.is_leaf_node %}child_node{%endif%} list-group-item bg-secondary border-warning rounded-0 list-group-item-action">
+                    {{ node }}
+                </a>
+            </li>
         {% endfor %}
-    </nav>
-    <main class="container col-9 pt-3">
+
+        
+        </ul>
+    <main class="container col-10 pt-3">
 
         <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
         <h2>Products list</h2>
@@ -42,7 +49,7 @@
                         <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
                         <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
                         
-                        <form method="POST" action="/add-to-cart/{{ product.id }}">
+                        <form method="POST" action="{% url 'add_to_cart' product.id %}">
                             <fieldset class="row" data-toggle="buttons">
                                 {% csrf_token %}
                                 {{ add_to_cart_form }}

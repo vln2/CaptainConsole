@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import HttpResponseRedirect
 from .models import Product, Category, ProductImage, Order, Item
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
 from django.db.models import Q
@@ -39,7 +40,7 @@ def userLogin(request):
 
         if user is not None:
             login(request,user)
-            return redirect('home')
+            return redirect('list_products')
         else:
             messages.info(request, 'Your username OR password is incorrect')
 
@@ -49,7 +50,7 @@ def userLogin(request):
 # ======================= LOGOUT
 def userLogout(request):
     logout(request)
-    return redirect('login')
+    return HttpResponseRedirect('/')
 
 # ======================= USER PROFILE
 def userProfile(request):
@@ -132,12 +133,22 @@ def addToCart(request, product_id):
 
     
 # ======================= VIEW CART
-def cartOverview(request):
-    context = {
-        'order' : Order.objects.filter(owner=request.user)
-    }
-    return render(request, 'pages/cart_overview.html', context)
+def cart(request):
+    order_qs = Order.objects.filter(owner=request.user, status=Order.CART)
+    if order_qs.exists():
+        cart = order_qs[0]
+    else:
+        cart = Order.objects.create(owner=request.user, status=Order.CART)
 
+    context = {
+        'cart': cart
+    }
+    return render(request, 'pages/cart.html', context)
+
+def checkout(request):
+    return render(request, 'pages/checkout.html')
+
+# ======================= SEARCH RESULTS
 def search_results(request):
     context = {}
     query = ""
@@ -150,6 +161,7 @@ def search_results(request):
     return render(request, 'pages/search_results.html', context)
 
 
+# ======================= SEARCH QUERY
 def query_search(query=None):
     queryset = []
     queries = query.split(" ")

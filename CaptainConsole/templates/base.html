@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
  <!-- Your custom styles (optional) -->
     <link type="text/css" rel="stylesheet" href="{%static "bootstrap/scss/bootstrap.css" %}">
+    <link type="text/css" rel="stylesheet" href="{%static "scss/style.css" %}">
 </head>
 <body>
     <!--        Header      -->
@@ -52,16 +53,16 @@
                 {% if user.is_authenticated %}
                 <a href="/profile" class="btn btn-secondary">Profile</a>
                 {% else %}
-                <a href="/register" class="btn btn-secondary">Login/Register</a>
+                <a href="/login" class="btn btn-secondary">Login</a>
                 {% endif%}
             </div>      
         </nav>
-    </header>    
-    <!-- Breadcrumbs -->
     {% block breadcrumbs %}
 
     {% endblock breadcrumbs %}
     
+    </header>    
+    <!-- Breadcrumbs -->
     {% block sidebar %}
     {% endblock sidebar %}
     <!--         CONTENT         -->
@@ -69,7 +70,7 @@
     {% endblock content %}
     
     <!--         FOOTER         -->
-    <footer class="blockquote-footer bg-light">
+    <footer class="blockquote-footer bg-primary container">
         <h3>Footer stuff</h3>
     </footer>
     <!--        FACEBOOK -->
