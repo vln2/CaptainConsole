@@ -10,7 +10,7 @@
 <!--    Page content      -->
 {% block content %}
 
-    <main class="container pt-3">
+    <main class="pt-3 align-content-center d-flex flex-column">
         <h2 class="h2">{{ object.name }}</h2>
         <!-- THE IMAGES 
             bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
@@ -19,7 +19,7 @@
             <!-- IF GALLERY CONTAINS MORE THAN SINGLE IMAGE -->
             {% if object.gallery|length > 1 %}
 
-                <div class="col-10">
+                <div class="col-xl-10 col-sm-8">
                     <div class="tab-content text-center" id="nav-tabContent">
 
                         {% for image in object.gallery %}                       
@@ -30,7 +30,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="col-2">
+                <div class="col-xl-2 col-sm-4">
                     <div class="list-group" id="list-tab" role="tablist">
 
                         {% for image in object.gallery %}    

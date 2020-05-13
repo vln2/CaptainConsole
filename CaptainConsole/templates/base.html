@@ -22,40 +22,49 @@
 <body>
     <!--        Header      -->
     <header>
-        <nav class="navbar navbar-light bg-primary navbar-expand-lg">
-            <!-- LOGO & NAME -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+            <!-- LOGO & NAME -->                
             <a class="navbar-brand" href="/">
                 <img src="{%static "media/captain_console_logo.png" %}" class="d-inline-block align-center" width="50" height="50" alt="">
                 <span class="pl-3 text-secondary">Captain Console's RetroGame Shop</span>
                 
             </a>
-            <!-- SEARCH BAR-->
-            <form class="form-inline my-lg-0 collapse navbar-collapse " method="GET" action="{% url 'search_results' %}">
-                <div class="input-group">
-                    <input type="text" class="form-control"type="search" placeholder="Search..." aria-label="Search" name="q" id="id_q">
-                    <div class="input-group-append">
-                        <!--button class="btn btn-outline-success my-sm-0" type="submit" onclick="window.location.href='/product_list'">Search</button-->
-                        <button class="btn btn-secondary my-sm-0" type="submit">Search</button>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse d-md-flex justify-content-between">
+                <div class=" d-sm-flex justify-content-between py-3">
+                        
+                    <!-- SEARCH BAR-->
+                    <form class="form-inline my-lg-0 " method="GET" action="{% url 'search_results' %}">
+                        <div class="input-group">
+                            <input type="text" class="form-control"type="search" placeholder="Search..." aria-label="Search" name="q" id="id_q">
+                            <div class="input-group-append">
+                                <!--button class="btn btn-outline-success my-sm-0" type="submit" onclick="window.location.href='/product_list'">Search</button-->
+                                <button class="btn btn-secondary my-sm-0" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- CART INFO -->
+                    <div> 
+                        <a href="/cart" class="btn btn-outline-secondary border-0">
+                            <!-- NUMBER OF ITEMS-->
+                            <span class="badge badge-warning mx-1">0</span>
+                            Cart
+                        </a> 
                     </div>
-                </div>
-            </form>
-            <!-- CART INFO -->
-            <div> 
-                <a href="/cart" class="btn btn-outline-secondary border-0">
-                    <!-- NUMBER OF ITEMS-->
-                    <span class="badge badge-warning mx-1">0</span>
-                    Cart
-                </a> 
+                    <!-- LOGIN/REGISTER/PROFILE-->
+                    <div>
+                        <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
+                        {% if user.is_authenticated %}
+                        <a href="/profile" class="btn btn-secondary">Profile</a>
+                        {% else %}
+                        <a href="/login" class="btn btn-secondary">Login</a>
+                        {% endif%}
+                    </div>  
+                </div>  
             </div>
-            <!-- LOGIN/REGISTER/PROFILE-->
-            <div class=" collapse navbar-collapse">
-                <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
-                {% if user.is_authenticated %}
-                <a href="/profile" class="btn btn-secondary">Profile</a>
-                {% else %}
-                <a href="/login" class="btn btn-secondary">Login</a>
-                {% endif%}
-            </div>      
         </nav>
         {% block breadcrumbs %}
 
