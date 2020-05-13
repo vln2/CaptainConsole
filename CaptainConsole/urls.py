@@ -18,7 +18,7 @@ urlpatterns = [
 
     path('profile/', views.userProfile, name="user_profile"),
 
-    path('product/<int:id>/<slug:slug>/', views.ProductDetailView.as_view(), name='product_details'),
+    path('product/<int:id>/<slug:slug>/', views.ProductDetailView.as_view(), name='product_details_slug'),
     path('product/<int:id>/', views.ProductDetailView.as_view(), name='product_details'),
 
     path('add-to-cart/<int:product_id>', views.addToCart, name='add_to_cart'),
@@ -27,7 +27,8 @@ urlpatterns = [
     path('cart/', views.cart, name="cart"),
     path('checkout/', views.checkout, name="checkout"),
 
-    re_path(r'^category/(?P<hierarchy>.+)/$', views.showCategory, name='category'),
+    path('category/', views.productList, name='category'),
+    re_path(r'^category/(?P<hierarchy>.+)/$', views.showCategory, name='category_tree'),
 
     # catch all
     re_path(r'^.*/$', views.notFound, name="not_found")

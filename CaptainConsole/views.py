@@ -66,6 +66,8 @@ def productList(request, *args):
     context = {
         'products': Product.objects.all()
     }
+
+    #if the user wishes to sort by name/price
     query = request.GET.get('sort_by')
     if query:
         if query == 'price':
@@ -106,6 +108,11 @@ def showCategory(request, hierarchy=None):
 
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+
+        # if user wishes to sort the list by name/price
+        query = request.GET.get('sort_by')
+        if query:
+            products = category.get_products(sort_by=query)
 
         context = {
             'add_to_cart_form': AddItemToCartForm(),
@@ -163,6 +170,7 @@ def cart(request):
     }
     return render(request, 'pages/cart.html', context)
 
+# ======================= CHECKOUT 
 def checkout(request):
     return render(request, 'pages/checkout.html')
 

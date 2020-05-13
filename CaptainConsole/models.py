@@ -34,11 +34,14 @@ class Category(MPTTModel):
         if slugs:
             return slugs[-1]
 
-    def get_products(self):
+    def get_products(self, sort_by=None):
         descendants = self.get_descendants(include_self=True)
         # descendants = [i.name for i in descendants]
-        products = Product.objects.filter(category__in=descendants)
-        return products
+        if sort_by != None:
+            if sort_by == 'price' or sort_by == 'name':
+                return Product.objects.filter(category__in=descendants).order_by(sort_by)
+
+        return Product.objects.filter(category__in=descendants)
 
     def __str__(self):
         return self.name
