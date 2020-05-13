@@ -25,15 +25,9 @@
         {% full_tree_for_model CaptainConsole.Category as gs %}
         {% for node, structure in gs|tree_info %}
             <li>
-                {% if not node.is_leaf_node %}
-                    <a href="/category/{{ node.get_slug_link }}" class="list-group-item bg-secondary rounded-0 border-warning list-group-item-action">
-                        {{ node }} 
-                    </a>
-                {% else %}
-                    <a href="/category/{{ node.get_slug_link }}" class="child_node list-group-item bg-secondary border-warning rounded-0 list-group-item-action">
-                        {{ node }}
-                    </a>
-                {% endif %}
+                <a href="/category/{{ node.get_slug_link }}" class="{% if node.is_leaf_node %}child_node{%endif%} list-group-item bg-secondary border-warning rounded-0 list-group-item-action">
+                    {{ node }}
+                </a>
             </li>
         {% endfor %}
 
