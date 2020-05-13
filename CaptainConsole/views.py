@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import HttpResponseRedirect
 from .models import Product, Category, ProductImage, Order, Item
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
 from django.db.models import Q
@@ -39,7 +40,7 @@ def userLogin(request):
 
         if user is not None:
             login(request,user)
-            return redirect('home')
+            return redirect('list_products')
         else:
             messages.info(request, 'Your username OR password is incorrect')
 
@@ -49,7 +50,7 @@ def userLogin(request):
 # ======================= LOGOUT
 def userLogout(request):
     logout(request)
-    return redirect('login')
+    return HttpResponseRedirect('/')
 
 # ======================= USER PROFILE
 def userProfile(request):
