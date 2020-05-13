@@ -8,9 +8,69 @@
 <!--    Page content      -->
 {% block content %}
 <main class="container">
-    <h2>Checkout step 1: Address</h2>
-    <h2>Checkout step 2: Payment info</h2>
-    <h2>Checkout step 3: Review order</h2>
-    <h2>Checkout step 4: Confirm payment</h2>
+    <div>
+        <!-- CHECKOUT BREADCRUMBS LINKS -->
+        <ul class="list-group flex-row">
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_1" class="btn btn-primary rounded-circle">1</a>
+            </li>
+            <li class="list-group-item border-0 col-1">></li>
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_2" class="btn btn-primary rounded-circle">2</a>
+            </li>
+            <li class="list-group-item border-0 col-1">></li>
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_3" class="btn btn-primary rounded-circle">3</a>
+            </li>
+            <li class="list-group-item border-0 col-1">></li>
+            <li class="list-group-item border-0 col-2">
+                <a href="#checkout_4" class="btn btn-primary rounded-circle">4</a>
+            </li>
+        </ul>
+    </div>
+
+    <!--        CHECKOUT SHIPPING ADDRESS -->
+    <section id="checkout_1">
+        <h2>Checkout step 1: Address</h2>
+        <ul>
+            <li>Email</li>
+            <li>Shipping address</li>
+        </ul>
+        <!-- NEXT -->
+        <a href="#checkout_2" class="btn-info btn">next</a>
+    </section>
+
+    <!--        CHECKOUT BILLING INFO -->
+    <section id="checkout_2">
+        <h2>Checkout step 2: Payment info</h2>
+        <ul>
+            <li>Billing info</li>
+            <li>Card details</li>
+            <li>Billing address same as shipping?</li>
+        </ul>
+        <!-- NEXT -->
+        <a href="#checkout_3" class="btn-info btn">next</a>
+    </section>
+
+    <!--        CHECKOUT REVIEW -->  
+    <section id="checkout_3">
+        <h2>Checkout step 3: Review order</h2>
+        <ul>
+            <li>List of products to be ordered</li>
+        </ul>
+        <!-- NEXT -->
+        <a href="#checkout_4" class="btn-info btn">next</a>
+    </section>
+    
+    <!--        CHECKOUT CONFIRM PAYMENT -->
+    <section id="checkout_4">
+        <h2>Checkout step 4: Confirm payment</h2>
+        <ul>
+            <li>Shipping info</li>
+            <li>Confirm amount to be charged on card</li>
+        </ul>
+        <!-- FINISH -->
+        <a href="" class="btn-success btn">Complete payment</a>
+    </section>
 </main>
 {% endblock content %}
