@@ -23,27 +23,7 @@
         <h2>Products list</h2>
         <section class="container d-flex flex-wrap justify-content-center">
             {% for product in products %}
-            
-                <!-- Single product cards-->
-                <div class="card my-3 mx-3 shadow-sm rounded" style="width: 18rem;">
-                    <!-- CARD IMAGE -->
-                    <a href="/product/{{product.id}}/{{product.slug}}" ><img src="{{product.thumb.url}}" class="card-img-top img-fluid" alt="..."></a>
-                    <!-- CARD TEXT -->
-                    <div class="card-body text-center ">
-                        <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
-                        <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
-                        
-                        <form method="POST" action="{% url 'add_to_cart' product.id %}">
-                            <fieldset class="row" data-toggle="buttons">
-                                {% csrf_token %}
-                                {{ add_to_cart_form }}
-                                <input type="submit" class="btn btn-secondary col-6 border border-primary" value="Add to cart">
-                                <input type="button" class="btn btn-secondary col-6 border border-primary" value="Share">
-                            </fieldset>
-                        </form>
-                    </div>
-                            
-                </div>
+                {% include "../components/product_card.html"%}
             {% endfor %}
         </section>
 

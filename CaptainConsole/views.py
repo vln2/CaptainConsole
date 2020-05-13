@@ -174,3 +174,7 @@ def query_search(query=None):
         for post in posts:
             queryset.append(post)
     return list(set(queryset))
+    
+# ======================= SEARCH QUERY
+def notFound(request):
+    return render(request, 'pages/error_page.html')

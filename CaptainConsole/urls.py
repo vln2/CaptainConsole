@@ -28,4 +28,7 @@ urlpatterns = [
 
     re_path(r'^category/(?P<hierarchy>.+)/$', views.showCategory, name='category'),
 
+    # catch all
+    re_path(r'^.*/$', views.notFound, name="not_found")
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
