@@ -9,6 +9,7 @@ from django.shortcuts import HttpResponseRedirect
 from .models import Product, Category, ProductImage, Order, Item
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
 from django.db.models import Q
+from django.http import Http404
 
 # ======================= REGISTER USER
 def registerUser(request):
@@ -74,30 +75,37 @@ class ProductDetailView(DetailView):
     template_name = 'pages/product_details.html'
 
     def get_object(self):
-        iProductId = self.kwargs['id']
-        return {
-            'product': Product.objects.get(id=iProductId),
-            'gallery': ProductImage.objects.filter(product=iProductId)
-        }
+        try:
+            iProductId = self.kwargs['id']
+            return {
+                'product': Product.objects.get(id=iProductId),
+                'gallery': ProductImage.objects.filter(product=iProductId)
+            }
+        except Product.DoesNotExist:
+            raise Http404("Product does not exist")
+
 
 
 # ======================= SHOW CATEGORY
 def showCategory(request, hierarchy=None):
-    categories_slug = hierarchy.split('/')
-    category_slug = categories_slug[-1]
-    category = Category.objects.get(slug=category_slug)
-    products = category.get_products()
-    paginator = Paginator(products, 20)
+    try:
+        categories_slug = hierarchy.split('/')
+        category_slug = categories_slug[-1]
+        category = Category.objects.get(slug=category_slug)
+        products = category.get_products()
+        paginator = Paginator(products, 20)
 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
 
-    context = {
-        'add_to_cart_form': AddItemToCartForm(),
-        'instance': category,
-        'products': page_obj,
-        'breadcrumbs': category.get_ancestors(include_self=True)
-    }
+        context = {
+            'add_to_cart_form': AddItemToCartForm(),
+            'instance': category,
+            'products': page_obj,
+            'breadcrumbs': category.get_ancestors(include_self=True)
+        }
+    except Category.DoesNotExist:
+        raise Http404("Category not found")
 
     return render(request, 'pages/product_list.html', context)
 
@@ -177,4 +185,4 @@ def query_search(query=None):
     
 # ======================= SEARCH QUERY
 def notFound(request):
-    return render(request, 'pages/error_page.html')
+    raise Http404("Page not found")
