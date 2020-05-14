@@ -82,6 +82,9 @@ class Address(models.Model):
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f'{self.street} {self.postalCode} {self.city} {self.country}'
+
 
 class Payment(models.Model):
     cardNumber = encrypt(models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')]))
@@ -90,9 +93,15 @@ class Payment(models.Model):
     cardCVC = models.CharField(max_length=3)
     status = models.CharField(max_length=255, null=True, blank=True)
 
+    class Meta:
+        unique_together = (("cardNumber", "cardExp", "cardCVC"),)
+
     @property
     def getLastFour(self):
         return self.cardNumber[-4:]
+
+    def __str__(self):
+        return f'{self.cardName} {self.getLastFour}'
 
 
 class Shipping(models.Model):
@@ -148,15 +157,14 @@ class Item(models.Model):
 
 
 class UserInfo(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=255)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, null=True, blank=True)
     # firstName = models.CharField(max_length=255)
     # lastName = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True, blank=True)
     paymentInfo = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
     profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
-    cart = models.OneToOneField(Order, on_delete=models.SET_NULL, null=True)
+    cart = models.OneToOneField(Order, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return self.email
+        return self.user.email
