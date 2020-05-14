@@ -45,12 +45,15 @@ class LoginForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
-        
-
-
 
 
 class AddItemToCartForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ('quantity',)
+
+
+class RemoveItemFromCartForm(ModelForm):
     class Meta:
         model = Item
         fields = ('quantity',)

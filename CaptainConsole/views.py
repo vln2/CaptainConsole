@@ -1,15 +1,16 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
-from .models import Product, Category, ProductImage, Order, Item, Shipping
-from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm
+from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo
+from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 
 #just strings for checking for sorting options 
 VALID_SORTS = {
@@ -28,9 +29,9 @@ def registerUser(request):
     if request.method == 'POST':
         registerForm = CreatingUserForms(request.POST)
         if registerForm.is_valid():
-            registerForm.save()
-            user = registerForm.cleaned_data.get('username')
-            messages.success(request, 'Account has been made, Welcome ' + user)
+            user = registerForm.save()
+            userInfo = UserInfo.objects.create(user=user)
+            messages.success(request, 'Account has been made, Welcome ' + user.username)
             return redirect('login')
 
     return render(request, 'pages/register.html', {'form': registerForm})
@@ -95,6 +96,7 @@ class ProductDetailView(DetailView):
         try:
             iProductId = self.kwargs['id']
             return {
+                'add_to_cart_form': AddItemToCartForm,
                 'product': Product.objects.get(id=iProductId),
                 'gallery': ProductImage.objects.filter(product=iProductId)
             }
@@ -124,7 +126,7 @@ def showCategory(request, hierarchy=None):
         page_obj = paginator.get_page(page_number)
 
         context = {
-            'add_to_cart_form': AddItemToCartForm(),
+            'add_to_cart_form': AddItemToCartForm,
             'instance': category,
             'products': page_obj,
             'breadcrumbs': category.get_ancestors(include_self=True)
@@ -139,43 +141,78 @@ def showCategory(request, hierarchy=None):
 # ======================= ADD TO CART
 def addToCart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    userInfo = get_object_or_404(UserInfo, user=request.user)
     form = AddItemToCartForm(request.POST or None)
+
     if form.is_valid():
+        if not isinstance(userInfo.cart, Order):
+            userInfo.cart = Order.objects.create(owner=request.user, status=Order.CART)
+            userInfo.save()
 
-        order_qs = Order.objects.filter(owner=request.user, status=Order.CART)
-        if order_qs.exists():
-            order = order_qs.first()
-        else:
-            order = Order.objects.create(owner=request.user, status=Order.CART)
-
-        item_qs = order.items.filter(product__id=product.id)
-        if item_qs.exists():
-            item = item_qs[0]
-            item.quantity += 1
-            item.save()
-            messages.info(request, "This item quantity was updated.")
-            # return redirect("core:order-summary")
-        else:
-            item = Item.objects.create(product=product)
-            order.items.add(item)
+        item = Item.objects.get_or_create(order=userInfo.cart, product=product)
+        if item[1]:
+            item[0].save()
             messages.info(request, "This item was added to your cart.")
-            # return redirect("core:order-summary")
+        else:
+            item[0].quantity += form.cleaned_data.get('quantity')
+            item[0].save()
+            messages.info(request, "This item:{item[0]} quantity was updated.")
 
-    httpheaders = request.headers
-    refer = httpheaders['Referer']
+    try:
+        httpheaders = request.headers
+        refer = httpheaders['Referer']
+    except:
+        return HttpResponseBadRequest('Bad Request')
     return redirect(refer)
 
-    
+
+def removeFromCart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    userInfo = get_object_or_404(UserInfo, user=request.user)
+    form = RemoveItemFromCartForm(request.POST or None)
+    try:
+        httpheaders = request.headers
+        refer = httpheaders['Referer']
+    except:
+        return HttpResponseBadRequest('Bad Request')
+
+    if form.is_valid():
+        if not isinstance(userInfo.cart, Order):
+            messages.error(request, "User has no cart")
+            return redirect(refer)
+
+        item = Item.objects.get(order=userInfo.cart, product=product)
+        if isinstance(item, Item):
+            item.quantity -= form.cleaned_data.get('quantity')
+            if item.quantity < 1:
+                item.delete()
+            else:
+                item.save()
+            messages.info(request, "Item removed from cart")
+        else:
+            messages.info(request, f"No item {product} was found in {request.user} cart")
+
+    return redirect(refer)
+
+
 # ======================= VIEW CART
 def cart(request):
-    order_qs = Order.objects.filter(owner=request.user, status=Order.CART)
-    if order_qs.exists():
-        cart = order_qs.first()
-    else:
-        cart = Order.objects.create(owner=request.user, status=Order.CART)
+    userInfo = get_object_or_404(UserInfo, user=request.user)
+    if not isinstance(userInfo.cart, Order):
+        userInfo.cart = Order.objects.create(owner=request.user, status=Order.CART)
+        userInfo.save()
 
+    class breadcrumb:
+        get_slug_link = reverse('cart')
+        def __str__(self):
+            return 'Cart'
+
+    items = userInfo.cart.getItems
     context = {
-        'cart': cart
+        'removeitem': RemoveItemFromCartForm(),
+        'cart': userInfo.cart,
+        'items': items,
+        'breadcrumbs': (breadcrumb,)
     }
     return render(request, 'pages/cart.html', context)
 
