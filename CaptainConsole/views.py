@@ -19,6 +19,16 @@ VALID_SORTS = {
     'name_desc': '-name'
 }
 
+# ======================= SALES / FRONT PAGE
+
+def currentSales(request):
+    #get all products that are on sale
+    products = Product.objects.all() #Product.objects.filter('discount' > 0)
+    
+    context = {
+        'products':products
+    }
+    return render(request, 'pages/sales.html', context)
 # ======================= REGISTER USER
 def registerUser(request):
     #if request.user.is_authenticed:

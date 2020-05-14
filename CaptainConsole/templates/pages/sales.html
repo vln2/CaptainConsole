@@ -1,0 +1,12 @@
+{% extends '../base.html' %}
+
+<!--    Page content      -->
+{% block content %}
+<main class="container">
+    <h2>Sales (front page)</h2>
+    {% for product in products %}
+    {% include '../components/product_card.html'%}
+    {% endfor %}
+
+</main>
+{% endblock content %}
