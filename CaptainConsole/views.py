@@ -28,9 +28,9 @@ def registerUser(request):
     if request.method == 'POST':
         registerForm = CreatingUserForms(request.POST)
         if registerForm.is_valid():
-            registerForm.save()
-            user = registerForm.cleaned_data.get('username')
-            messages.success(request, 'Account has been made, Welcome ' + user)
+            user = registerForm.save()
+            userInfo = UserInfo.objects.create(user=user)
+            messages.success(request, 'Account has been made, Welcome ' + user.username)
             return redirect('login')
 
     return render(request, 'pages/register.html', {'form': registerForm})
