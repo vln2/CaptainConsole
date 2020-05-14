@@ -8,25 +8,35 @@
 <!--    Page content      -->
 {% block content %}
 <main class="container">
-    <!-- LIST OF PRODUCTS IN CART  -->
-    <ul class="list-group mb-3 z-depth-1">
-        {% for item in cart.items.all %}
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-                <h6 class="my-0">{{ item.quantity }} x {{ item.product }}</h6>
-                <small class="text-muted">{{ item.product.description}}</small>
-            </div>
-            <div>
-                <span>${{ item.product.price }}</span>
-                <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger btn-sm">remove item</a>
-            </div>
-        </li>
-        {% endfor %}
-        <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>${{ cart.getTotal }}</strong>
-        </li>
-    </ul>
+    <h2>Your cart</h2>
+    <div>
+            
+        <!-- LIST OF PRODUCTS IN CART  -->
+        <ul class="list-group mb-3 z-depth-1">
+            {% for item in items %}
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div>
+                    <h6 class="my-0">{{ item.quantity }} x {{ item.product }}</h6>
+                    <small class="text-muted">{{ item.product.description}}</small>
+                </div>
+                <div>
+                    <span>${{ item.product.price }}</span>
+                    <form method="POST" action="{% url 'remove_from_cart' item.product.id %}">
+                        <fieldset class="row" data-toggle="buttons">
+                            {% csrf_token %}
+                            {{ removeitem }}
+                            <input type="submit" class="btn btn-secondary col-6 border border-primary" value="Remove from cart">
+                        </fieldset>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <li class="list-group-item d-flex justify-content-between">
+        <span>Total (USD)</span>
+        <strong>${{ cart.getTotal }}</strong>
+    </li>
     <!-- PROCEED TO CHECKOUT  -->
     <a href="{% url 'checkout' cart.id %}" class="btn btn-primary">Proceed to checkout</a>
 
