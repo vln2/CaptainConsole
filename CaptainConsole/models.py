@@ -53,17 +53,17 @@ class Product(models.Model):
     price = models.FloatField()
     slug = models.SlugField(null=False)
     thumb = models.ImageField(upload_to='images/thumbs/', default='No_image_available.png', blank=True)
-    discount = models.IntegerField( default=0 ) 
+    # discount = models.IntegerField( default=0 ) 
 
     def __str__(self):
         return self.name
 
-    def valid_discound(self):
-        """Checks if the discount is valid (not higher than actual price)"""
-        if discount > price or discount == 0:
-            return False
-        else:
-            return True
+    # def valid_discound(self):
+    #     """Checks if the discount is valid (not higher than actual price)"""
+    #     if discount > price or discount == 0:
+    #         return False
+    #     else:
+    #         return True
 
 
 class ProductImage(models.Model):
@@ -84,8 +84,11 @@ class Address(models.Model):
 class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
+    # firstName = models.CharField(max_length=255)
+    # lastName = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
 
     def __str__(self):
         return self.email
