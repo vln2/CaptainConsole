@@ -83,7 +83,6 @@ class Address(models.Model):
     country = models.CharField(max_length=255)
 
 
-
 class Payment(models.Model):
     cardNumber = encrypt(models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')]))
     cardName = models.CharField(max_length=255)
@@ -96,20 +95,6 @@ class Payment(models.Model):
         return self.cardNumber[-4:]
 
 
-class UserInfo(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=255)
-    # firstName = models.CharField(max_length=255)
-    # lastName = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
-    paymentInfo = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
-    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
-
-    def __str__(self):
-        return self.email
-
-
 class Shipping(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
     dateShipped = models.DateTimeField(null=True, blank=True)
@@ -118,17 +103,9 @@ class Shipping(models.Model):
     shippingCost = models.FloatField(null=True, blank=True)
 
 
-class Item(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.quantity} of {self.product.name}"
-
-
 class Order(models.Model):
     dateCreated = models.DateTimeField(auto_now=True)
-    items = models.ManyToManyField(Item)
+    products = models.ManyToManyField(Product, through='Item', related_name='orders')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT, null=True, blank=True)
     payment = models.ForeignKey(Payment, on_delete=models.PROTECT, null=True, blank=True)
@@ -143,11 +120,43 @@ class Order(models.Model):
     status = models.CharField(choices=order_labels, max_length=1, default='C')
 
     def __str__(self):
-        return f"{self.owner.username} order with {self.items.count()} items, status: {self.status}"
+        count = self.products.count()
+        return f"{self.owner.username} order with {count} product{'' if count == 1 else 's'}, status: {self.get_status_display()}"
 
     @property
     def getTotal(self):
         order_sum = 0
-        for item in self.items.all():
+        for item in self.getItems:
             order_sum += (item.product.price * item.quantity)
         return round(order_sum, 2)
+
+    @property
+    def getItems(self):
+        return Item.objects.filter(order=self)
+
+
+class Item(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
+    quantity = models.IntegerField(default=1)
+
+    class Meta:
+        unique_together = (("order", "product"),)
+
+    def __str__(self):
+        return f"{self.quantity} of {self.product.name} in {self.order}"
+
+
+class UserInfo(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=255)
+    # firstName = models.CharField(max_length=255)
+    # lastName = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    paymentInfo = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
+    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
+    cart = models.OneToOneField(Order, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.email
