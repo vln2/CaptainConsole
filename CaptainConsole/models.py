@@ -84,8 +84,11 @@ class Address(models.Model):
 class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
+    # firstName = models.CharField(max_length=255)
+    # lastName = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
 
     def __str__(self):
         return self.email
