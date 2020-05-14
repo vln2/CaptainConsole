@@ -38,8 +38,7 @@ class Category(MPTTModel):
         descendants = self.get_descendants(include_self=True)
         # descendants = [i.name for i in descendants]
         if sort_by != None:
-            if sort_by == 'price' or sort_by == 'name':
-                return Product.objects.filter(category__in=descendants).order_by(sort_by)
+            return Product.objects.order_by(sort_by).filter(category__in=descendants)
 
         return Product.objects.filter(category__in=descendants)
 

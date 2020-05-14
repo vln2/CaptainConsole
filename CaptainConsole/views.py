@@ -109,16 +109,19 @@ def showCategory(request, hierarchy=None):
         categories_slug = hierarchy.split('/')
         category_slug = categories_slug[-1]
         category = Category.objects.get(slug=category_slug)
-        products = category.get_products()
-        paginator = Paginator(products, 20)
 
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+        products = category.get_products()
 
         # if user wishes to sort the list by name/price
         query = request.GET.get('sort_by')
         if query:
-            products = category.get_products(sort_by=query)
+            if query in VALID_SORTS:
+                products = category.get_products(sort_by=VALID_SORTS[query])
+
+        #sort products into pages
+        paginator = Paginator(products, 20)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
 
         context = {
             'add_to_cart_form': AddItemToCartForm(),
