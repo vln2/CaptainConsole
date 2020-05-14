@@ -49,7 +49,7 @@ def userLogin(request):
 
         if user is not None:
             login(request,user)
-            return redirect('list_products')
+            return redirect('home')
         else:
             messages.info(request, 'Your username OR password is incorrect')
 
