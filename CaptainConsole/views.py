@@ -95,6 +95,7 @@ class ProductDetailView(DetailView):
         try:
             iProductId = self.kwargs['id']
             return {
+                'add_to_cart_form': AddItemToCartForm,
                 'product': Product.objects.get(id=iProductId),
                 'gallery': ProductImage.objects.filter(product=iProductId)
             }
