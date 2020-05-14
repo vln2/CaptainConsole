@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     # == Home
-    path('', views.currentSales, name='home'),
+    path('', views.productList, name='home'),
 
     # == Authentication
     path('admin/', admin.site.urls),
