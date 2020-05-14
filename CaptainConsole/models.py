@@ -65,6 +65,9 @@ class Product(models.Model):
         else:
             return True
 
+    def dis_persentage(self):
+        return int(100 * (discount/price))
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

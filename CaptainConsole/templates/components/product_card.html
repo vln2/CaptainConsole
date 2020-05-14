@@ -5,8 +5,10 @@
         <a href="/product/{{product.id}}/{{product.slug}}" ><img src="{{product.thumb.url}}" class="card-img-top img-fluid" alt="..."></a>
         <!-- CARD TEXT -->
         <div>
-            <span>Sale</span>
-            <span>50%</span>
+            {% if product.discount > 0 and product.discount < product.price%}
+                <span>Sale</span>
+                <span>?? %</span>
+            {% endif %}
         </div>
         <div class="card-body text-center ">
             <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
