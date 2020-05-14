@@ -7,8 +7,21 @@ nav.breadcrumb, ol.breadcrumb {
   margin-bottom: 0;
 }
 
-a.child_node {
-  border-left: 1.5rem solid #FFD945;
+.categories_sidebar .card-header {
+  background-color: #FFD945;
+}
+
+.categories_sidebar .card-group-itembg-secondary {
+  background-color: #FFF0B2;
+}
+
+.categories_sidebar .card-group-item .list-group, .categories_sidebar .card-group-item .card-body {
+  border-left: 0.2rem solid #FFD945;
+}
+
+.categories_sidebar a.child_node {
+  border-left: 1.5rem solid #ffe378;
+  padding-left: 1rem;
 }
 
 .active.list-group-item {

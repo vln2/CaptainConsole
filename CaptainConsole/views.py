@@ -11,6 +11,14 @@ from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
 from django.db.models import Q
 from django.http import Http404
 
+#just strings for checking for sorting options 
+VALID_SORTS = {
+    'price_asc': 'price',
+    'price_desc': '-price',
+    'name_asc': 'name',
+    'name_desc': '-name'
+}
+
 # ======================= REGISTER USER
 def registerUser(request):
     #if request.user.is_authenticed:
@@ -70,10 +78,8 @@ def productList(request, *args):
     #if the user wishes to sort by name/price
     query = request.GET.get('sort_by')
     if query:
-        if query == 'price':
-            context['products'] = Product.objects.all().order_by('price')
-        elif query == 'name':
-            context['products'] = Product.objects.all().order_by('name')
+        if query in VALID_SORTS:
+            context['products'] = Product.objects.all().order_by(VALID_SORTS[query])
     
             
             
