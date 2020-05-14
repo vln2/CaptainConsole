@@ -3,62 +3,66 @@
 <!--    Page content      -->
 
 {% block content %}
-<div class="row">       
-    <!-- SIDEBAR -->
-    <aside class="categories_sidebar col-xl-2  col-md-3  bg-secondary pr-0">
-        <!-- CATEGORIES -->
-        <nav class="card-group-item">
-            <a href="#categories" class="card-header d-block" data-toggle="collapse">
-                <h6 class="title">Browse Categories </h6>
-            </a>
-            <div class="collapse" id="categories" > 
-                <ul class="list-group" >
+<div class="container-fluid">
+
+    <div class="row">
+        <!-- SIDEBAR -->
+        <aside class="categories_sidebar col-xl-2  col-md-3  bg-secondary px-0">
+            <!-- CATEGORIES -->
+            <nav class="card-group-item">
+                <a href="#categories" class="card-header d-block" data-toggle="collapse">
+                    <h6 class="title">Browse Categories </h6>
+                </a>
+                <div class="collapse" id="categories" > 
+                    <nav class="list-group" >
+                            
+                        {% full_tree_for_model CaptainConsole.Category as gs %}
+                        {% for node, structure in gs|tree_info %}
                         
-                    {% full_tree_for_model CaptainConsole.Category as gs %}
-                    {% for node, structure in gs|tree_info %}
-                        <li>
-                            <a href="{% url 'category' %}{{ node.get_slug_link }}" class="{% if node.is_leaf_node %}child_node{%endif%} list-group-item bg-secondary rounded-0 list-group-item-action">
-                                {{ node }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </nav>
-        <!-- SORT BY -->
-        <div class="card-group-item">
-            <div class="card-header">
-                <h6 class="title">Sort by </h6>
-            </div>
-            {% include '../components/sidebar_sort.html'%}
-        </div> <!-- card-group-item.// -->
-    </aside>
-        
-    <main class="container col-xl-10 col-md-9 pt-3">
+                                <a href="{% url 'category' %}{{ node.get_slug_link }}" class="{% if node.is_leaf_node %}child_node{%endif%} list-group-item bg-secondary rounded-0 list-group-item-action">
+                                    {{ node }}
+                                </a>
+                        {% endfor %}
+                    </nav>
+                </div>
+            </nav>
+            <!-- SORT BY -->
+            <div class="card-group-item">
+                <a href="#sort_by" class="card-header d-block" data-toggle="collapse">
+                    <h6 class="title">Sort by </h6>
+                </a>
+                <div class="collapse show" id="sort_by" >
+                    {% include '../components/sidebar_sort.html'%}
+                </div>
+            </div> <!-- card-group-item.// -->
+        </aside>
+            
+        <main class="container col-xl-10 col-md-9 pt-3">
+            <section class="container d-flex flex-wrap justify-content-center">
+                {% for product in products %}
+                    {% include "../components/product_card.html"%}
+                {% endfor %}
+            </section>
 
-   
-        <section class="container d-flex flex-wrap justify-content-center">
-            {% for product in products %}
-                {% include "../components/product_card.html"%}
-            {% endfor %}
-        </section>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if products.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ products.previous_page_number }}">previous</a>
+                    {% endif %}
 
-        <div class="pagination">
-            <span class="step-links">
-                {% if products.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ products.previous_page_number }}">previous</a>
-                {% endif %}
+                    <span class="current">
+                        Page {{ products.number }} of {{ products.paginator.num_pages }}.
+                    </span>
 
-                <span class="current">
-                    Page {{ products.number }} of {{ products.paginator.num_pages }}.
+                    {% if products.has_next %}
+                        <a href="?page={{ products.next_page_number }}">next</a>
+                        <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
                 </span>
-
-                {% if products.has_next %}
-                    <a href="?page={{ products.next_page_number }}">next</a>
-                    <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
-    </main>
+            </div>
+        </main>
+        
+    </div>
+</div>
 {% endblock %}
