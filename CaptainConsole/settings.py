@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     # our own apps
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -140,3 +142,4 @@ FIXTURE_DIRS = (
     
 
 LOGIN_REDIRECT_URL = 'login'
+
