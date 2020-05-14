@@ -15,73 +15,83 @@
         <!-- THE IMAGES 
             bootstrap reference: https://getbootstrap.com/docs/4.1/components/list-group/#javascript-behavior
         -->
-        <section class="container row" >
+        <section class="container col-8" >
             <!-- IF GALLERY CONTAINS MORE THAN SINGLE IMAGE -->
-            {% if object.gallery|length > 1 %}
+            <div class="row">
 
-                <div class="col-xl-10 col-sm-8">
-                    <div class="tab-content text-center" id="nav-tabContent">
+                {% if object.gallery|length > 1 %}
+                    <!-- BIG PICTURE -->
+                    <div class="col-xl-10 col-md-12">
+                        <div class="tab-content text-center" id="nav-tabContent">
 
-                        {% for image in object.gallery %}                       
-                            <div class="tab-pane fade {% if forloop.first %} active show{% endif %}" id="image-{{image.id}}" role="tabpanel" aria-labelledby="image-{{image.id}}-list">
-                                    <img src="{{image.image.url}}" alt="" class="img-fluid border border-primary rounded shadow-sm">      
-                            </div>
+                            {% for image in object.gallery %}                       
+                                <div class="tab-pane fade {% if forloop.first %} active show{% endif %}" id="image-{{image.id}}" role="tabpanel" aria-labelledby="image-{{image.id}}-list">
+                                        <img src="{{image.image.url}}" alt="" class="img-fluid border border-primary rounded shadow-sm">      
+                                </div>
 
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- THUMBNAILS -->
+                    <div class="col-xl-2 col-sm-4 d-md-flex">
+                        <div class="list-group" id="list-tab" role="tablist">
+
+                            {% for image in object.gallery %}    
+                                <a class="list-group-item list-group-item-action border-secondary {% if forloop.first %}active{% endif %}" id="image-{{image.id}}-list" data-toggle="list" href="#image-{{image.id}}" role="tab" aria-controls="profile">
+                                    <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-primary rounded shadow-sm my-2">
+                                </a>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                <!-- ELSE DISPLAY SINGLE IMAGE -->
+                    <div class="container text-center">
+                        {% for image in object.gallery %}
+                        <img src="{{image.image.url}}" alt="" class=" img-fluid border border-light rounded shadow-sm">
                         {% endfor %}
                     </div>
-                </div>
-                <div class="col-xl-2 col-sm-4">
-                    <div class="list-group" id="list-tab" role="tablist">
-
-                        {% for image in object.gallery %}    
-                            <a class="list-group-item list-group-item-action border-secondary {% if forloop.first %}active{% endif %}" id="image-{{image.id}}-list" data-toggle="list" href="#image-{{image.id}}" role="tab" aria-controls="profile">
-                                <img src="{{image.image.url}}" alt="" class="img-thumbnail border border-primary rounded shadow-sm my-2">
-                            </a>
-
-                        {% endfor %}
-                    </div>
-                </div>
-            {% else %}
-            <!-- ELSE DISPLAY SINGLE IMAGE -->
-                <div class="container text-center">
-                    {% for image in object.gallery %}
-                    <img src="{{image.image.url}}" alt="" class="border border-light rounded shadow-sm">
-                    {% endfor %}
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
         </section> 
-        <hr>
         <!-- THE DETAILS-->
-        <section>
+        <section class="container">
+            <ul class="list-group-flush col-lg-8 col-md-12">
                 <!-- PRICE -->
-                <div class="container">
+                <li class="list-group-item">
                     <h3 class="h5 d-inline">Price:</h3>
                     <span>{{object.product.price}}</span>
-                    <div>
-                        
-                        <form  method="POST" action="{% url 'add_to_cart' object.product.id %}">
-                            {% csrf_token %}
-                            <fieldset class="row">
-                                    
-                                <label for="{{ object.add_to_cart_form.quantity.id_for_label }}" class="col-sm-2 col-form-label">
-                                    Quantity
-                                </label>
-                                {{ object.add_to_cart_form.quantity }}
-                            </fieldset>
-                            <input type="submit" class="btn btn-secondary col-6 border border-warning" value="Add to cart">
-                            <div class="fb-share-button col-6" data-href="{{ request.build_absolute_uri }} " data-layout="button" data-size="small">
-                                <a  class="btn btn-secondary col-12 border border-warning" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
-                            </div>
-                        </form>
+                </li>
+
+                <!--    ADD TO CART -->  
+                <li class="list-group-item"> 
+                    <form  method="POST" class="form-inline" action="{% url 'add_to_cart' object.product.id %}">
+                        {% csrf_token %}
+                        <fieldset>
+                            <label for="{{ object.add_to_cart_form.quantity.id_for_label }}" class=" form-label" hidden>
+                                Quantity
+                            </label>
+                            {{ object.add_to_cart_form.quantity }}
+                            <input type="submit" class="btn btn-secondary border border-warning" value="Add to cart">
+                        </fieldset>
+                    </form>
+                </li>
+
+                <!--    FACEBOOK SHARE -->
+                <li class="list-group-item">
+                    <div class="fb-share-button" data-href="{{ request.build_absolute_uri }} " data-layout="button" data-size="small">
+                        <a  class="btn btn-secondary col-12 border border-warning" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
                     </div>
-                </div>
-            
-                <hr>
+                </li>
+
                 <!-- DESCRIPTION -->
-                <div class="container">
+                <li class="list-group-item">
                     <h3 class="h5">Description</h3>
                     <p>{{object.product.description}}</p>
-                </div>
+                </li>
+            </div>
+
         </section>
         <hr>
         <!-- THE SEARCH/PRODUCTS VIEWED HISTORY -->
