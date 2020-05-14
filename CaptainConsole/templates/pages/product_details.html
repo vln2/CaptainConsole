@@ -56,14 +56,15 @@
                 <!-- PRICE -->
                 <div class="container">
                     <h3 class="h5 d-inline">Price:</h3>
-                    <span>{{object.product.price}}</span>         
-                    <div class="row">
+                    <span>{{object.product.price}}</span>
+                    <form class="row" method="POST" action="{% url 'add_to_cart' object.product.id %}">
+                        {% csrf_token %}
+                        {{ object.add_to_cart_form }}
                         <input type="submit" class="btn btn-secondary col-6 border border-warning" value="Add to cart">
                         <div class="fb-share-button col-6" data-href="{{ request.build_absolute_uri }} " data-layout="button" data-size="small">
                             <a  class="btn btn-secondary col-12 border border-warning" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}};src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
                         </div>
-  
-                    </div>
+                    </form>
                 </div>
             
                 <hr>

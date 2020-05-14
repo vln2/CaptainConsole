@@ -54,6 +54,12 @@
                             Cart
                         </a> 
                     </div>
+                    <!--LOGOUT BUTTON -->
+                    <div>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+                        {% endif%}
+                    </div>
                     <!-- LOGIN/REGISTER/PROFILE-->
                     <div>
                         <!-- Swap out button for profile if user is authenticated (inside profile could be logout)-->
@@ -71,7 +77,7 @@
         <nav class="breadcrumb py-0 rounded-0">
                 <ol class="breadcrumb mb-0 rounded-0" aria-label="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/" class="text-white">Catalog</a>
+                        <a href="{% url 'home' %}" class="text-white">Home</a>
                     </li>
                     {% for breadcrumb in breadcrumbs %}
                     <li class="breadcrumb-item"><a class="text-white" href="{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
