@@ -9,6 +9,15 @@ from django.shortcuts import HttpResponseRedirect
 from .models import Product, Category, ProductImage, Order, Item
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm
 from django.db.models import Q
+from django.http import Http404
+
+#just strings for checking for sorting options 
+VALID_SORTS = {
+    'price_asc': 'price',
+    'price_desc': '-price',
+    'name_asc': 'name',
+    'name_desc': '-name'
+}
 
 # ======================= REGISTER USER
 def registerUser(request):
@@ -61,10 +70,19 @@ def userProfile(request):
 
 
 # ======================= PRODUCT LIST
-def productList(request):
+def productList(request, *args):
     context = {
         'products': Product.objects.all()
     }
+
+    #if the user wishes to sort by name/price
+    query = request.GET.get('sort_by')
+    if query:
+        if query in VALID_SORTS:
+            context['products'] = Product.objects.all().order_by(VALID_SORTS[query])
+    
+            
+            
     return render(request, 'pages/product_list.html', context)
 
 
@@ -74,30 +92,46 @@ class ProductDetailView(DetailView):
     template_name = 'pages/product_details.html'
 
     def get_object(self):
-        iProductId = self.kwargs['id']
-        return {
-            'product': Product.objects.get(id=iProductId),
-            'gallery': ProductImage.objects.filter(product=iProductId)
-        }
+        try:
+            iProductId = self.kwargs['id']
+            return {
+                'product': Product.objects.get(id=iProductId),
+                'gallery': ProductImage.objects.filter(product=iProductId)
+            }
+        except Product.DoesNotExist:
+            raise Http404("Product does not exist")
+
 
 
 # ======================= SHOW CATEGORY
 def showCategory(request, hierarchy=None):
-    categories_slug = hierarchy.split('/')
-    category_slug = categories_slug[-1]
-    category = Category.objects.get(slug=category_slug)
-    products = category.get_products()
-    paginator = Paginator(products, 20)
+    try:
+        categories_slug = hierarchy.split('/')
+        category_slug = categories_slug[-1]
+        category = Category.objects.get(slug=category_slug)
 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+        products = category.get_products()
 
-    context = {
-        'add_to_cart_form': AddItemToCartForm(),
-        'instance': category,
-        'products': page_obj,
-        'breadcrumbs': category.get_ancestors(include_self=True)
-    }
+        # if user wishes to sort the list by name/price
+        query = request.GET.get('sort_by')
+        if query:
+            if query in VALID_SORTS:
+                products = category.get_products(sort_by=VALID_SORTS[query])
+
+        #sort products into pages
+        paginator = Paginator(products, 20)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'add_to_cart_form': AddItemToCartForm(),
+            'instance': category,
+            'products': page_obj,
+            'breadcrumbs': category.get_ancestors(include_self=True)
+        }
+
+    except Category.DoesNotExist:
+        raise Http404("Category not found")
 
     return render(request, 'pages/product_list.html', context)
 
@@ -145,6 +179,7 @@ def cart(request):
     }
     return render(request, 'pages/cart.html', context)
 
+# ======================= CHECKOUT 
 def checkout(request):
     return render(request, 'pages/checkout.html')
 
@@ -174,3 +209,7 @@ def query_search(query=None):
         for post in posts:
             queryset.append(post)
     return list(set(queryset))
+    
+# ======================= SEARCH QUERY
+def notFound(request):
+    raise Http404("Page not found")

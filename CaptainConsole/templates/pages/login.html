@@ -7,19 +7,17 @@
 
 <!--    Page content      -->
 {% block content %}
-<main class="container">
-    
-    <h2>Login </h2>
-
-    <section class="container"></section>
-
-        <form method="POST" action="">
+<main class="container text-center">
+    <div class="container">
+        
+        <form method="POST" action="" class="d-flex adjust-items-center flex-column">
+            <h2>Please Sign In</h2>
             {% csrf_token %}
             <!-- Login form -->
 
             <!-- USERNAME  -->
             <fieldset class="form-group row">
-                <label for="{{ form.username.id_for_label }}" class="col-sm-2 col-form-label">Username:</label>
+                <label for="{{ form.username.id_for_label }}" class="col-sm-2 col-form-label" autofocus>Username:</label>
                 {{form.username}}
             </fieldset>
 
@@ -33,9 +31,10 @@
             <input type="submit" class="btn btn-success mb-3" name="Login" value="Login">
         </form>
 
-    <!-- REGISTER IF NO ACCOUNT -->
-    <a href="/register" class="btn btn-primary mb-3">Dont have an account?</a>
-    </section>
+        <!-- REGISTER IF NO ACCOUNT -->
+        <a href="/register" class="btn btn-primary mb-3">Dont have an account?</a>
+        </section>
+    </div>
 
 </main>
 {% endblock content %}

@@ -34,11 +34,13 @@ class Category(MPTTModel):
         if slugs:
             return slugs[-1]
 
-    def get_products(self):
+    def get_products(self, sort_by=None):
         descendants = self.get_descendants(include_self=True)
         # descendants = [i.name for i in descendants]
-        products = Product.objects.filter(category__in=descendants)
-        return products
+        if sort_by != None:
+            return Product.objects.order_by(sort_by).filter(category__in=descendants)
+
+        return Product.objects.filter(category__in=descendants)
 
     def __str__(self):
         return self.name
@@ -51,9 +53,17 @@ class Product(models.Model):
     price = models.FloatField()
     slug = models.SlugField(null=False)
     thumb = models.ImageField(upload_to='images/thumbs/', default='No_image_available.png', blank=True)
+    discount = models.IntegerField( default=0 ) 
 
     def __str__(self):
         return self.name
+
+    def valid_discound(self):
+        """Checks if the discount is valid (not higher than actual price)"""
+        if discount > price or discount == 0:
+            return False
+        else:
+            return True
 
 
 class ProductImage(models.Model):

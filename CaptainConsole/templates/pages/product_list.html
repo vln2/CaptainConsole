@@ -1,49 +1,73 @@
 {% extends '../base.html' %}
 {% load mptt_tags %}
-
 <!--    Page content      -->
 
 {% block content %}
-<div class="row">  
-    <ul class="list-group col-xl-2  col-md-3  bg-secondary pr-0">
-        {% full_tree_for_model CaptainConsole.Category as gs %}
-        {% for node, structure in gs|tree_info %}
-            <li>
-                <a href="/category/{{ node.get_slug_link }}" class="{% if node.is_leaf_node %}child_node{%endif%} list-group-item bg-secondary border-warning rounded-0 list-group-item-action">
-                    {{ node }}
-                </a>
-            </li>
-        {% endfor %}
-
+<div class="row">       
+    <!-- SIDEBAR -->
+    <aside class="categories_sidebar col-xl-2  col-md-3  bg-secondary pr-0">
+        <!-- CATEGORIES -->
+        <nav class="card-group-item">
+            <a href="#categories" class="card-header d-block" data-toggle="collapse">
+                <h6 class="title">Browse Categories </h6>
+            </a>
+            <div class="collapse" id="categories" > 
+                <ul class="list-group" >
+                        
+                    {% full_tree_for_model CaptainConsole.Category as gs %}
+                    {% for node, structure in gs|tree_info %}
+                        <li>
+                            <a href="{% url 'category' %}{{ node.get_slug_link }}" class="{% if node.is_leaf_node %}child_node{%endif%} list-group-item bg-secondary rounded-0 list-group-item-action">
+                                {{ node }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </nav>
+        <!-- SORT BY -->
+        <div class="card-group-item">
+            <div class="card-header">
+                <h6 class="title">Sort by </h6>
+            </div>
+                <form method="GET" action="{{ request.get_full_path }}" class="form_sort">
+                    <div class="card-body">
+                    <label class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" value="name_desc">
+                        <span class="form-check-label">
+                            Name (descending)
+                        </span>
+                    </label>
+                    <label class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" value="name_asc">
+                        <span class="form-check-label">
+                            Name (ascending)
+                        </span>
+                    </label>
+                    <label class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" value="price_desc">
+                        <span class="form-check-label">
+                            Price (highest)
+                        </span>
+                    </label>
+                    <label class="form-check">
+                        <input class="form-check-input" type="radio" name="sort_by" value="price_asc">
+                        <span class="form-check-label">
+                            Price (lowest)
+                        </span>
+                    </label>
+                    <button type="submit" class="btn btn-warning">Sort</button>
+                </div> <!-- card-body.// -->
+            </form>
+        </div> <!-- card-group-item.// -->
+    </aside>
         
-        </ul>
     <main class="container col-xl-10 col-md-9 pt-3">
 
-        <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
-        <h2>Products list</h2>
+   
         <section class="container d-flex flex-wrap justify-content-center">
             {% for product in products %}
-            
-                <!-- Single product cards-->
-                <div class="card my-3 mx-3 shadow-sm rounded" style="width: 18rem;">
-                    <!-- CARD IMAGE -->
-                    <a href="/product/{{product.id}}/{{product.slug}}" ><img src="{{product.thumb.url}}" class="card-img-top img-fluid" alt="..."></a>
-                    <!-- CARD TEXT -->
-                    <div class="card-body text-center ">
-                        <a href="/product/{{product.id}}/{{product.slug}}" >{{ product.name }}</a>
-                        <p class="font-weight-bold blue-text">{{ product.price }}$ </p>
-                        
-                        <form method="POST" action="{% url 'add_to_cart' product.id %}">
-                            <fieldset class="row" data-toggle="buttons">
-                                {% csrf_token %}
-                                {{ add_to_cart_form }}
-                                <input type="submit" class="btn btn-secondary col-6 border border-primary" value="Add to cart">
-                                <input type="button" class="btn btn-secondary col-6 border border-primary" value="Share">
-                            </fieldset>
-                        </form>
-                    </div>
-                            
-                </div>
+                {% include "../components/product_card.html"%}
             {% endfor %}
         </section>
 
