@@ -53,9 +53,17 @@ class Product(models.Model):
     price = models.FloatField()
     slug = models.SlugField(null=False)
     thumb = models.ImageField(upload_to='images/thumbs/', default='No_image_available.png', blank=True)
+    discount = models.IntegerField( default=0 ) 
 
     def __str__(self):
         return self.name
+
+    def valid_discound(self):
+        """Checks if the discount is valid (not higher than actual price)"""
+        if discount > price or discount == 0:
+            return False
+        else:
+            return True
 
 
 class ProductImage(models.Model):
