@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -112,6 +113,7 @@ class ProductDetailView(DetailView):
         try:
             iProductId = self.kwargs['id']
             return {
+                'add_to_cart_form': AddItemToCartForm,
                 'product': Product.objects.get(id=iProductId),
                 'gallery': ProductImage.objects.filter(product=iProductId)
             }
@@ -217,11 +219,17 @@ def cart(request):
         userInfo.cart = Order.objects.create(owner=request.user, status=Order.CART)
         userInfo.save()
 
+    class breadcrumb:
+        get_slug_link = reverse('cart')
+        def __str__(self):
+            return 'Cart'
+
     items = userInfo.cart.getItems
     context = {
         'removeitem': RemoveItemFromCartForm(),
         'cart': userInfo.cart,
-        'items': items
+        'items': items,
+        'breadcrumbs': (breadcrumb,)
     }
     return render(request, 'pages/cart.html', context)
 
