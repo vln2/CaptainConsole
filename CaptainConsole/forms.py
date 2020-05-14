@@ -1,9 +1,9 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import Order, Item
+from .models import Order, Item, Address, Payment
 
 # bootstrap class styles for input forms
 sInputClass = "form-control col-sm-12 col-md-8 col-lg-6"
@@ -35,6 +35,7 @@ class CreatingUserForms(UserCreationForm):
             'password2': forms.PasswordInput(attrs={'class': sInputClass})
         }
 
+
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -48,7 +49,20 @@ class LoginForm(AuthenticationForm):
 
 
 
+
 class AddItemToCartForm(ModelForm):
     class Meta:
         model = Item
         fields = ('quantity',)
+
+
+class AddressForm(ModelForm):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+
+class PaymentForm(ModelForm):
+    class Meta:
+        model = Payment
+        fields = '__all__'

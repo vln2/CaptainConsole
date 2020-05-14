@@ -1,5 +1,7 @@
+from django.core.validators import RegexValidator
 from django.db import models
 from django.conf import settings
+from django_cryptography.fields import encrypt
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -84,6 +86,19 @@ class Address(models.Model):
     country = models.CharField(max_length=255)
 
 
+
+class Payment(models.Model):
+    cardNumber = encrypt(models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')]))
+    cardName = models.CharField(max_length=255)
+    cardExp = models.CharField(max_length=4)
+    cardCVC = models.CharField(max_length=3)
+    status = models.CharField(max_length=255, null=True, blank=True)
+
+    @property
+    def getLastFour(self):
+        return self.cardNumber[-4:]
+
+
 class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
@@ -91,6 +106,7 @@ class UserInfo(models.Model):
     # lastName = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    paymentInfo = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
     profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
 
     def __str__(self):
@@ -99,10 +115,10 @@ class UserInfo(models.Model):
 
 class Shipping(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
-    dateShipped = models.DateTimeField()
-    trackingNumber = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
-    shippingCost = models.FloatField()
+    dateShipped = models.DateTimeField(null=True, blank=True)
+    trackingNumber = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=255, null=True, blank=True)
+    shippingCost = models.FloatField(null=True, blank=True)
 
 
 class Item(models.Model):
@@ -117,21 +133,24 @@ class Order(models.Model):
     dateCreated = models.DateTimeField(auto_now=True)
     items = models.ManyToManyField(Item)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT, null=True)
+    shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT, null=True, blank=True)
+    payment = models.ForeignKey(Payment, on_delete=models.PROTECT, null=True, blank=True)
     CART = 'C'
+    PAYMENT = 'P'
     order_labels = (
         (CART, 'Cart'),
-        ('P', 'Payment'),
+        (PAYMENT, 'Payment'),
         ('S', 'Shipping'),
         ('D', 'Done')
     )
     status = models.CharField(choices=order_labels, max_length=1, default='C')
 
     def __str__(self):
-        return self.owner.username
+        return f"{self.owner.username} order with {self.items.count()} items, status: {self.status}"
 
+    @property
     def getTotal(self):
         order_sum = 0
         for item in self.items.all():
-            order_sum += item.product.price
+            order_sum += (item.product.price * item.quantity)
         return round(order_sum, 2)

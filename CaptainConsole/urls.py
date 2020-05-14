@@ -36,7 +36,9 @@ urlpatterns = [
     path('remove-from-cart/<int:product_id>', views.addToCart, name='remove_from_cart'),
 
     # == Checkout
-    path('checkout/', views.checkout, name="checkout"),
+    path('cart/', views.cart, name="cart"),
+    path('checkout/<int:order_id>', views.checkout, name="checkout"),
+    path('review/<int:order_id>', views.order_review, name="review"),
 
     # == catch all
     re_path(r'^.*/$', views.notFound, name="not_found")
