@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.productList, name='list_products'),
+    path('', views.productList, name='home'),
 
     path('search_results/', views.search_results, name='search_results'),
 
@@ -24,7 +24,8 @@ urlpatterns = [
     path('remove-from-cart/<int:product_id>', views.addToCart, name='remove_from_cart'),
 
     path('cart/', views.cart, name="cart"),
-    path('checkout/', views.checkout, name="checkout"),
+    path('checkout/<int:order_id>', views.checkout, name="checkout"),
+    path('review/<int:order_id>', views.order_review, name="review"),
 
     re_path(r'^category/(?P<hierarchy>.+)/$', views.showCategory, name='category'),
 

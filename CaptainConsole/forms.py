@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import Order, Item, Address
+from .models import Order, Item, Address, Payment
 
 
 class OrderForms(ModelForm):
@@ -43,4 +43,10 @@ class AddItemToCartForm(ModelForm):
 class AddressForm(ModelForm):
     class Meta:
         model = Address
+        fields = '__all__'
+
+
+class PaymentForm(ModelForm):
+    class Meta:
+        model = Payment
         fields = '__all__'

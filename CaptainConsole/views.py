@@ -5,8 +5,8 @@ from django.views.generic import ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Product, Category, ProductImage, Order, Item
-from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm
+from .models import Product, Category, ProductImage, Order, Item, Shipping
+from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm
 from django.db.models import Q
 
 # ======================= REGISTER USER
@@ -135,7 +135,7 @@ def addToCart(request, product_id):
 def cart(request):
     order_qs = Order.objects.filter(owner=request.user, status=Order.CART)
     if order_qs.exists():
-        cart = order_qs[0]
+        cart = order_qs.first()
     else:
         cart = Order.objects.create(owner=request.user, status=Order.CART)
 
@@ -145,11 +145,53 @@ def cart(request):
     return render(request, 'pages/cart.html', context)
 
 
-def checkout(request):
+def checkout(request, order_id):
+    order_qs = Order.objects.filter(owner=request.user, status=Order.CART, id=order_id)
+    if order_qs.exists():
+        order = order_qs.first()
+    else:
+        messages.error(request, f'No order with id:{order_id} found')
+        return redirect('home')
+
+    addressform = AddressForm(request.POST or None, prefix='address')
+    paymentform = PaymentForm(request.POST or None, prefix='payment')
+
+    if request.method == 'POST':
+
+        if addressform.is_valid() and paymentform.is_valid():
+            new_address = addressform.save()
+            new_payment = paymentform.save()
+
+            order.status = Order.PAYMENT
+            order.shipping = Shipping.objects.create(address=new_address)
+            order.payment = new_payment
+            order.save()
+
+            return redirect('review', order_id=order_id)
+
     context = {
-        'addressform': AddressForm()
+        'addressform': addressform,
+        'paymentform': paymentform,
+        'cart': order
     }
     return render(request, 'pages/checkout.html', context)
+
+
+def order_review(request, order_id):
+    order_qs = Order.objects.filter(owner=request.user, id=order_id)
+    if order_qs.exists():
+        order = order_qs.first()
+    else:
+        messages.error(request, f'No order with id:{order_id} found')
+        return redirect('home')
+
+    context = {
+        'order': order,
+        'cart': order.items.all(),
+        'address': order.shipping.address,
+        'payment': order.payment,
+    }
+    return render(request, 'pages/order_review.html', context)
 
 
 def search_results(request):
