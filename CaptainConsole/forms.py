@@ -8,6 +8,12 @@ from .models import Order, Item
 # bootstrap class styles for input forms
 sInputClass = "form-control col-sm-12 col-md-8 col-lg-6"
 
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
 class OrderForms(ModelForm):
     class Meta:
         model = Order

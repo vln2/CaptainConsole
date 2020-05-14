@@ -4,12 +4,36 @@
 {% block breadcrumbs %}
 {% endblock breadcrumbs %}
 
+<style>
+    .profilepic{
+        max-width: 200px;
+        max-height: 200px;
+        margin: 0 auto;
+        border-radius: 50%;
+    }
+</style>
 
+<br>
 <!--    Page content      -->
 {% block content %}
-<main class="container">
-    <h2>User profile</h2>
+<div class="row">
+    <div class="col">
+        <div class="card body">
+            <hr>
+            <h2 style="text-align: center;">User profile</h2>
+            <hr>
+            <img class="profile-pic" src="{{request.user.userinfo.profile_picture}}" >
+            <hr>
+            <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+        </div>
+    </div>
+    <div class="nextCol">
+        <div class="nextCard body">
+            <form method="POST" action="">
+            <input class="updates" type="submit" name="Update Information">
+            </form>
+        </div>
+    </div>
+</div>
 
-    <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
-</main>
 {% endblock content %}
