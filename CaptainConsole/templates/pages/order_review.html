@@ -1,0 +1,61 @@
+{% extends '../base.html' %}
+
+<!--    Page breadcrumbs (removed)      -->
+{% block breadcrumbs %}
+    <nav>
+        <ol class="breadcrumb mb-0" aria-label="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'checkout' order.id %}">Checkout</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'review' order.id %}">Review</a></li>
+        </ol>
+    </nav>
+{% endblock breadcrumbs %}
+
+
+<!--    Page content      -->
+{% block content %}
+<main class="container">
+    <!-- LIST OF PRODUCTS IN CART  -->
+    <div class="row">
+        <div class="col">
+            <ul class="list-group mb-3 z-depth-1">
+                {% for item in cart %}
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <h6 class="my-0">{{ item.quantity }} x {{ item.product }}</h6>
+                    </div>
+                    <div>
+                        <span>${{ item.product.price }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (USD)</span>
+                    <strong>${{ order.getTotal }}</strong>
+                </li>
+            </ul>
+        </div>
+        <div class="col">
+             <ul class="list-group mb-3 z-depth-1">
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <h4>Shipping address:</h4>
+                    <p>Street: {{ address.street }}</p>
+                    <p>Postal code: {{ address.postalCode }}</p>
+                    <p>City: {{ address.city }}</p>
+                    <p>Country: {{ address.country }}</p>
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <h4>Payment:</h4>
+                    <p>Card number: **** **** **** {{ payment.getLastFour }}</p>
+                    <p>Name on card: {{ payment.cardName }}</p>
+                    <p>CVC: {{ payment.cardCVC }}</p>
+                    <p>Expiration: {{ payment.cardExp }}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- PROCEED TO CHECKOUT  -->
+    <a href="" class="btn btn-primary">Confirm and pay</a>
+
+</main>
+{% endblock content %}
