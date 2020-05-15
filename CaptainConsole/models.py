@@ -1,7 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from django.conf import settings
-from django_cryptography.fields import encrypt
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -90,7 +89,7 @@ class Address(models.Model):
 
 
 class Payment(models.Model):
-    cardNumber = encrypt(models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')]))
+    cardNumber = models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')])
     cardName = models.CharField(max_length=255)
     cardExp = models.CharField(max_length=4)
     cardCVC = models.CharField(max_length=3)
@@ -165,7 +164,7 @@ class UserInfo(models.Model):
     # firstName = models.CharField(max_length=255)
     # lastName = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True, blank=True)
-    paymentInfo = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
+    paymentInfo = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='images/profiles',default="defaultuserimg.png", null=True, blank=True)
     cart = models.OneToOneField(Order, on_delete=models.SET_NULL, null=True, blank=True)
 

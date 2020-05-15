@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
-from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo
+from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo, Address, Payment
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm
 from django.db.models import Q
 from django.http import Http404, HttpResponseBadRequest
@@ -231,41 +231,56 @@ def cart(request):
         userInfo.cart = Order.objects.create(owner=request.user, status=Order.CART)
         userInfo.save()
 
-    class breadcrumb:
-        get_slug_link = reverse('cart')
-        def __str__(self):
-            return 'Cart'
-
     items = userInfo.cart.getItems
     context = {
         'removeitem': RemoveItemFromCartForm(),
         'cart': userInfo.cart,
-        'items': items,
-        'breadcrumbs': (breadcrumb,)
+        'items': items
     }
     return render(request, 'pages/cart.html', context)
 
 
 def checkout(request, order_id):
+    userInfo = get_object_or_404(UserInfo, user=request.user)
     order_qs = Order.objects.filter(owner=request.user, status=Order.CART, id=order_id)
     if order_qs.exists():
         order = order_qs.first()
     else:
         messages.error(request, f'No order with id:{order_id} found')
-        return redirect('home')
+        return redirect('cart')
 
-    addressform = AddressForm(request.POST or None, prefix='address')
-    paymentform = PaymentForm(request.POST or None, prefix='payment')
+    address = None
+    payment = None
+
+    if isinstance(order.shipping, Shipping):
+        address = order.shipping.address
+    elif isinstance(userInfo.address, Address):
+        address = userInfo.address
+
+    if isinstance(order.payment, Payment):
+        payment = order.payment
+    elif isinstance(userInfo.paymentInfo, Payment):
+        payment = userInfo.paymentInfo
+
+    addressform = AddressForm(request.POST or None, prefix='address', instance=address)
+    paymentform = PaymentForm(request.POST or None, prefix='payment', instance=payment)
+
+    addressform.fields['name'].initial = userInfo.name
 
     if request.method == 'POST':
 
         if addressform.is_valid() and paymentform.is_valid():
-            new_address = addressform.save()
-            new_payment = paymentform.save()
+            address = addressform.save()
+            payment = paymentform.save()
 
-            order.status = Order.PAYMENT
-            order.shipping = Shipping.objects.create(address=new_address)
-            order.payment = new_payment
+            try:
+                order.shipping.address = address
+            except:
+                order.shipping = Shipping.objects.create(address=address)
+
+            userInfo.name = addressform.cleaned_data['name']
+            userInfo.save()
+            order.payment = payment
             order.save()
 
             return redirect('review', order_id=order_id)
@@ -273,14 +288,15 @@ def checkout(request, order_id):
     context = {
         'addressform': addressform,
         'paymentform': paymentform,
-        'cart': order
+        'cart': order,
+        'items': order.getItems
     }
-
 
     return render(request, 'pages/checkout.html', context)
 
 
 def order_review(request, order_id):
+    userInfo = get_object_or_404(UserInfo, user=request.user)
     order_qs = Order.objects.filter(owner=request.user, id=order_id)
     if order_qs.exists():
         order = order_qs.first()
@@ -288,9 +304,15 @@ def order_review(request, order_id):
         messages.error(request, f'No order with id:{order_id} found')
         return redirect('home')
 
+    if request.method == 'POST':
+        order.status = Order.PAYMENT
+        order.save()
+        userInfo.cart = None
+        userInfo.save()
+
     context = {
         'order': order,
-        'cart': order.items.all(),
+        'items': order.getItems,
         'address': order.shipping.address,
         'payment': order.payment,
     }

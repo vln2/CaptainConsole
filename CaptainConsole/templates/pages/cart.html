@@ -1,5 +1,10 @@
 {% extends '../base.html' %}
 
+{% block breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'cart' %}" class="text-white">Cart</a>
+    </li>
+{% endblock breadcrumbs %}
 
 <!--    Page content      -->
 {% block content %}
