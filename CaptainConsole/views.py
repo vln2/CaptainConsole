@@ -367,6 +367,7 @@ def order_review(request, order_id):
     order_qs = Order.objects.filter(owner=request.user, id=order_id)
     if order_qs.exists():
         order = order_qs.first()
+        messages.success(request, "Your order has been sent, thank you!")
     else:
         messages.error(request, f'No order with id:{order_id} found')
         return redirect('home')
