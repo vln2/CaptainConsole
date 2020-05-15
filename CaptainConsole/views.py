@@ -7,12 +7,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
-from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo
+from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo, SearchHistory
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm
 from django.db.models import Q
 from django.http import Http404, HttpResponseBadRequest
 
-#just strings for checking for sorting options 
+
+#just strings for checking for sorting options
 VALID_SORTS = {
     'price_asc': 'price',
     'price_desc': '-price',
@@ -151,7 +152,7 @@ def showCategory(request, hierarchy=None):
         page_obj = paginator.get_page(page_number)
 
         context = {
-            'add_to_cart_form': AddItemToCartForm,
+            'add_to_cart_form': AddItemToCartForm(),
             'instance': category,
             'products': page_obj,
             'breadcrumbs': category.get_ancestors(include_self=True)
@@ -319,7 +320,28 @@ def query_search(query=None):
         for post in posts:
             queryset.append(post)
     return list(set(queryset))
-    
+
 # ======================= SEARCH QUERY
 def notFound(request):
     raise Http404("Page not found")
+
+
+def search_history(request):
+    context = {}
+    history = None
+    if request.user.is_authenticated:
+        username = request.user.username
+        if username:
+            history = SearchHistory.objects.filter(
+                Q(username__icontains=username)
+            ).distinct()
+            history = list(set(history))
+
+    context['history'] = history
+
+
+    return render(request, 'pages/search_history.html', context)
+
+
+
+

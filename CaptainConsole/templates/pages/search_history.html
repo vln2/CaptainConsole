@@ -1,18 +1,17 @@
 {% extends '../base.html' %}
 
-<!--    Page content      -->
+
+<!--    Page content    -->
 
 {% block content %}
 <main class="container">
 
     <!-- ADD SIDEBAR HERE FOR CATEGORIES -->
-    <h2>Search results: {{products|length}} items</h2>
+    <h2>Search history</h2>
     <section class="container">
         <ul class="list-group">
-            {% if products|length > 0 %}
-                {% for product in products %}
-
-                <!-- Single product cards-->
+            {% for product in history %}
+            <!-- Single product cards-->
                 <div class="card mb-3 shadow-sm" style="max-height: 300px;">
                     <!-- Single product cards-->
                     <div class="card mb-3" style="max-height: 300px;">
@@ -40,20 +39,7 @@
                             </div>
                         </div>
                     </div>
-
                 {% endfor %}
-            {% else %}
-                <div class="card mb-3" style="max-height: 300px;">
-                    <div class="card-body">
-                        <h3 class="card-title">
-                            No results!
-                        </h3>
-                        <p class="card-text">
-                            There were no results matching your search: "{{ query }}"
-                        </p>
-                    </div>
-                </div>
-            {% endif %}
         </ul>
     </section>
 </main>

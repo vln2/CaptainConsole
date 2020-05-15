@@ -11,6 +11,10 @@ urlpatterns = [
     # == Home
     path('', views.productList, name='home'),
 
+
+    path('search_results/', views.search_results, name='search_results'),
+    path('search_history/', views.search_history, name='search_history'),
+
     # == Authentication
     path('admin/', admin.site.urls),
     path('register/', views.registerUser, name='register'),

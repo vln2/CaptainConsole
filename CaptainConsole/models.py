@@ -5,6 +5,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.core.validators import RegexValidator
 from django_cryptography.fields import encrypt
 
+
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
@@ -88,15 +89,6 @@ class Address(models.Model):
     def __str__(self):
         return f'{self.street} {self.postalCode} {self.city} {self.country}'
 
-class UserInfo(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=255)
-    # firstName = models.CharField(max_length=255)
-    # lastName = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
-    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
-
 class Payment(models.Model):
     cardNumber = encrypt(models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')]))
     cardName = models.CharField(max_length=255)
@@ -179,3 +171,6 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.user.email
+class SearchHistory(models.Model):
+     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+     query = models.CharField(max_length=255)
