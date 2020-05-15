@@ -20,7 +20,7 @@ VALID_SORTS = {
     'name_desc': '-name'
 }
 
-PRODUCTS_PER_PAGE = 4
+PRODUCTS_PER_PAGE = 12
 
 # ======================= SALES / FRONT PAGE
 

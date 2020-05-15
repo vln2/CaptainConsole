@@ -33,10 +33,10 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse d-md-flex justify-content-between" id="header_nav">
+            <div class="collapse navbar-collapse d-md-flex" id="header_nav">
                 <div class=" container-fluid d-sm-flex justify-content-between py-3">
                         
-                    <div class="d-flex ">
+                    <div class="d-flex justify-content-between">
                                 
                         <!-- SEARCH BAR-->
                         <form class="form-inline my-lg-0 " method="GET" action="{% url 'search_results' %}">
@@ -98,12 +98,7 @@
     {% endblock content %}
     
     <!--         FOOTER         -->
-    <footer class="blockquote-footer bg-primary ">
-        <div  class=" container">
-                
-            <h3>Footer stuff</h3>
-        </div>
-    </footer>
+    {% include 'components/footer.html'%}
     <!--        FACEBOOK -->
     <div id="fb-root"></div>
 
