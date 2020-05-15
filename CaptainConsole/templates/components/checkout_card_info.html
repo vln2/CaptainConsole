@@ -1,54 +1,48 @@
 
-    <!--    CARD TYPE     -->
-    <div class="d-block my-3">
-        <div class="custom-control custom-radio">
-            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
-            <label class="custom-control-label" for="credit">Credit card</label>
-        </div>
-        <div class="custom-control custom-radio">
-            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
-            <label class="custom-control-label" for="debit">Debit card</label>
-        </div>
-    </div>
-    
-    <!--    CARD INFO     -->
-    
-    <div class="row">
-        <!--    Cardholder name     -->
-        <fieldset class="col-md-6 mb-3">
-            <label for="cc-name">Name on card</label>
-            <input type="text" class="form-control" id="cc-name" placeholder="" required>
-            <small class="text-muted">Full name as displayed on card</small>
-            <div class="invalid-feedback">
-            Name on card is required
-            </div>
-        </fieldset>
-    
-        <!--    Card Number    -->
-        <fieldset class="col-md-6 mb-3">
-            <label for="cc-number">Credit card number</label>
-            <input type="text" class="form-control" id="cc-number" placeholder="" required>
-            <div class="invalid-feedback">
-            Credit card number is required
-            </div>
-        </fieldset>
-    </div>
-    
-    <div class="row">
-        <!--    Expiration date     -->
-        <fieldset class="col-md-3 mb-3">
-            <label for="cc-expiration">Expiration</label>
-            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
-            <div class="invalid-feedback">
-            Expiration date required
-            </div>
-        </fieldset>
-        <!--    Security Code     -->
-        <fieldset class="col-md-3 mb-3">
-            <label for="cc-cvv">CVV</label>
-            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
-            <div class="invalid-feedback">
-            Security code required
-            </div>
-        </fieldset>
-    </div>
+                  <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                          <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                          <label class="custom-control-label" for="credit">Credit card</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                          <label class="custom-control-label" for="debit">Debit card</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+                          <label class="custom-control-label" for="paypal">PayPal</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <label for="{{ paymentform.cardName.id_for_label }}">Name on card</label>
+                          {{paymentform.cardName}}
+                          <small class="text-muted">Full name as displayed on card</small>
+                          <div class="invalid-feedback">
+                            Name on card is required
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="{{ paymentform.cardNumber.id_for_label }}">Credit card number</label>
+                          {{paymentform.cardNumber}}
+                          <div class="invalid-feedback">
+                            Credit card number is required
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3 mb-3">
+                          <label for="{{ paymentform.cardExp.id_for_label }}">Expiration</label>
+                          {{paymentform.cardExp}}
+                          <div class="invalid-feedback">
+                            Expiration date required
+                          </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                          <label for="{{ paymentform.cardCVC.id_for_label }}">CVV</label>
+                          {{paymentform.cardCVC}}
+                          <div class="invalid-feedback">
+                            Security code required
+                          </div>
+                        </div>
+                      </div>

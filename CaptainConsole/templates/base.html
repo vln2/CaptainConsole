@@ -52,7 +52,11 @@
                         <div> 
                             <a href="/cart" class="btn btn-outline-secondary border-0 ml-4 mr-2">
                                 <!-- NUMBER OF ITEMS-->
-                                <span class="badge badge-warning mx-1">0</span>
+                                <span class="badge badge-warning mx-1">
+                                    {% block cart_quantity%}
+                                    0
+                                    {% endblock cart_quantity%}
+                                </span>
                                 Cart
                             </a> 
                         </div>
@@ -75,19 +79,21 @@
                 </div>  
             </div>
         </nav>
-        {% block breadcrumbs %}
 
         <nav class="breadcrumb py-0 rounded-0">
-                <ol class="breadcrumb mb-0 rounded-0" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 rounded-0 text-white" aria-label="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="{% url 'home' %}" class="text-white">Home</a>
                     </li>
-                    {% for breadcrumb in breadcrumbs %}
-                    <li class="breadcrumb-item"><a class="text-white" href="{% url 'category' %}{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a></li>
-                    {% endfor %}
+                    {% block breadcrumbs %}     
+                        {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item">
+                            <a class="text-white" href="{% url 'category' %}{{ breadcrumb.get_slug_link }}">{{ breadcrumb }}</a>
+                        </li>
+                        {% endfor %}
+                    {% endblock breadcrumbs %}
                 </ol>
             </nav>
-        {% endblock breadcrumbs %}
         
     </header>    
     <!-- Breadcrumbs -->

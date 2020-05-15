@@ -17,22 +17,43 @@
 <br>
 <!--    Page content      -->
 {% block content %}
-<div class="row">
-    <div class="col">
-        <div class="card body">
-            <hr>
-            <h2 style="text-align: center;">User profile</h2>
-            <hr>
-            <img class="profile-pic" src="{{request.user.userinfo.profile_picture}}" >
-            <hr>
-        </div>
-    </div>
-    <div class="nextCol">
-        <div class="nextCard body">
+<div class="container">
+        
+    <div class="d-flex align-items-center justify-content-around flex-column py-3">
+        <!-- IMAGE -->
+
+            <h2 class="h3">Full name</h2>
+            <div class="my-3">
+                <img style="height:300px; width:300px" class="rounded-circle img-thumbnail" src="{{request.user.userinfo.profile_picture}}" >
+            </div>
+        <!-- INPUT -->
+        <a class="btn btn-primary" data-toggle="collapse" href="#user_profile" role="button" aria-expanded="false" aria-controls="user_profile">
+        Edit profile
+        </a>
+        <section class="collapse"  id="user_profile">
             <form method="POST" action="">
-            <input class="updates" type="submit" name="Update Information">
+                <div class="container">
+                    <fieldset class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">First name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName">Last name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
+
+                        </div>
+                    </fieldset>
+                    <fieldset class="mb-3">
+                        <label for="street">Upload new image</label>
+                        <input type="file" class="form-control">
+                    </fieldset>  
+                </div>                  
+                    <input class="btn btn-success" type="submit" name="update-info" value="Update Information">
+                </div>
             </form>
-        </div>
+        </section>
     </div>
 </div>
 
