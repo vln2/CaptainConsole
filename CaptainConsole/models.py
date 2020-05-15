@@ -95,7 +95,7 @@ class UserInfo(models.Model):
     # lastName = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
-    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
+    profile_picture = models.ImageField(default="/media/defaultuserimg.png", null=True, blank=True)
 
 class Payment(models.Model):
     cardNumber = encrypt(models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')]))
