@@ -86,10 +86,12 @@ def userProfile(request):
 def productList(request, *args):
     products = Product.objects.all()
     #if the user wishes to sort by name/price
+
     query = request.GET.get('sort_by')
     if query:
         if query in VALID_SORTS:
-            context['products'] = Product.objects.all().order_by(VALID_SORTS[query])
+            products = Product.objects.all().order_by(VALID_SORTS[query])
+  
     
 
     #sort products into pages
