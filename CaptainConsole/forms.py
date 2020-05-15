@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Form
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
 
@@ -18,7 +18,7 @@ class OrderForms(ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
-
+  
 
 class CreatingUserForms(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -47,6 +47,14 @@ class LoginForm(AuthenticationForm):
         fields = ['username', 'password']
 
 
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+
 class AddItemToCartForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -64,6 +72,8 @@ class RemoveItemFromCartForm(ModelForm):
 
 
 class AddressForm(ModelForm):
+    name = forms.CharField(max_length=255, required=True, widget=forms.TextInput(attrs={'class': "form-control"}))
+
     class Meta:
         model = Address
         fields = '__all__'

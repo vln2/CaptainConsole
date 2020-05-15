@@ -1,14 +1,14 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
-from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo
-from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm
+from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo, Address, Payment
+from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm, UserUpdateForm
 from django.db.models import Q
 from django.http import Http404, HttpResponseBadRequest
 import json
@@ -19,7 +19,7 @@ VALID_SORTS = {
     'price_desc': '-price',
     'name_asc': 'name',
     'name_desc': '-name'
-}
+} 
 
 PRODUCTS_PER_PAGE = 12
 
@@ -49,6 +49,18 @@ def registerUser(request):
 
     return render(request, 'pages/register.html', {'form': registerForm})
 
+def edit_profile(request):
+    form = UserUpdateForm(request.POST or None, instance=request.user)
+
+    if request == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated!')
+            return redirect('user_profile')
+
+    return redirect('home')
+
+
 # ======================= LOGIN
 def userLogin(request):
     #if request.user.is_authenticed:
@@ -69,6 +81,12 @@ def userLogin(request):
 
     return render(request, 'pages/login.html', {'form': authForm})
 
+# ======================= FORGOT PASSWORD
+def forgot_password(request):
+    if request.method == 'POST':
+        return password_reset(request, from_email=request.POST.get('email'))
+    else:
+        return render(request, 'forgot_password_form.html')
 
 # ======================= LOGOUT
 def userLogout(request):
@@ -77,10 +95,24 @@ def userLogout(request):
 
 # ======================= USER PROFILE
 def userProfile(request):
-    # if not request.user.is_authenticed():
-    #     return redirect('login')
-    # else:
-    return render(request, 'pages/user_profile.html', {'user': request.user})
+    changePassword = PasswordChangeForm(request.user)
+    changeEmail = UserUpdateForm(instance=request.user)
+
+    if request.method == 'POST':
+        changepassword = PasswordChangeForm(user=request.user, data=request.POST)
+
+        if changepassword.is_valid():
+            changePassword.save()
+            update_session_auth_hash(request, changePassword.user)
+
+    userInfo = get_object_or_404(UserInfo, user=request.user)
+    context = {
+        'user': request.user,
+        'userinfo': userInfo,
+        'pass': changePassword,
+        'email': changeEmail
+    }
+    return render(request, 'pages/user_profile.html', context)
 
 
 # ======================= PRODUCT LIST
@@ -111,7 +143,6 @@ def productList(request, *args):
     #find the recently viewed products from session cookie
     lRecentlyViewed = Product.objects.filter(id__in=viewed_products)
     context = {
-        
         'add_to_cart_form': AddItemToCartForm,
         'products': page_obj,
         'recentlyViewed': lRecentlyViewed
@@ -202,13 +233,9 @@ def addToCart(request, product_id):
             userInfo.save()
 
         item = Item.objects.get_or_create(order=userInfo.cart, product=product)
-        if item[1]:
-            item[0].save()
-            messages.success(request, "{} was added to your cart.".format(str(product)))
-        else:
-            item[0].quantity += form.cleaned_data.get('quantity')
-            item[0].save()
-            messages.success(request, "{} copies of {} are in your cart.".format(str(item[0].quantity),str(product)))
+        item[0].quantity += form.cleaned_data.get('quantity')
+        item[0].save()
+        messages.success(request, "{} was added to your cart.".format(str(product)))
 
     try:
         httpheaders = request.headers
@@ -254,56 +281,74 @@ def cart(request):
         userInfo.cart = Order.objects.create(owner=request.user, status=Order.CART)
         userInfo.save()
 
-    class breadcrumb:
-        get_slug_link = reverse('cart')
-        def __str__(self):
-            return 'Cart'
-
     items = userInfo.cart.getItems
     context = {
         'removeitem': RemoveItemFromCartForm(),
         'cart': userInfo.cart,
-        'items': items,
-        'breadcrumbs': (breadcrumb,)
+        'items': items
     }
     return render(request, 'pages/cart.html', context)
 
 
 def checkout(request, order_id):
+    userInfo = get_object_or_404(UserInfo, user=request.user)
     order_qs = Order.objects.filter(owner=request.user, status=Order.CART, id=order_id)
     if order_qs.exists():
         order = order_qs.first()
     else:
         messages.error(request, f'No order with id:{order_id} found')
-        return redirect('home')
+        return redirect('cart')
 
-    addressform = AddressForm(request.POST or None, prefix='address')
-    paymentform = PaymentForm(request.POST or None, prefix='payment')
+    address = None
+    payment = None
+
+    if isinstance(order.shipping, Shipping):
+        address = order.shipping.address
+    elif isinstance(userInfo.address, Address):
+        address = userInfo.address
+
+    if isinstance(order.payment, Payment):
+        payment = order.payment
+    elif isinstance(userInfo.paymentInfo, Payment):
+        payment = userInfo.paymentInfo
+
+    addressform = AddressForm(request.POST or None, prefix='address', instance=address)
+    paymentform = PaymentForm(request.POST or None, prefix='payment', instance=payment)
+
+    addressform.fields['name'].initial = userInfo.name
 
     if request.method == 'POST':
 
         if addressform.is_valid() and paymentform.is_valid():
-            new_address = addressform.save()
-            new_payment = paymentform.save()
+            address = addressform.save()
+            payment = paymentform.save()
 
-            order.status = Order.PAYMENT
-            order.shipping = Shipping.objects.create(address=new_address)
-            order.payment = new_payment
+            try:
+                order.shipping.address = address
+            except:
+                order.shipping = Shipping.objects.create(address=address)
+
+            userInfo.name = addressform.cleaned_data['name']
+            userInfo.save()
+            order.payment = payment
             order.save()
 
             return redirect('review', order_id=order_id)
 
+        messages.error(request, 'form not valid')
+
     context = {
         'addressform': addressform,
         'paymentform': paymentform,
-        'cart': order
+        'cart': order,
+        'items': order.getItems
     }
-
 
     return render(request, 'pages/checkout.html', context)
 
 
 def order_review(request, order_id):
+    userInfo = get_object_or_404(UserInfo, user=request.user)
     order_qs = Order.objects.filter(owner=request.user, id=order_id)
     if order_qs.exists():
         order = order_qs.first()
@@ -311,9 +356,15 @@ def order_review(request, order_id):
         messages.error(request, f'No order with id:{order_id} found')
         return redirect('home')
 
+    if request.method == 'POST':
+        order.status = Order.PAYMENT
+        order.save()
+        userInfo.cart = None
+        userInfo.save()
+
     context = {
         'order': order,
-        'cart': order.items.all(),
+        'items': order.getItems,
         'address': order.shipping.address,
         'payment': order.payment,
     }

@@ -5,7 +5,7 @@
 {% endblock breadcrumbs %}
 
 <style>
-    .profilepic{
+    .profile-pic{
         max-width: 200px;
         max-height: 200px;
         margin: 0 auto;
@@ -13,7 +13,7 @@
     }
 </style>
 
-<br>
+<br>  
 <!--    Page content      -->
 {% block content %}
 <div class="container">
@@ -23,34 +23,23 @@
 
             <h2 class="h3">Full name</h2>
             <div class="my-3">
-                <img style="height:300px; width:300px" class="rounded-circle img-thumbnail" src="{{request.user.userinfo.profile_picture}}" >
+                <img style="height:300px; width:300px" class="rounded-circle img-thumbnail" src="{{ userinfo.profile_picture.url }}" >
             </div>
         <!-- INPUT -->
         <a class="btn btn-primary" data-toggle="collapse" href="#user_profile" role="button" aria-expanded="false" aria-controls="user_profile">
         Edit profile
+        
         </a>
         <section class="collapse"  id="user_profile">
-            <form method="POST" action="">
-                <div class="container">
-                    <fieldset class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="firstName">First name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
-
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="lastName">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-
-                        </div>
-                    </fieldset>
-                    <fieldset class="mb-3">
-                        <label for="street">Upload new image</label>
-                        <input type="file" class="form-control">
-                    </fieldset>  
-                </div>                  
-                    <input class="btn btn-success" type="submit" name="update-info" value="Update Information">
-                </div>
+            <form method="POST">
+                {% csrf_token %}
+                {{ pass }}     
+                <input class="btn btn-success" type="submit" name="update-info" value="Update password">
+            </form>
+            <form method="POST" action="{% url 'edit-email' %}">
+                {% csrf_token %}
+                {{ email }}
+                <input class="btn btn-success" type="submit" name="update-info" value="Update email">
             </form>
         </section>
     </div>

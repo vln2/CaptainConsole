@@ -4,6 +4,9 @@
 <!--    Page breadcrumbs   -->
 {% block breadcrumbs %}
     <li class="breadcrumb-item">
+        <a href="{% url 'cart' %}" class="text-white">Cart</a>
+    </li>
+    <li class="breadcrumb-item">
         <a href="{% url 'checkout' cart.id %}" class="text-white">Checkout</a>
     </li>
 {% endblock breadcrumbs %}
@@ -28,35 +31,114 @@
                 <div class="col-md-4 order-md-2 mb-4">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-muted">Your cart</span>
-                        <span class="badge badge-secondary badge-pill">3</span>
+                        <span class="badge badge-secondary badge-pill">{{ items.count }}</span>
                     </h4>
                     <!-- CART REVIEW -->
-                    {% include '../components/checkout_cart_review.html'%}
+                    <ul class="list-group mb-3">
+                        {% for item in items %}
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">{{ item.quantity }} of {{ item.product }}</h6>
+                                </div>
+                                <span class="text-muted">${{ item.product.price }}</span>
+                            </li>
+                        {%endfor%}
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (USD)</span>
+                            <strong>${{ cart.getTotal }}</strong>
+                        </li>
+                    </ul>
                 </div>
                 <div class="col-md-8 order-md-1">
-                    <h4 class="mb-3">Billing address</h4>
+                    <!-- SHIPPING ADDRESS -->
+                    <h4 class="mb-3">Shipping address</h4>
                     <form class="needs-validation" method="POST" novalidate>
-                        <!-- BILLING ADDRESS -->
-                        {% include '../components/checkout_billing_address.html'%}
-                        <hr class="mb-4">
-                        <!-- Reuse address for shipping checkbox-->
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="same-address">
-                            <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+                        {% csrf_token %}
+                        <!-- Name -->
+                        <div class="mb-3">
+                            {{ addressform.name.label_tag }}
+                            {{ addressform.name }}
+                            {{ addressform.name.errors }}
+                            <div class="invalid-feedback">Valid name is required.</div>
                         </div>
+
+                        <!-- Address-->
+                        <div class="mb-3">
+                            {{ addressform.street.label_tag }}
+                            {{ addressform.street }}
+                            {{ addressform.street.errors }}
+                            <div class="invalid-feedback">Please enter your shipping address.</div>
+                        </div>
+
+                        <!-- Country and zip-->
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                {{ addressform.postalCode.label_tag }}
+                                {{ addressform.postalCode}}
+                                {{ addressform.postalCode.errors }}
+                                <div class="invalid-feedback">Zip code required.</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ addressform.city.label_tag }}
+                                {{ addressform.city}}
+                                {{ addressform.city.errors }}
+                                <div class="invalid-feedback">Please provide a valid city.</div>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                {{ addressform.country.label_tag }}
+                                {{ addressform.country }}
+                                {{ addressform.country.errors }}
+                                <div class="invalid-feedback">Please select a valid country.</div>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
                         <!-- Save information -->
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="save-info">
-                            <label class="custom-control-label" for="save-info">Save this information for next time</label>
+                            <label class="custom-control-label" for="save-info">Save address information to user profile</label>
                         </div>
                         <hr class="mb-4">
 
                         <!-- PAYMENT -->
                         <h4 class="mb-3">Payment</h4>
-                        {% include '../components/checkout_card_info.html'%}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ paymentform.cardName.id_for_label }}">Name on card</label>
+                                {{ paymentform.cardName }}
+                                <small class="text-muted">Full name as displayed on card</small>
+                                {{ paymentform.cardName.errors }}
+                                <div class="invalid-feedback">Name on card is required</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ paymentform.cardNumber.id_for_label }}">Credit card number</label>
+                                {{ paymentform.cardNumber }}
+                                {{ paymentform.cardNumber.errors }}
+                                <div class="invalid-feedback">Credit card number is required</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="{{ paymentform.cardExp.id_for_label }}">Expiration</label>
+                                {{ paymentform.cardExp }}
+                                {{ paymentform.cardExp.errors }}
+                                <div class="invalid-feedback">Expiration date required</div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="{{ paymentform.cardCVC.id_for_label }}">CVV</label>
+                                {{ paymentform.cardCVC }}
+                                {{ paymentform.cardCVC.errors }}
+                                <div class="invalid-feedback">Security code required</div>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="save-info">
+                            <label class="custom-control-label" for="save-info">Save payment information to user profile</label>
+                        </div>
                         <hr class="mb-4">
                         <!-- CONTINUE -->
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue</button>
                     </form>
                 </div>
             </div>
