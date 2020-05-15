@@ -41,7 +41,7 @@
                 {{ email }}
                 <input class="btn btn-success" type="submit" name="update-info" value="Update email">
             </form>
-            <form method="POST" action="{% url 'edit-image' %}">
+            <form method="POST" action="{% url 'edit-image' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ image }}
                 <input class="btn btn-success" type="submit" name="update-info" value="Update Image">
