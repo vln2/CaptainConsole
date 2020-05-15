@@ -1,3 +1,4 @@
+from django.db import models
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
@@ -10,8 +11,8 @@ from django.shortcuts import HttpResponseRedirect
 from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo, SearchHistory
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm
 from django.db.models import Q
-from django.http import Http404, HttpResponseBadRequest
-
+from django.http import Http404, HttpResponseBadRequest, request
+import json
 
 #just strings for checking for sorting options
 VALID_SORTS = {
@@ -105,9 +106,29 @@ def productList(request, *args):
     paginator = Paginator(products, PRODUCTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-            
+
+    viewed_products = []
+    request.session['viewed_products'] = viewed_products
+    cookie = request.COOKIES.get('new_cookie')
+    try:
+        #cookie is set
+        cookie = request.COOKIES('new_cookie')
+        if cookie in request.session:
+            viewed_products.append(cookie)
+            viewed_json = json.dumps(viewed_products)
+            request.set_cookie(viewed_json)
+
+    except KeyError:
+        #Cookie is not set
+        pass
+
+
+
+
+    lRecentyViewed = Product.objects.filter(id__in=viewed_products)
     context = {
-        'products': page_obj
+        'products': page_obj,
+        'recentlyViewed': lRecentyViewed
     }
 
     return render(request, 'pages/product_list.html', context)
@@ -128,7 +149,6 @@ class ProductDetailView(DetailView):
             }
         except Product.DoesNotExist:
             raise Http404("Product does not exist")
-
 
 
 # ======================= SHOW CATEGORY
@@ -341,7 +361,4 @@ def search_history(request):
 
 
     return render(request, 'pages/search_history.html', context)
-
-
-
 

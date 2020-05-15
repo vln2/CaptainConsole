@@ -6,6 +6,7 @@ from django.core.validators import RegexValidator
 from django_cryptography.fields import encrypt
 
 
+
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
@@ -56,7 +57,8 @@ class Product(models.Model):
     price = models.FloatField()
     slug = models.SlugField(null=False)
     thumb = models.ImageField(upload_to='images/thumbs/', default='No_image_available.png', blank=True)
-    discount = models.IntegerField( default=0 ) 
+    discount = models.IntegerField( default=0 )
+
 
     def __str__(self):
         return self.name
@@ -171,6 +173,8 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.user.email
+
+
 class SearchHistory(models.Model):
      user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
      query = models.CharField(max_length=255)
