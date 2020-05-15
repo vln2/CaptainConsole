@@ -11,6 +11,7 @@ from .models import Product, Category, ProductImage, Order, Item, Shipping, User
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm, UserUpdateForm
 from django.db.models import Q
 from django.http import Http404, HttpResponseBadRequest
+import json
 
 #just strings for checking for sorting options 
 VALID_SORTS = {
@@ -130,13 +131,14 @@ def productList(request, *args):
     paginator = Paginator(products, PRODUCTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-            
-    #get the recently viewed products from list
+                #get the recently viewed products from list
     viewed_products = []
     if 'viewed_products' in request.session:
         #process the data into a working list
-        viewed_products = [0,1,2,3] #dummy list of ids
-    
+        viewed_products = json.loads(request.session['viewed_products']) #dummy list of ids
+    else:
+        #create the variable for next time
+        request.session['viewed_products'] = json.dumps([])
 
     #find the recently viewed products from session cookie
     lRecentlyViewed = Product.objects.filter(id__in=viewed_products)
@@ -149,14 +151,33 @@ def productList(request, *args):
     return render(request, 'pages/product_list.html', context)
 
 
-# ======================= PRODUCT DETAILS
+#======================= PRODUCT DETAILS
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'pages/product_details.html'
 
+    def addToSession(self,request):
+        product_id = self.kwargs['id']
+        viewed_products = []
+        if 'viewed_products' in request.session:
+            #process the data into a working list
+            viewed_products = json.loads(request.session['viewed_products']) 
+
+            if product_id in viewed_products:
+                pass
+            else:
+                viewed_products.append(product_id)
+                request.session['viewed_products'] = json.dumps(viewed_products)
+        else:
+            #create the variable for next time
+            request.session['viewed_products'] = json.dumps([product_id])
+        
+        return
+
     def get_object(self):
         try:
             iProductId = self.kwargs['id']
+            self.addToSession(self.request)
             return {
                 'add_to_cart_form': AddItemToCartForm,
                 'product': Product.objects.get(id=iProductId),
