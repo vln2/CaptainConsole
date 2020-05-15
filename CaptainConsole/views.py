@@ -265,6 +265,8 @@ def checkout(request, order_id):
         'paymentform': paymentform,
         'cart': order
     }
+
+
     return render(request, 'pages/checkout.html', context)
 
 
