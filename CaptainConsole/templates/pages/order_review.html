@@ -12,6 +12,12 @@
 {% block content %}
 <main class="container pt-4">
     <section class="container">
+    {% if not cart.status == 'C' %}
+        <div class="row">
+            <h1>Thank you for ordering</h1>
+            <p>Your order is on it's way</p>
+        </div>
+    {% endif %}
     <!-- LIST OF PRODUCTS IN CART  -->
     <div class="row">
         <div class="col">
@@ -73,7 +79,9 @@
         </div>
     </div>
     <!-- PROCEED TO CHECKOUT  -->
+    {% if not cart.status == 'C' %}
     <a href="" class="btn btn-primary">Confirm and pay</a>
+    {% endif %}
     </section>
 </main>
 {% endblock content %}
