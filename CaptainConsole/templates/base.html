@@ -20,6 +20,15 @@
     <link type="text/css" rel="stylesheet" href="{%static "scss/style.css" %}">
 </head>
 <body>
+    <!-- MESSAGES AND ALERTS-->
+        {% if messages %}
+            <!-- Then put toasts within -->
+            <ul class="messages list-unstyled">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} alert alert-success"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     <!--        Header      -->
     <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-primary">
@@ -80,6 +89,7 @@
             </div>
         </nav>
 
+        <!-- Breadcrumbs -->
         <nav class="breadcrumb py-0 rounded-0">
                 <ol class="breadcrumb mb-0 rounded-0 text-white" aria-label="breadcrumb">
                     <li class="breadcrumb-item">
@@ -95,10 +105,9 @@
                 </ol>
             </nav>
         
-    </header>    
-    <!-- Breadcrumbs -->
-    {% block sidebar %}
-    {% endblock sidebar %}
+    </header>
+    <!-- MESSAGES -->
+    
     <!--         CONTENT         -->
     {% block content %}
     {% endblock content %}
@@ -128,6 +137,9 @@
 
     <script type="text/javascript">
         document.getElementById("id_q").value = "{{ query }}"
+            $('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').focus()
+    })
     </script>
 </body>
 </html>
