@@ -168,7 +168,7 @@ def addToCart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     userInfo = get_object_or_404(UserInfo, user=request.user)
     form = AddItemToCartForm(request.POST or None)
-
+    
     if form.is_valid():
         if not isinstance(userInfo.cart, Order):
             userInfo.cart = Order.objects.create(owner=request.user, status=Order.CART)
@@ -177,11 +177,11 @@ def addToCart(request, product_id):
         item = Item.objects.get_or_create(order=userInfo.cart, product=product)
         if item[1]:
             item[0].save()
-            messages.info(request, "This item was added to your cart.")
+            messages.success(request, "{} was added to your cart.".format(str(product)))
         else:
             item[0].quantity += form.cleaned_data.get('quantity')
             item[0].save()
-            messages.info(request, "This item:{item[0]} quantity was updated.")
+            messages.success(request, "{} quantity was updated.".format(str(product)))
 
     try:
         httpheaders = request.headers
