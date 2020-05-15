@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
 from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo
 from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm, \
-    UserUpdateForm
+    UserUpdateForm, UserImageUpdateForm
 from django.db.models import Q
 from django.http import Http404, HttpResponseBadRequest
 
@@ -52,14 +52,20 @@ def registerUser(request):
 
 # ======================= USER CAN CHANGE INFO 
 def edit_profile(request):
+    userInfo = get_object_or_404(UserInfo, user=request.user)
     form = UserUpdateForm(request.POST or None, instance=request.user)
+    imForm = UserImageUpdateForm(request.POST or None, request.FILES or None, instance=userInfo)
 
     if request.method == 'POST':
+        if imForm.is_valid():
+            instance = imForm.save()
+
+    
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated!')
             return redirect('user_profile')
-
+    
     return redirect('home')
 
 
@@ -99,6 +105,7 @@ def userLogout(request):
 def userProfile(request):
     changePassword = PasswordChangeForm(request.user)
     changeEmail = UserUpdateForm(instance=request.user)
+    changePicture =  UserImageUpdateForm()
 
     if request.method == 'POST':
         changepassword = PasswordChangeForm(user=request.user, data=request.POST)
@@ -112,7 +119,8 @@ def userProfile(request):
         'user': request.user,
         'userinfo': userInfo,
         'pass': changePassword,
-        'email': changeEmail
+        'email': changeEmail,
+        'image' : changePicture
     }
     return render(request, 'pages/user_profile.html', context)
 

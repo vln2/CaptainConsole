@@ -41,6 +41,11 @@
                 {{ email }}
                 <input class="btn btn-success" type="submit" name="update-info" value="Update email">
             </form>
+            <form method="POST" action="{% url 'edit-image' %}">
+                {% csrf_token %}
+                {{ image }}
+                <input class="btn btn-success" type="submit" name="update-info" value="Update Image">
+            </form>
         </section>
     </div>
 </div>

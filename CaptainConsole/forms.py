@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Authenti
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import Order, Item, Address, Payment
+from .models import Order, Item, Address, Payment, UserInfo
 
 # bootstrap class styles for input forms
 sInputClass = "form-control col-sm-12 col-md-8 col-lg-6"
@@ -45,6 +45,14 @@ class LoginForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+class UserImageUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserInfo
+        fields = ('profile_picture',)
+
+          
 
 
 class UserUpdateForm(forms.ModelForm):
