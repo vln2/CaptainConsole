@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Form
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
 
@@ -45,6 +45,13 @@ class LoginForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+#class ChangeUserForm(UserChangeForm):
+
+    #class Meta:
+        #model = User
+        #fields = ['']
 
 
 class AddItemToCartForm(ModelForm):

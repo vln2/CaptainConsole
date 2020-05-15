@@ -52,7 +52,7 @@ def registerUser(request):
 def userLogin(request):
     #if request.user.is_authenticed:
     #    return redirect('login')
-    #else:
+    #else: 
     authForm = LoginForm()
     if request.method == 'POST':
         username = request.POST.get('username')
