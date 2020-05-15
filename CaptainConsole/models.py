@@ -1,9 +1,9 @@
-from django.core.validators import RegexValidator
 from django.db import models
 from django.conf import settings
-from django_cryptography.fields import encrypt
 from mptt.models import MPTTModel, TreeForeignKey
 
+from django.core.validators import RegexValidator
+from django_cryptography.fields import encrypt
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
@@ -55,17 +55,20 @@ class Product(models.Model):
     price = models.FloatField()
     slug = models.SlugField(null=False)
     thumb = models.ImageField(upload_to='images/thumbs/', default='No_image_available.png', blank=True)
-    # discount = models.IntegerField( default=0 ) 
+    discount = models.IntegerField( default=0 ) 
 
     def __str__(self):
         return self.name
 
-    # def valid_discound(self):
-    #     """Checks if the discount is valid (not higher than actual price)"""
-    #     if discount > price or discount == 0:
-    #         return False
-    #     else:
-    #         return True
+    def valid_discound(self):
+        """Checks if the discount is valid (not higher than actual price)"""
+        if discount > price or discount == 0:
+            return False
+        else:
+            return True
+
+    def dis_persentage(self):
+        return int(100 * (discount/price))
 
 
 class ProductImage(models.Model):
@@ -85,6 +88,14 @@ class Address(models.Model):
     def __str__(self):
         return f'{self.street} {self.postalCode} {self.city} {self.country}'
 
+class UserInfo(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=255)
+    # firstName = models.CharField(max_length=255)
+    # lastName = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
 
 class Payment(models.Model):
     cardNumber = encrypt(models.CharField(max_length=16, validators=[RegexValidator(r'^[0-9]{16}$')]))
@@ -106,35 +117,35 @@ class Payment(models.Model):
 
 class Shipping(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT)
-    dateShipped = models.DateTimeField(null=True, blank=True)
-    trackingNumber = models.CharField(max_length=255, null=True, blank=True)
-    status = models.CharField(max_length=255, null=True, blank=True)
-    shippingCost = models.FloatField(null=True, blank=True)
+    dateShipped = models.DateTimeField()
+    trackingNumber = models.CharField(max_length=255)
+    status = models.CharField(max_length=255)
+    shippingCost = models.FloatField()
 
 
 class Order(models.Model):
     dateCreated = models.DateTimeField(auto_now=True)
     products = models.ManyToManyField(Product, through='Item', related_name='orders')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT, null=True, blank=True)
-    payment = models.ForeignKey(Payment, on_delete=models.PROTECT, null=True, blank=True)
+    shipping = models.ForeignKey(Shipping, on_delete=models.PROTECT, null=True)
     CART = 'C'
-    PAYMENT = 'P'
     order_labels = (
         (CART, 'Cart'),
-        (PAYMENT, 'Payment'),
+        ('P', 'Payment'),
         ('S', 'Shipping'),
         ('D', 'Done')
     )
     status = models.CharField(choices=order_labels, max_length=1, default='C')
 
     def __str__(self):
+        return self.owner.username
         count = self.products.count()
         return f"{self.owner.username} order with {count} product{'' if count == 1 else 's'}, status: {self.get_status_display()}"
 
-    @property
     def getTotal(self):
         order_sum = 0
+        for item in self.items.all():
+            order_sum += item.product.price
         for item in self.getItems:
             order_sum += (item.product.price * item.quantity)
         return round(order_sum, 2)

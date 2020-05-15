@@ -1,194 +1,89 @@
 
 {% extends '../base.html' %}
 
-<!--    Page breadcrumbs (removed)      -->
+<!--    Page breadcrumbs   -->
 {% block breadcrumbs %}
-    <nav>
-        <ol class="breadcrumb mb-0" aria-label="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'checkout' cart.id %}">Checkout</a></li>
-        </ol>
-    </nav>
+    <li class="breadcrumb-item">
+        <a href="{% url 'checkout' cart.id %}" class="text-white">Checkout</a>
+    </li>
 {% endblock breadcrumbs %}
 
+<!--    Cart quantity in header -->
+{% block cart_quantity %}
+    <!-- just add total number of items here-->
+{% endblock cart_quantity %}
 
 <!--    Page content      -->
+<!--
+    The HTML itself has been split into a few components
+    to keep things organised. All are found in ../components/
+        checkout_billing_address.html
+        checkout_card_info.html
+        checkout_cart_review.html
+-->
 {% block content %}
-<main class="container">
-    <div class="row">
-        <div class="col">
-            <ul class="list-group mb-3 z-depth-1">
-                {% for item in cart.items.all %}
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                    <div>
-                        <h6 class="my-0">{{ item.quantity }} x {{ item.product }}</h6>
-                    </div>
-                    <div>
-                        <span>${{ item.product.price }}</span>
-                    </div>
-                </li>
-                {% endfor %}
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>Total (USD)</span>
-                    <strong>${{ cart.getTotal }}</strong>
-                </li>
-            </ul>
-        </div>
-        <div class="col">
-            <form method="post">
-                {% csrf_token %}
-                <h3>Checkout step 1: Address</h3>
-                {{ addressform }}
-                <h3>Checkout step 2: Payment info</h3>
-                {{ paymentform }}
-           </form>
-        </div>
-    </div>
-</main>
+    <main class="container pt-4">
+        <section class="container"> 
+            <div class="row">
+                <div class="col-md-4 order-md-2 mb-4">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Your cart</span>
+                        <span class="badge badge-secondary badge-pill">3</span>
+                    </h4>
+                    <!-- CART REVIEW -->
+                    {% include '../components/checkout_cart_review.html'%}
+                </div>
+                <div class="col-md-8 order-md-1">
+                    <h4 class="mb-3">Billing address</h4>
+                    <form class="needs-validation" method="POST" novalidate>
+                        <!-- BILLING ADDRESS -->
+                        {% include '../components/checkout_billing_address.html'%}
+                        <hr class="mb-4">
+                        <!-- Reuse address for shipping checkbox-->
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="same-address">
+                            <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+                        </div>
+                        <!-- Save information -->
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="save-info">
+                            <label class="custom-control-label" for="save-info">Save this information for next time</label>
+                        </div>
+                        <hr class="mb-4">
+
+                        <!-- PAYMENT -->
+                        <h4 class="mb-3">Payment</h4>
+                        {% include '../components/checkout_card_info.html'%}
+                        <hr class="mb-4">
+                        <!-- CONTINUE -->
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+
+            window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+                }, false);
+            });
+            }, false);
+        })();
+    </script>
 {% endblock content %}
 
-{% comment %}
-<main class="container">
-    <div>
-        <!-- CHECKOUT BREADCRUMBS LINKS -->
-        <ul class="list-group flex-row">
-            <li class="list-group-item border-0 col-2">
-                <a href="#checkout_1" class="btn btn-primary rounded-circle">1</a>
-            </li>
-            <li class="list-group-item border-0 col-1">></li>
-            <li class="list-group-item border-0 col-2">
-                <a href="#checkout_2" class="btn btn-primary rounded-circle">2</a>
-            </li>
-            <li class="list-group-item border-0 col-1">></li>
-            <li class="list-group-item border-0 col-2">
-                <a href="#checkout_3" class="btn btn-primary rounded-circle">3</a>
-            </li>
-            <li class="list-group-item border-0 col-1">></li>
-            <li class="list-group-item border-0 col-2">
-                <a href="#checkout_4" class="btn btn-primary rounded-circle">4</a>
-            </li>
-        </ul>
-    </div>
-
-    <!--        CHECKOUT SHIPPING ADDRESS -->
-    <section id="checkout_1">
-        <h2>Checkout step 1: Contact information</h2>
-        <form>
-            <!---   NAME -->
-            <fieldset>
-                <label> First name
-                    <input type="text">
-                </label>
-                <label> Last Name
-                    <input type="text">
-                </label>
-            </fieldset>
-
-            <!--    EMAIL-->
-            <fieldset>
-                <label> Email
-                    <input type="email">
-                </label>
-            </fieldset>
-
-            <!--    PHONE-->
-            <fieldset>
-                <label> Phone
-                    <input type="tel">
-                </label>
-            </fieldset>
-            
-            <!--    ADDRESS  -->
-            <fieldset>
-                <label> Address 1
-                    <input type="text">
-                </label>
-                <label> Address 2
-                    <input type="text">
-                </label>
-                <label> City
-                    <input type="text">
-                </label>
-            </fieldset>
-
-            <!-- RESET FORM -->
-            <input type="reset" value="Clear shipping info">
-        </form>
-        <!-- NEXT -->
-        <a href="#checkout_2" class="btn-info btn">next</a>
-    </section>
-
-    <!--        CHECKOUT BILLING INFO -->
-    <section id="checkout_2">
-        <h2>Checkout step 2: Payment info</h2>
-        <ul>
-            <li>Billing info</li>
-            <li>Card details</li>
-            <li>Billing address same as shipping?</li>
-        </ul>
-        <form>
-                <!--    CARD NUMBER -->
-                <fieldset>
-                    <label> Credit Card Number
-                        <input type="text">
-                    </label>
-                </fieldset>
-
-                <!--    MONTH  -->
-                <fieldset>
-                    <label> Month
-                        <input type="number" min="1" max="12">
-                    </label>
-                </fieldset>
-
-                <!--    YEAR -->
-                <fieldset>
-                    <label> Year
-                        <input type="number">
-                    </label>
-                </fieldset>
-
-                <!--    CVC -->
-                <fieldset>
-                    <label> CVC
-                        <input type="number" max="999">
-                    </label>
-                </fieldset>
-
-                <!-- ADDRESS SAME AS SHIPPING ?-->
-                <fieldset>
-                    <label> Billing address same as shipping?
-                        <input type="checkbox">
-                    </label>
-                </fieldset>
-                
-                <!-- RESET FORM -->
-                <input type="reset" value="Clear card info">
-        </form>
-        <!-- NEXT -->
-        <a href="#checkout_3" class="btn-info btn">next</a>
-    </section>
-
-    <!--        CHECKOUT REVIEW -->  
-    <section id="checkout_3">
-        <h2>Checkout step 3: Review order</h2>
-        <ul>
-            <li>List of products to be ordered</li>
-        </ul>
-        <!-- NEXT -->
-        <a href="#checkout_4" class="btn-info btn">next</a>
-    </section>
-    
-    <!--        CHECKOUT CONFIRM PAYMENT -->
-    <section id="checkout_4">
-        <h2>Checkout step 4: Confirm payment</h2>
-        <ul>
-            <li>Shipping info</li>
-            <li>Confirm amount to be charged on card</li>
-        </ul>
-        <!-- FINISH -->
-        <a href="" class="btn-success btn">Complete payment</a>
-    </section>
-</main>
-
-{% endcomment %}

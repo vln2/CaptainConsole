@@ -48,6 +48,10 @@ class LoginForm(AuthenticationForm):
 
 
 class AddItemToCartForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['quantity'].widget.attrs['class'] = "form-control"
+        self.fields['quantity'].widget.attrs['min'] = 1
     class Meta:
         model = Item
         fields = ('quantity',)
@@ -63,9 +67,23 @@ class AddressForm(ModelForm):
     class Meta:
         model = Address
         fields = '__all__'
+        widgets = {
+            'street': forms.TextInput(attrs={'class': "form-control"}),
+            'postalCode': forms.TextInput(attrs={'class': "form-control"}),
+            'city': forms.TextInput(attrs={'class': "form-control"}),
+            'country': forms.TextInput(attrs={'class': "form-control"})
+        }
 
 
 class PaymentForm(ModelForm):
     class Meta:
         model = Payment
         fields = '__all__'
+        widgets = {
+            'cardNumber': forms.TextInput(attrs={'class': "form-control"}),
+            'cardName': forms.TextInput(attrs={'class': "form-control"}),
+            'cardExp': forms.TextInput(attrs={'class': "form-control"}),
+            'status': forms.TextInput(attrs={'class': "form-control"}),
+            'cardCVC': forms.TextInput(attrs={'class': "form-control"})
+        }
+
