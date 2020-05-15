@@ -21,15 +21,18 @@
         
     <div class="d-flex align-items-center justify-content-around flex-column py-3">
         <!-- IMAGE -->
-        <div>
-            <img style="height:300px; width:300px" class="rounded-circle img-thumbnail" src="{{request.user.userinfo.profile_picture}}" >
-        </div>
+
+            <h2 class="h3">Full name</h2>
+            <div class="my-3">
+                <img style="height:300px; width:300px" class="rounded-circle img-thumbnail" src="{{request.user.userinfo.profile_picture}}" >
+            </div>
         <!-- INPUT -->
-        <div>
+        <a class="btn btn-primary" data-toggle="collapse" href="#user_profile" role="button" aria-expanded="false" aria-controls="user_profile">
+        Edit profile
+        </a>
+        <section class="collapse"  id="user_profile">
             <form method="POST" action="">
                 <div class="container">
-                            
-                    <h2 class="h3">User profile</h2>
                     <fieldset class="row">
                         <div class="col-md-6 mb-3">
                             <label for="firstName">First name</label>
@@ -50,7 +53,7 @@
                     <input class="btn btn-success" type="submit" name="update-info" value="Update Information">
                 </div>
             </form>
-        </div>
+        </section>
     </div>
 </div>
 
