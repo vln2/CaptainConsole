@@ -174,7 +174,7 @@ def addToCart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     userInfo = get_object_or_404(UserInfo, user=request.user)
     form = AddItemToCartForm(request.POST or None)
-
+    
     if form.is_valid():
         if not isinstance(userInfo.cart, Order):
             userInfo.cart = Order.objects.create(owner=request.user, status=Order.CART)
