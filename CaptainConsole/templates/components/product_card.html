@@ -18,7 +18,10 @@
             <form method="POST" action="{% url 'add_to_cart' product.id %}">
                 <fieldset class="row" data-toggle="buttons">
                     {% csrf_token %}
-                    {{ add_to_cart_form }}
+                    <div hidden>
+                            
+                        {{ add_to_cart_form }}
+                    </div>
                     <input type="submit" class="btn btn-secondary col-12 border border-primary" value="Add to cart">
                 </fieldset>
             </form>

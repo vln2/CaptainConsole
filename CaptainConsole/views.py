@@ -23,6 +23,8 @@ VALID_SORTS = {
 
 PRODUCTS_PER_PAGE = 12
 
+
+
 # ======================= SALES / FRONT PAGE
 
 def currentSales(request):
@@ -116,6 +118,21 @@ def userProfile(request):
 
 
 # ======================= PRODUCT LIST
+def funcSearchHistory(request):
+    
+    viewed_products = []
+    if 'viewed_products' in request.session:
+        #process the data into a working list
+        viewed_products = json.loads(request.session['viewed_products']) #dummy list of ids
+    else:
+        #create the variable for next time
+        request.session['viewed_products'] = json.dumps([])
+
+    #find the recently viewed products from session cookie
+    lRecentlyViewed = Product.objects.filter(id__in=viewed_products)
+
+    return lRecentlyViewed
+
 def productList(request, *args):
     products = Product.objects.all()
     #if the user wishes to sort by name/price
@@ -132,20 +149,10 @@ def productList(request, *args):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
                 #get the recently viewed products from list
-    viewed_products = []
-    if 'viewed_products' in request.session:
-        #process the data into a working list
-        viewed_products = json.loads(request.session['viewed_products']) #dummy list of ids
-    else:
-        #create the variable for next time
-        request.session['viewed_products'] = json.dumps([])
-
-    #find the recently viewed products from session cookie
-    lRecentlyViewed = Product.objects.filter(id__in=viewed_products)
     context = {
         'add_to_cart_form': AddItemToCartForm,
         'products': page_obj,
-        'recentlyViewed': lRecentlyViewed
+        'recentlyViewed': funcSearchHistory(request)
     }
 
     return render(request, 'pages/product_list.html', context)
@@ -212,7 +219,8 @@ def showCategory(request, hierarchy=None):
             'add_to_cart_form': AddItemToCartForm,
             'instance': category,
             'products': page_obj,
-            'breadcrumbs': category.get_ancestors(include_self=True)
+            'breadcrumbs': category.get_ancestors(include_self=True),
+            'recentlyViewed': funcSearchHistory(request)
         }
 
     except Category.DoesNotExist:
