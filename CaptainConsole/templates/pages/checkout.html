@@ -14,63 +14,15 @@
 {% endblock cart_quantity %}
 
 <!--    Page content      -->
+<!--
+    The HTML itself has been split into a few components
+    to keep things organised. All are found in ../components/
+        checkout_billing_address.html
+        checkout_card_info.html
+        checkout_cart_review.html
+-->
 {% block content %}
-    <main class="container">
-
-        <nav class="row">
-            <!-- CHECKOUT BREADCRUMBS LINKS -->
-            <ul class="list-group flex-row">
-                <li class="list-group-item border-0 col-2">
-                    <a href="#checkout_1" class="btn btn-primary rounded-circle">1</a>
-                </li>
-                <li class="list-group-item border-0 col-1">></li>
-                <li class="list-group-item border-0 col-2">
-                    <a href="#checkout_2" class="btn btn-primary rounded-circle">2</a>
-                </li>
-                <li class="list-group-item border-0 col-1">></li>
-                <li class="list-group-item border-0 col-2">
-                    <a href="#checkout_3" class="btn btn-primary rounded-circle">3</a>
-                </li>
-                <li class="list-group-item border-0 col-1">></li>
-                <li class="list-group-item border-0 col-2">
-                    <a href="#checkout_4" class="btn btn-primary rounded-circle">4</a>
-                </li>
-            </ul>
-        </nav>
-            
-        <!-- OLD CHECKOUT LAYOUT -->
-        <section class="container"> 
-            <div class="row">
-                <div class="col">
-                    <ul class="list-group mb-3 z-depth-1">
-                        {% for item in cart.items.all %}
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 class="my-0">{{ item.quantity }} x {{ item.product }}</h6>
-                            </div>
-                            <div>
-                                <span>${{ item.product.price }}</span>
-                            </div>
-                        </li>
-                        {% endfor %}
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Total (USD)</span>
-                            <strong>${{ cart.getTotal }}</strong>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col">
-                    <form method="post">
-                        {% csrf_token %}
-                        <h3>Checkout step 1: Address</h3>
-                        {{ addressform }}
-                        <h3>Checkout step 2: Payment info</h3>
-                        {{ paymentform }}
-                    </form>
-                </div>
-            </div>
-        </section>
-        <!--     NEW CHECKOUT LAYOUT -->
+    <main class="container pt-4">
         <section class="container"> 
             <div class="row">
                 <div class="col-md-4 order-md-2 mb-4">
@@ -83,7 +35,7 @@
                 </div>
                 <div class="col-md-8 order-md-1">
                     <h4 class="mb-3">Billing address</h4>
-                    <form class="needs-validation" novalidate>
+                    <form class="needs-validation" method="POST" novalidate>
                         <!-- BILLING ADDRESS -->
                         {% include '../components/checkout_billing_address.html'%}
                         <hr class="mb-4">
@@ -110,5 +62,28 @@
             </div>
         </section>
     </main>
+    
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+
+            window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+                }, false);
+            });
+            }, false);
+        })();
+    </script>
 {% endblock content %}
 
