@@ -48,6 +48,10 @@ class LoginForm(AuthenticationForm):
 
 
 class AddItemToCartForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['quantity'].widget.attrs['class'] = "form-control"
+        self.fields['quantity'].widget.attrs['min'] = 1
     class Meta:
         model = Item
         fields = ('quantity',)

@@ -20,6 +20,18 @@ VALID_SORTS = {
     'name_desc': '-name'
 }
 
+PRODUCTS_PER_PAGE = 12
+
+# ======================= SALES / FRONT PAGE
+
+def currentSales(request):
+    #get all products that are on sale
+    products = Product.objects.all() #Product.objects.filter('discount' > 0)
+    
+    context = {
+        'products':products
+    }
+    return render(request, 'pages/sales.html', context)
 # ======================= REGISTER USER
 def registerUser(request):
     #if request.user.is_authenticed:
@@ -78,18 +90,25 @@ def userProfile(request):
 
 # ======================= PRODUCT LIST
 def productList(request, *args):
-    context = {
-        'products': Product.objects.all()
-    }
-
+    products = Product.objects.all()
     #if the user wishes to sort by name/price
+
     query = request.GET.get('sort_by')
     if query:
         if query in VALID_SORTS:
-            context['products'] = Product.objects.all().order_by(VALID_SORTS[query])
+            products = Product.objects.all().order_by(VALID_SORTS[query])
+  
     
+
+    #sort products into pages
+    paginator = Paginator(products, PRODUCTS_PER_PAGE)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
             
-            
+    context = {
+        'products': page_obj
+    }
+
     return render(request, 'pages/product_list.html', context)
 
 
@@ -127,7 +146,7 @@ def showCategory(request, hierarchy=None):
                 products = category.get_products(sort_by=VALID_SORTS[query])
 
         #sort products into pages
-        paginator = Paginator(products, 20)
+        paginator = Paginator(products, PRODUCTS_PER_PAGE)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
