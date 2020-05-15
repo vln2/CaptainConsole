@@ -49,6 +49,7 @@ def registerUser(request):
 
     return render(request, 'pages/register.html', {'form': registerForm})
 
+@login_required
 def edit_profile(request):
     form = UserUpdateForm(request.POST or None, instance=request.user)
 
@@ -89,11 +90,13 @@ def forgot_password(request):
         return render(request, 'forgot_password_form.html')
 
 # ======================= LOGOUT
+@login_required
 def userLogout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
 # ======================= USER PROFILE
+@login_required
 def userProfile(request):
     changePassword = PasswordChangeForm(request.user)
     changeEmail = UserUpdateForm(instance=request.user)
@@ -222,6 +225,7 @@ def showCategory(request, hierarchy=None):
 
 
 # ======================= ADD TO CART
+@login_required
 def addToCart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     userInfo = get_object_or_404(UserInfo, user=request.user)
@@ -237,14 +241,9 @@ def addToCart(request, product_id):
         item[0].save()
         messages.success(request, "{} was added to your cart.".format(str(product)))
 
-    try:
-        httpheaders = request.headers
-        refer = httpheaders['Referer']
-    except:
-        return HttpResponseBadRequest('Bad Request')
-    return redirect(refer)
+    return redirect('cart')
 
-
+@login_required
 def removeFromCart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     userInfo = get_object_or_404(UserInfo, user=request.user)
@@ -275,6 +274,7 @@ def removeFromCart(request, product_id):
 
 
 # ======================= VIEW CART
+@login_required
 def cart(request):
     userInfo = get_object_or_404(UserInfo, user=request.user)
     if not isinstance(userInfo.cart, Order):
@@ -289,7 +289,7 @@ def cart(request):
     }
     return render(request, 'pages/cart.html', context)
 
-
+@login_required
 def checkout(request, order_id):
     userInfo = get_object_or_404(UserInfo, user=request.user)
     order_qs = Order.objects.filter(owner=request.user, status=Order.CART, id=order_id)
@@ -346,7 +346,7 @@ def checkout(request, order_id):
 
     return render(request, 'pages/checkout.html', context)
 
-
+@login_required
 def order_review(request, order_id):
     userInfo = get_object_or_404(UserInfo, user=request.user)
     order_qs = Order.objects.filter(owner=request.user, id=order_id)
