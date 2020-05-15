@@ -9,6 +9,7 @@
 
 <!--    Page content      -->
 {% block content %}
+
     <main class="pt-3 align-content-center d-flex flex-column">
         <h2 class="h2">{{ object.name }}</h2>
         <!-- THE IMAGES 
@@ -71,7 +72,7 @@
                             <label for="{{ object.add_to_cart_form.quantity.id_for_label }}" class=" form-label" hidden>
                                 Quantity
                             </label>
-                            {{ add_to_cart_form.quantity }}
+                            {{ object.add_to_cart_form.quantity }}
                             <input type="submit" class="btn btn-secondary border border-warning" value="Add to cart">
                         </fieldset>
                     </form>
