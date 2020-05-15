@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path, re_path
+from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+
 
 from . import views
 
@@ -17,6 +19,12 @@ urlpatterns = [
 
     # == UserProfile
     path('profile/', views.userProfile, name="user_profile"),
+
+    # == Forgot password
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path(r'^password_reset/done/$', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    re_path(r'^reset/(?P<hierarchy>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_complete'),
+    re_path(r'^reset/done/$', auth_views.PasswordResetDoneView.as_view(), name='password_reset_complete'),
 
     # == Catalog and Categories
     path('catalog/', views.productList, name='catalog'),

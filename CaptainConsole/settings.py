@@ -42,6 +42,13 @@ INSTALLED_APPS = [
     # our own apps
 ]
 
+EMAIL_HOST = 'mail.hringdu.is'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'capcon_vef'
+EMAIL_HOST_PASSWORD = 'emailadmin'
+EMAIL_US_TLS = True
+DEFAULT_FROM_EMAIL = 'Captain Console <noreply@example.com>'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -140,3 +147,4 @@ FIXTURE_DIRS = (
     
 
 LOGIN_REDIRECT_URL = 'login'
+
