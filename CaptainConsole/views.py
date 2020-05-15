@@ -56,6 +56,12 @@ def userLogin(request):
 
     return render(request, 'pages/login.html', {'form': authForm})
 
+# ======================= FORGOT PASSWORD
+def forgot_password(request):
+    if request.method == 'POST':
+        return password_reset(request, from_email=request.POST.get('email'))
+    else:
+        return render(request, 'forgot_password_form.html')
 
 # ======================= LOGOUT
 def userLogout(request):

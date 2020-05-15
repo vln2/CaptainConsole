@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from mptt.models import MPTTModel, TreeForeignKey
 
+from django.core.validators import RegexValidator
+from django_cryptography.fields import encrypt
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255)

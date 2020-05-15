@@ -42,7 +42,12 @@ INSTALLED_APPS = [
     # our own apps
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'mail.hringdu.is'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'capcon_vef'
+EMAIL_HOST_PASSWORD = 'emailadmin'
+EMAIL_US_TLS = True
+DEFAULT_FROM_EMAIL = 'Captain Console <noreply@example.com>'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
