@@ -19,7 +19,7 @@ urlpatterns = [
 
     # == UserProfile
     path('profile/', views.userProfile, name="user_profile"),
-    path('profile/editemail', views.edit_profile, name="edit-email"),
+    path('profile/editemail/', views.edit_profile, name="edit-email"),
   
     # == Forgot password
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),

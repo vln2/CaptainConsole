@@ -49,10 +49,12 @@ def registerUser(request):
 
     return render(request, 'pages/register.html', {'form': registerForm})
 
+
+# ======================= USER CAN CHANGE INFO 
 def edit_profile(request):
     form = UserUpdateForm(request.POST or None, instance=request.user)
 
-    if request == 'POST':
+    if request.method == 'POST':
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated!')
