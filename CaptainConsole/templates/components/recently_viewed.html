@@ -13,14 +13,14 @@
       
               <!-- Indicators -->
               <ol class="carousel-indicators">
-                  {% for product in products%}
+                  {% for product in recentlyViewed %}
                 <li data-target="#carousel-example-multi" data-slide-to="0" class="{% if forloop.first %}active{%endif%}"></li>
                 {% endfor %}
               </ol>
               <!--/.Indicators-->
       
               <div class="carousel-inner" role="listbox">
-                {%for product in products%}
+                {%for product in recentlyViewed%}
                 <div class="carousel-item {% if forloop.first %}active{%endif%} mx-auto">
                   <div class="col-12 ">
                     <div class="card mb-2">

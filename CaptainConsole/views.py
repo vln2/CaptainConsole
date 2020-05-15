@@ -99,8 +99,18 @@ def productList(request, *args):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
             
+    #get the recently viewed products from list
+    viewed_products = []
+    if 'viewed_products' in request.session:
+        #process the data into a working list
+        viewed_products = [0,1,2,3] #dummy list of ids
+    
+
+    #find the recently viewed products from session cookie
+    lRecentlyViewed = Product.objects.filter(id__in=viewed_products)
     context = {
-        'products': page_obj
+        'products': page_obj,
+        'recentlyViewed': lRecentlyViewed
     }
 
     return render(request, 'pages/product_list.html', context)
