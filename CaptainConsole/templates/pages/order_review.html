@@ -12,10 +12,12 @@
 {% block content %}
 <main class="container pt-4">
     <section class="container">
-    {% if not cart.status == 'C' %}
+    {% if not order.status == 'C' %}
         <div class="row">
-            <h1>Thank you for ordering</h1>
-            <p>Your order is on it's way</p>
+            <div class="col">
+                <h1>Thank you for ordering</h1>
+                <p>Your order is on it's way</p>
+            </div>
         </div>
     {% endif %}
     <!-- LIST OF PRODUCTS IN CART  -->
@@ -79,8 +81,11 @@
         </div>
     </div>
     <!-- PROCEED TO CHECKOUT  -->
-    {% if not cart.status == 'C' %}
-    <a href="" class="btn btn-primary">Confirm and pay</a>
+    {% if order.status == 'C' %}
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Confirm and pay</button>
+        </form>
     {% endif %}
     </section>
 </main>

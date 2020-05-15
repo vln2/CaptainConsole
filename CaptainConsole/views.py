@@ -294,6 +294,12 @@ def order_review(request, order_id):
         messages.error(request, f'No order with id:{order_id} found')
         return redirect('home')
 
+    if request.method == 'POST':
+        order.status = Order.PAYMENT
+        order.save()
+        userInfo.cart = None
+        userInfo.save()
+
     context = {
         'order': order,
         'items': order.getItems,
