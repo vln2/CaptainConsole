@@ -34,7 +34,17 @@
                 <div class="collapse show" id="sort_by" >
                     {% include '../components/sidebar_sort.html'%}
                 </div>
-            </div> <!-- card-group-item.// -->
+            </div> 
+            <!-- RECENTLY VIEWED -->
+            <div class="card-group-item">
+                <a href="#recently_viewed" class="card-header d-block" data-toggle="collapse">
+                    <h6 class="title">Recently Viewed </h6>
+                </a>
+                <div class="collapse show" id="recently_viewed" >
+                    {% include '../components/recently_viewed.html'%}
+                </div>
+            </div> 
+                
         </aside>
             
         <main class="container col-xl-10 col-md-9 pt-3">
@@ -46,7 +56,6 @@
             </section>
             {% include '../components/pagnation.html'%}
         </main>
-        
     </div>
 </div>
 {% endblock %}
