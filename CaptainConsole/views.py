@@ -109,6 +109,8 @@ def productList(request, *args):
     #find the recently viewed products from session cookie
     lRecentlyViewed = Product.objects.filter(id__in=viewed_products)
     context = {
+        
+        'add_to_cart_form': AddItemToCartForm,
         'products': page_obj,
         'recentlyViewed': lRecentlyViewed
     }
@@ -181,11 +183,11 @@ def addToCart(request, product_id):
         item = Item.objects.get_or_create(order=userInfo.cart, product=product)
         if item[1]:
             item[0].save()
-            messages.info(request, "This item was added to your cart.")
+            messages.success(request, "{} was added to your cart.".format(str(product)))
         else:
             item[0].quantity += form.cleaned_data.get('quantity')
             item[0].save()
-            messages.info(request, "This item:{item[0]} quantity was updated.")
+            messages.success(request, "{} copies of {} are in your cart.".format(str(item[0].quantity),str(product)))
 
     try:
         httpheaders = request.headers
