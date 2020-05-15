@@ -61,11 +61,8 @@
                         <div> 
                             <a href="/cart" class="btn btn-outline-secondary border-0 ml-4 mr-2">
                                 <!-- NUMBER OF ITEMS-->
-                                <span class="badge badge-warning mx-1">
-                                    {% block cart_quantity%}
-                                    0
-                                    {% endblock cart_quantity%}
-                                </span>
+                                {% block cart_quantity%}
+                                {% endblock cart_quantity%}
                                 Cart
                             </a> 
                         </div>

@@ -20,10 +20,9 @@
                             <tr>
                                 <th scope="col"> </th>
                                 <th scope="col">Product</th>
-                                <th scope="col"></th>
                                 <th scope="col" class="text-center">Quantity</th>
                                 <th scope="col" class="text-right">Price per item</th>
-                                <th> </th>
+                                <th colspan="2" class="text-center">Remove item</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,15 +30,15 @@
                             <tr>                    
                                 <form method="POST" action="{% url 'remove_from_cart' item.product.id %}">
 
-                                <td><img src="{{item.product.thumb.url}}" style="height:50px;width:50px;" /> </td>
-                                <td><a href="{%url 'product_details' item.product.id%}">{{item.product.name}}</a></td>
-                                <td>                            
-                                    {% csrf_token %}
-                                    {{ removeitem.quantity }}
-                                </td>
-                                <td class="text-center">{{item.quantity}}</td>
-                                <td class="text-right">{{item.product.price}}</td>
-                                <td class="text-right"><button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i> </button> </td>
+                                    <td><img src="{{item.product.thumb.url}}" style="height:50px;width:50px;" /> </td>
+                                    <td><a href="{%url 'product_details' item.product.id%}">{{item.product.name}}</a></td>
+                                    <td class="text-center">{{item.quantity}}</td>
+                                    <td class="text-right">{{item.product.price}}</td>
+                                    <td class="text-right">
+                                        {% csrf_token %}
+                                        {{ removeitem.quantity }}
+                                    </td>
+                                    <td class="text-center"><button class="btn btn-sm btn-danger" type="submit"><i class="fa fa-trash"></i> </button> </td>
                                 </form>
                             </tr>
                             {% endfor %}
@@ -56,9 +55,7 @@
             </div>
             <div class="col mb-2">
                 <div class="row">
-                    <div class="col-sm-12  col-md-6">
-                        <button class="btn btn-block btn-secondary">Update Cart</button>
-                    </div>
+                    <div class="col-sm-12  col-md-6"></div>
                     <div class="col-sm-12 col-md-6 text-right">
                         <a class="btn btn-lg btn-block btn-success text-uppercase" href="{% url 'checkout' cart.id %}">Proceed to checkout</a>
                     </div>
