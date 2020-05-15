@@ -24,17 +24,6 @@ VALID_SORTS = {
 PRODUCTS_PER_PAGE = 12
 
 
-
-# ======================= SALES / FRONT PAGE
-
-def currentSales(request):
-    #get all products that are on sale
-    products = Product.objects.all() #Product.objects.filter('discount' > 0)
-    
-    context = {
-        'products':products
-    }
-    return render(request, 'pages/sales.html', context)
 # ======================= REGISTER USER
 def registerUser(request):
     #if request.user.is_authenticed:
@@ -136,6 +125,7 @@ def funcSearchHistory(request):
 
     return lRecentlyViewed
 
+#======================= PRODUCT LIST
 def productList(request, *args):
     products = Product.objects.all()
     #if the user wishes to sort by name/price
@@ -248,9 +238,17 @@ def addToCart(request, product_id):
         item[0].quantity += form.cleaned_data.get('quantity')
         item[0].save()
         messages.success(request, "{} was added to your cart.".format(str(product)))
-
+        
+        #session cookie keeps track of cart size
+        if 'cart_size' in request.session:
+            cart_size = request.session['cart_size'] + 1
+            request.session['cart_size'] = cart_size
+        else:
+            request.session['cart_size'] = 1
+            
     return redirect('cart')
 
+#======================= REMOVE FROM CART
 @login_required
 def removeFromCart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -275,6 +273,15 @@ def removeFromCart(request, product_id):
             else:
                 item.save()
             messages.info(request, "Item removed from cart")
+
+            #then update the session cookie
+            if 'cart_size' in request.session:
+                cart_size = request.session['cart_size']
+                if cart_size > 0:
+                    cart_size -= 1
+                    request.session['cart_size'] = cart_size
+            
+            
         else:
             messages.info(request, f"No item {product} was found in {request.user} cart")
 
@@ -369,6 +376,8 @@ def order_review(request, order_id):
         order.save()
         userInfo.cart = None
         userInfo.save()
+        messages.success(request, "Your order has been sent, thank you!")
+        request.session['cart_size'] = 0
 
     context = {
         'order': order,
