@@ -1,14 +1,14 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
 from .models import Product, Category, ProductImage, Order, Item, Shipping, UserInfo, Address, Payment
-from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm
+from .forms import CreatingUserForms, AddItemToCartForm, LoginForm, AddressForm, PaymentForm, RemoveItemFromCartForm, UserUpdateForm
 from django.db.models import Q
 from django.http import Http404, HttpResponseBadRequest
 
@@ -18,7 +18,7 @@ VALID_SORTS = {
     'price_desc': '-price',
     'name_asc': 'name',
     'name_desc': '-name'
-}
+} 
 
 PRODUCTS_PER_PAGE = 12
 
@@ -48,6 +48,18 @@ def registerUser(request):
 
     return render(request, 'pages/register.html', {'form': registerForm})
 
+def edit_profile(request):
+    form = UserUpdateForm(request.POST or None, instance=request.user)
+
+    if request == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated!')
+            return redirect('user_profile')
+
+    return redirect('home')
+
+
 # ======================= LOGIN
 def userLogin(request):
     #if request.user.is_authenticed:
@@ -68,6 +80,12 @@ def userLogin(request):
 
     return render(request, 'pages/login.html', {'form': authForm})
 
+# ======================= FORGOT PASSWORD
+def forgot_password(request):
+    if request.method == 'POST':
+        return password_reset(request, from_email=request.POST.get('email'))
+    else:
+        return render(request, 'forgot_password_form.html')
 
 # ======================= LOGOUT
 def userLogout(request):
@@ -76,10 +94,24 @@ def userLogout(request):
 
 # ======================= USER PROFILE
 def userProfile(request):
-    # if not request.user.is_authenticed():
-    #     return redirect('login')
-    # else:
-    return render(request, 'pages/user_profile.html', {'user': request.user})
+    changePassword = PasswordChangeForm(request.user)
+    changeEmail = UserUpdateForm(instance=request.user)
+
+    if request.method == 'POST':
+        changepassword = PasswordChangeForm(user=request.user, data=request.POST)
+
+        if changepassword.is_valid():
+            changePassword.save()
+            update_session_auth_hash(request, changePassword.user)
+
+    userInfo = get_object_or_404(UserInfo, user=request.user)
+    context = {
+        'user': request.user,
+        'userinfo': userInfo,
+        'pass': changePassword,
+        'email': changeEmail
+    }
+    return render(request, 'pages/user_profile.html', context)
 
 
 # ======================= PRODUCT LIST
