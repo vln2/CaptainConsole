@@ -64,6 +64,8 @@ class RemoveItemFromCartForm(ModelForm):
 
 
 class AddressForm(ModelForm):
+    name = forms.CharField(max_length=255, required=True, widget=forms.TextInput(attrs={'class': "form-control"}))
+
     class Meta:
         model = Address
         fields = '__all__'
