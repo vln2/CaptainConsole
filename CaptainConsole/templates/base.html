@@ -20,17 +20,17 @@
     <link type="text/css" rel="stylesheet" href="{%static "scss/style.css" %}">
 </head>
 <body>
+    <!--        Header      -->
+    <header>
     <!-- MESSAGES AND ALERTS-->
         {% if messages %}
             <!-- Then put toasts within -->
-            <ul class="messages list-unstyled">
+            <ul class="messages list-unstyled mb-0">
                 {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }} alert alert-success"{% endif %}>{{ message }}</li>
+                <li{% if message.tags %} class="{{ message.tags }} alert alert-success mb-0"{% endif %}>{{ message }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
-    <!--        Header      -->
-    <header>
         <nav class="navbar navbar-expand-md navbar-dark bg-primary">
             <!-- LOGO & NAME -->                
             <a class="navbar-brand" href="{% url 'home' %}">
