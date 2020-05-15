@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mptt',
     # our own apps
-]
-
+] 
+ 
+ 
 EMAIL_HOST = 'mail.hringdu.is'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'capcon_vef'

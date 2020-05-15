@@ -78,7 +78,7 @@ class ProductImage(models.Model):
     def __str__(self):
         return str(self.product.id)
 
-
+  
 class Address(models.Model):
     street = models.CharField(max_length=255)
     postalCode = models.CharField(max_length=255)

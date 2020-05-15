@@ -18,7 +18,7 @@ VALID_SORTS = {
     'price_desc': '-price',
     'name_asc': 'name',
     'name_desc': '-name'
-}
+} 
 
 PRODUCTS_PER_PAGE = 12
 

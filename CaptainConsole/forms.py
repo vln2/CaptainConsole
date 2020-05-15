@@ -18,7 +18,7 @@ class OrderForms(ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
-
+  
 
 class CreatingUserForms(UserCreationForm):
     def __init__(self, *args, **kwargs):
