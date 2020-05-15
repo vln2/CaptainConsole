@@ -141,6 +141,7 @@ def productList(request, *args):
     #find the recently viewed products from session cookie
     lRecentlyViewed = Product.objects.filter(id__in=viewed_products)
     context = {
+        'add_to_cart_form': AddItemToCartForm,
         'products': page_obj,
         'recentlyViewed': lRecentlyViewed
     }
@@ -211,13 +212,9 @@ def addToCart(request, product_id):
             userInfo.save()
 
         item = Item.objects.get_or_create(order=userInfo.cart, product=product)
-        if item[1]:
-            item[0].save()
-            messages.success(request, "{} was added to your cart.".format(str(product)))
-        else:
-            item[0].quantity += form.cleaned_data.get('quantity')
-            item[0].save()
-            messages.success(request, "{} quantity was updated.".format(str(product)))
+        item[0].quantity += form.cleaned_data.get('quantity')
+        item[0].save()
+        messages.success(request, "{} was added to your cart.".format(str(product)))
 
     try:
         httpheaders = request.headers
@@ -316,6 +313,8 @@ def checkout(request, order_id):
             order.save()
 
             return redirect('review', order_id=order_id)
+
+        messages.error(request, 'form not valid')
 
     context = {
         'addressform': addressform,
