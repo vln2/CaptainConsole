@@ -84,7 +84,7 @@
     {% if order.status == 'C' %}
         <form method="post">
             {% csrf_token %}
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Confirm and pay</button>
+            <button class="btn btn-success btn-lg btn-block" type="submit">Confirm and pay</button>
         </form>
     {% endif %}
     </section>
