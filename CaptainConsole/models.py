@@ -166,7 +166,7 @@ class UserInfo(models.Model):
     # lastName = models.CharField(max_length=255)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True, blank=True)
     paymentInfo = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
-    profile_picture = models.ImageField(default="defaultuserimg.png", null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='images/profiles',default="defaultuserimg.png", null=True, blank=True)
     cart = models.OneToOneField(Order, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
