@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CONN_MAX_AGE = 60
 
 # Application definition
 
@@ -147,5 +148,6 @@ FIXTURE_DIRS = (
     )
     
 
-LOGIN_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/login'
+LOGIN_URL = '/login'
 
